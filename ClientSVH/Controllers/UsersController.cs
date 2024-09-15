@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
-using ClientSVH.Core.Abstaction.Services;
+using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Contracts;
 using ClientSVH.Application.Services;
 

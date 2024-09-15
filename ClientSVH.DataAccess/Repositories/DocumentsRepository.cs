@@ -5,6 +5,7 @@ using AutoMapper;
 using ClientSVH.DocsBodyCore.Models;
 using ClientSVH.DocsBodyCore.Repositories;
 using ClientSVH.DocsBodyCore.Abstraction;
+using ClientSVH.Core.Abstraction.Repositories;
 
 
 

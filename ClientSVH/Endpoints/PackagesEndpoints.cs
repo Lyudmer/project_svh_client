@@ -1,7 +1,7 @@
 ﻿using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Application.Services;
 using ClientSVH.Contracts;
-using ClientSVH.Core.Abstaction.Services;
+using ClientSVH.Core.Abstraction.Services;
 
 
 

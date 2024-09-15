@@ -1,6 +1,6 @@
 ﻿using ClientSVH.Core.Models;
 
-namespace ClientSVH.Core.Abstaction.Services
+namespace ClientSVH.Core.Abstraction.Services
 {
     public interface IPackagesServices
     {

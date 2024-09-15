@@ -1,7 +1,7 @@
 ﻿using ClientSVH.Core.Models;
 using ClientSVH.DocsBodyCore.Models;
 
-namespace ClientSVH.DataAccess.Repositories
+namespace ClientSVH.Core.Abstraction.Repositories
 {
     public interface IDocumentsRepository
     {

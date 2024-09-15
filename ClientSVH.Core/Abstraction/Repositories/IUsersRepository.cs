@@ -1,6 +1,6 @@
 ﻿using ClientSVH.Core.Models;
 
-namespace ClientSVH.Core.Abstaction.Repositories
+namespace ClientSVH.Core.Abstraction.Repositories
 {
     public interface IUsersRepository
     {

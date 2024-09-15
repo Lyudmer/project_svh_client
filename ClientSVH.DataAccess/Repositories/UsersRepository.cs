@@ -4,7 +4,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 using ClientSVH.DataAccess.Entities;
-using ClientSVH.Core.Abstaction.Repositories;
+using ClientSVH.Core.Abstraction.Repositories;
 
 namespace ClientSVH.DataAccess.Repositories
 {
