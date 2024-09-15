@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClienSVH.XMLParser", "ClienSVH.XMLParser\ClienSVH.XMLParser.csproj", "{AD70F5E2-5A8C-4238-B9C8-E6C3F1618ED2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientSVH.DataAccess", "ClientSVH.DataAccess\ClientSVH.DataAccess.csproj", "{4BED1ACC-A824-49B0-8D10-09D203812FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DataAccess", "ClientSVH.DataAccess\ClientSVH.DataAccess.csproj", "{4BED1ACC-A824-49B0-8D10-09D203812FEB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD} = {B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD}
 	EndProjectSection

@@ -1,7 +1,7 @@
-﻿
-using ClientSVH.Core.Abstaction.Services;
-using ClientSVH.Core.Abstraction.Repositories;
+﻿using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
+using ClientSVH.DataAccess.Repositories;
 using ClientSVH.DocsBodyCore.Models;
 
 
@@ -10,7 +10,7 @@ namespace ClientSVH.Application.Services
     public class DocumentsServices : IDocumentsServices
     {
         private readonly IDocumentsRepository _docRepository;
-        public DocumentsServices(IDocumentsRepository docRepository)
+        public DocumentsServices(DocumentsRepository docRepository)
         {
             _docRepository = docRepository;
         }

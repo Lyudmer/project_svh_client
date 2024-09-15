@@ -1,33 +1,32 @@
 ﻿using ClientSVH.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
-using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using AutoMapper;
 using ClientSVH.DocsBodyCore.Models;
 using ClientSVH.DocsBodyCore.Repositories;
 using ClientSVH.DocsBodyCore.Abstraction;
-using System.Diagnostics;
+
 
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class DocumentRepository : IDocumentsRepository
+    public class DocumentsRepository : IDocumentsRepository
     {
         private readonly ClientSVHDbContext _dbContext;
         private readonly IDocRecordRepository _docRecordRepository;
         private readonly IMapper _mapper;
 
-        public DocumentRepository(ClientSVHDbContext dbContext, IMapper mapper, DocRecordRepository docRecordRepository)
+        public DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper, DocRecordRepository docRecordRepository)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _docRecordRepository = docRecordRepository;
         }
-        public async Task<int> Add(int PkgId, Document Doc, DocRecord docRecord)
+        public async Task<Document> Add(Document Doc, DocRecord docRecord)
         {
             var docEntity = new DocumentEntity
             {
-                Pid = PkgId,
+                Pid = Doc.Pid,
                 Id = Doc.Id,
                 DocId = Doc.DocId,
                 Number = Doc.Number,
@@ -43,7 +42,7 @@ namespace ClientSVH.DataAccess.Repositories
             await _dbContext.AddAsync(docEntity);
             await _dbContext.SaveChangesAsync();
             await _docRecordRepository.Add(docRecord);
-            return docEntity.Id;
+            return Doc;
         }
         public async Task<Document> GetById(int id)
         {
@@ -62,7 +61,7 @@ namespace ClientSVH.DataAccess.Repositories
 
             var docs = await query.ToListAsync();
             return _mapper.Map<List<Document>>(docs);
-            
+
         }
         public async Task<List<Document>> GetByPage(int page, int page_size)
         {
@@ -92,7 +91,7 @@ namespace ClientSVH.DataAccess.Repositories
             var docEntity = await _dbContext.Document
                 .AsNoTracking()
                 .Include(d => d.DocRecord)
-                .FirstOrDefaultAsync(d => d.DocId== DocId)
+                .FirstOrDefaultAsync(d => d.DocId == DocId)
                 ?? throw new Exception();
 
             return _mapper.Map<DocRecord>(docEntity);

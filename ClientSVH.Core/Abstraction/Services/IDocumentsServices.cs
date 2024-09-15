@@ -1,7 +1,7 @@
 ﻿using ClientSVH.Core.Models;
 using ClientSVH.DocsBodyCore.Models;
 
-namespace ClientSVH.Core.Abstaction.Services
+namespace ClientSVH.Core.Abstraction.Services
 {
     public interface IDocumentsServices
     {
@@ -11,6 +11,6 @@ namespace ClientSVH.Core.Abstaction.Services
         Task<Document> GetById(int Id);
         Task<List<Document>> GetByPage(int Page, int Page_Size);
         Task Update(int Id);
-        Task<int> GetlactDocId();
+        Task<int> GetLastDocId();
     }
 }

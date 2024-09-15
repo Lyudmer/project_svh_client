@@ -32,7 +32,7 @@ namespace ClienSVH.XMLParser
                                 };
                     foreach (var doc in xDocs) 
                     {
-                        var doc_1 = await _docServices.GetLastDocId();
+                      //  var doc_1 = await _docServices.GetLastDocId();
                        // var Doc =Document.Create()
                     }
                             

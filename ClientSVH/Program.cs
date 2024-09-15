@@ -3,6 +3,7 @@ using ClientSVH.Application.Services;
 using ClientSVH.Core.Abstaction.Repositories;
 using ClientSVH.Core.Abstaction.Services;
 using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.DataAccess;
 using ClientSVH.DataAccess.Repositories;
 using ClientSVH.DocsBodyCore.Abstraction;
@@ -41,7 +42,7 @@ services.AddScoped<IPasswordHasher, PasswordHasher>();
 services.AddScoped<IPackagesServices, PackagesServices>();
 services.AddScoped<IPackagesRepository, PackagesRepository>();
 services.AddScoped<IDocumentsServices, DocumentsServices>();
-services.AddScoped<IDocumentsRepository, DocumentRepository>();
+services.AddScoped<IDocumentsRepository, DocumentsRepository>();
 services.AddScoped<IDocRecordServices, DocRecordServices>();
 services.AddScoped<IDocRecordRepository, DocRecordRepository>();
 
