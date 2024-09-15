@@ -18,19 +18,11 @@ namespace ClientSVH.DataAccess.Repositories
             _mapper = mapper;
         }
 
-        public async Task<int> Add(Guid UserId, Package Pkg)
+        public async Task<Package> Add(Package Pkg)
         {
-            var pkgEntity = new PackageEntity
-            {
-                Id = Pkg.Pid,
-                UserId = UserId,
-                StatusId = Pkg.StatusId,
-                CreateDate = Pkg.CreateDate,
-                ModifyDate = Pkg.ModifyDate
-            };
-            await _dbContext.AddAsync(pkgEntity);
+            await _dbContext.AddAsync(Pkg);
             await _dbContext.SaveChangesAsync();
-            return pkgEntity.Id;
+            return Pkg;
         }
         public async Task<Package> GetById(int Pid)
         {
@@ -47,20 +39,16 @@ namespace ClientSVH.DataAccess.Repositories
                 .AsNoTracking()
                 .OrderBy(p => p.UserId)
                 .ThenBy(p => p.Id);
-            var pkgList = await query
-                .Select(p => Package.Create(p.Id, p.UserId, p.StatusId, p.UUID, p.CreateDate, p.ModifyDate))
-                .ToListAsync();
-            return pkgList;
+            var pkgList = await query.ToListAsync();
+            return _mapper.Map<List<Package>>(pkgList);
         }
         public async Task<List<Package>> GetPkgUser(Guid UserId)
         {
             var query = _dbContext.Packages
                 .AsNoTracking()
                 .OrderBy(p => p.Id);
-            var pkgList = await query
-                .Select(p => Package.Create(p.Id, UserId, p.StatusId, p.UUID, p.CreateDate, p.ModifyDate))
-                .ToListAsync();
-            return pkgList;
+            var pkgList = await query.ToListAsync();
+            return _mapper.Map<List<Package>>(pkgList);
         }
         public async Task<Package> GetPkgWithDoc(int Pid)
         {
@@ -81,10 +69,8 @@ namespace ClientSVH.DataAccess.Repositories
             { query = query.Where(p => p.UserId == UserId); }
             if (Status > -1)
             { query = query.Where(p => p.StatusId == Status); }
-            var pkgList = await query
-               .Select(p => Package.Create(p.Id, UserId, Status, p.UUID, p.CreateDate, p.ModifyDate))
-               .ToListAsync();
-            return pkgList;
+            var pkgList = await query.ToListAsync();
+            return _mapper.Map<List<Package>>(pkgList);
         }
         public async Task<List<Package>> GetByPage(int Page, int Page_Size)
         {
@@ -92,10 +78,8 @@ namespace ClientSVH.DataAccess.Repositories
                 .AsNoTracking()
                 .Skip((Page - 1) * Page_Size)
                 .Take(Page_Size);
-            var pkgList = await query
-                .Select(p => Package.Create(p.Id, p.UserId, p.StatusId, p.UUID, p.CreateDate, p.ModifyDate))
-                .ToListAsync();
-            return pkgList;
+            var pkgList = await query.ToListAsync();
+            return _mapper.Map<List<Package>>(pkgList);
 
         }
         public async Task UpdateStatus(int Pid, int Status)

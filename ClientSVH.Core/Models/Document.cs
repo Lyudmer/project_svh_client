@@ -15,6 +15,7 @@
             Idmd5=idmd5;
             CreateDate = createDate;
             ModifyDate = modifyDate;
+            Pid=pid;
         }
 
         public int Id { get; set; }

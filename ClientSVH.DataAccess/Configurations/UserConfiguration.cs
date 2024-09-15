@@ -10,6 +10,11 @@ namespace ClientSVH.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             builder.HasKey(x => x.Id);
+     
+            builder.Property(b => b.Id)
+              .IsRequired()
+              .ValueGeneratedOnAdd()
+              .HasColumnType("bigint");
 
             builder.Property(b => b.UserName)
                 .IsRequired();

@@ -27,14 +27,26 @@ namespace ClientSVH.Application.Services
 
         async Task IUsersService.Register(string username, string password, string email)
         {
-            var hasherPassword = _passwordHasher.Generate(password);
-            var user = User.Create(Guid.NewGuid(), username, hasherPassword, email);
+            try
+            {
+                var hasherPassword = _passwordHasher.Generate(password);
 
-            await _usersRepository.Add(user);
+                var user = User.Create(Guid.NewGuid(), username, hasherPassword, email);
+                
+                await _usersRepository.Add(user);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error code {0}",e);
+            }
+
         }
         async Task<string> IUsersService.Login(string password, string email)
         {
             var user = await _usersRepository.GetByEmail(email);
+            if (user == null)
+                throw new Exception("Invalid username");
+
             var result = _passwordHasher.Verify(password, user.PasswordHash);
             if (result == false)
             {

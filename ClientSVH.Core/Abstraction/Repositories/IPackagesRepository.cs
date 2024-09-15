@@ -4,7 +4,7 @@ namespace ClientSVH.Core.Abstaction.Repositories
 {
     public interface IPackagesRepository
     {
-        Task<int> Add(Guid UserId, Package Pkg);
+        Task<Package> Add(Package Pkg);
         Task Delete(int Pid);
         Task<List<Package>> GetAll();
         Task<List<Package>> GetPkgUser(Guid UserId);

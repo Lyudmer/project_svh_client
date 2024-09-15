@@ -7,7 +7,7 @@ using ClientSVH.Application.Services;
 namespace ClientSVH.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/")]
+    [Route("svh/account")]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;

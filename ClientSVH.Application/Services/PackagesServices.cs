@@ -16,9 +16,9 @@ namespace ClientSVH.Application.Services
         {
             return _loadFromFile.LoadFileXml(UserId, FileName);
         }
-        public async Task<int> Add(Guid UserId, Package Pkg)
+        public async Task<Package> Add(Package Pkg)
         {
-            return await _pkgRepository.Add(UserId, Pkg);
+            return await _pkgRepository.Add(Pkg);
         }
         public async Task<int> GetLastPkgId()
         {

@@ -26,14 +26,17 @@ namespace ClientSVH.PackagesDBDateAccess.Configuration
                        .ValueGeneratedOnAdd()
                        .HasColumnName("pid")
                        .HasColumnType("bigint");
-
-                builder.Property(p => p.CreateDate)
+            builder.Property(p => p.UUID)
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("uuid");
+                      
+            builder.Property(p => p.CreateDate)
                         .HasColumnName("create_date")
                         .HasDefaultValueSql("now()");
 
                 builder.Property(p => p.ModifyDate)
                         .HasColumnName("modify_date");
-
 
                 builder.Property(p => p.StatusId)
                        .HasDefaultValue("0")

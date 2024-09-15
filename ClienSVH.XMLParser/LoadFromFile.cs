@@ -21,12 +21,19 @@ namespace ClienSVH.XMLParser
                     //create package
                     var pid_1 = await _pkgServices.GetLastPkgId();
                     var Pkg = Package.Create(pid_1, userId, 0, Guid.NewGuid(), DateTime.Now, DateTime.Now);
-                    var pid = await _pkgServices.Add(userId, Pkg);
-                    Pid = pid;
-                    foreach (XElement xDoc in xPkg.Elements())
+                    Pkg = await _pkgServices.Add(Pkg);
+                    Pid = Pkg.Pid;
+                    var xDocs = from xDoc in xPkg?.AsParallel().Elements()
+                                select new
+                                {
+                                    tdoc = xDoc.Name?.LocalName,
+                                    num = xDoc.Elements().Elements().FirstOrDefault(n => n.Name == "RegNum")?.Value,
+                                    dat = xDoc.Elements().Elements().FirstOrDefault(n => n.Name == "RegDate")?.Value
+                                };
+                    foreach (var doc in xDocs) 
                     {
-                      
-
+                     //   var doc_1 = await _docServices.GetLastDocId();
+                       // var Doc =Document.Create()
                     }
                             
                     

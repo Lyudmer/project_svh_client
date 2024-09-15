@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientSVH.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[user]")]
+    [Route("svh/packages")]
     public class PackagesController : ControllerBase
     {
         private readonly IPackagesServices _pkgService;

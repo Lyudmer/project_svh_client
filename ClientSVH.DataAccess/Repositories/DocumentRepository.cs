@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using AutoMapper;
+using ClientSVH.DocsBodyCore.Models;
+using ClientSVH.DocsBodyCore.Repositories;
+using ClientSVH.DocsBodyCore.Abstraction;
+using System.Diagnostics;
 
 
 namespace ClientSVH.DataAccess.Repositories
@@ -10,13 +14,16 @@ namespace ClientSVH.DataAccess.Repositories
     public class DocumentRepository : IDocumentsRepository
     {
         private readonly ClientSVHDbContext _dbContext;
+        private readonly IDocRecordRepository _docRecordRepository;
         private readonly IMapper _mapper;
-        public DocumentRepository(ClientSVHDbContext dbContext, IMapper mapper)
+
+        public DocumentRepository(ClientSVHDbContext dbContext, IMapper mapper, DocRecordRepository docRecordRepository)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _docRecordRepository = docRecordRepository;
         }
-        public async Task<int> Add(int PkgId, Document Doc)
+        public async Task<int> Add(int PkgId, Document Doc, DocRecord docRecord)
         {
             var docEntity = new DocumentEntity
             {
@@ -32,8 +39,10 @@ namespace ClientSVH.DataAccess.Repositories
                 CreateDate = Doc.CreateDate,
                 ModifyDate = Doc.ModifyDate
             };
+
             await _dbContext.AddAsync(docEntity);
             await _dbContext.SaveChangesAsync();
+            await _docRecordRepository.Add(docRecord);
             return docEntity.Id;
         }
         public async Task<Document> GetById(int id)
@@ -51,11 +60,9 @@ namespace ClientSVH.DataAccess.Repositories
 
             if (pid > 0) { query = query.Where(p => p.Pid == pid); }
 
-            var docs = await query
-             .Select(d => Document.Create(d.Id, d.DocId, d.Number, d.DocDate, d.ModeCode, d.SizeDoc,
-                                           d.Idmd5, d.IdSha256, pid, d.CreateDate, d.ModifyDate))
-             .ToListAsync();
-            return docs;
+            var docs = await query.ToListAsync();
+            return _mapper.Map<List<Document>>(docs);
+            
         }
         public async Task<List<Document>> GetByPage(int page, int page_size)
         {
@@ -64,11 +71,8 @@ namespace ClientSVH.DataAccess.Repositories
                 .Skip((page - 1) * page_size)
                 .Take(page_size);
 
-            var docs = await query
-            .Select(d => Document.Create(d.Id, d.DocId, d.Number, d.DocDate, d.ModeCode, d.SizeDoc,
-                                          d.Idmd5, d.IdSha256, d.Pid, d.CreateDate, d.ModifyDate))
-            .ToListAsync();
-            return docs;
+            var docs = await query.ToListAsync();
+            return _mapper.Map<List<Document>>(docs);
         }
 
         public async Task Update(int Id)
@@ -79,10 +83,23 @@ namespace ClientSVH.DataAccess.Repositories
         }
         public async Task Delete(int Id)
         {
-
             await _dbContext.Document
                 .Where(u => u.Id == Id)
                 .ExecuteDeleteAsync();
+        }
+        public async Task<DocRecord> GetDocWithRecord(Guid DocId)
+        {
+            var docEntity = await _dbContext.Document
+                .AsNoTracking()
+                .Include(d => d.DocRecord)
+                .FirstOrDefaultAsync(d => d.DocId== DocId)
+                ?? throw new Exception();
+
+            return _mapper.Map<DocRecord>(docEntity);
+        }
+        public async Task<int> GetLastDocId()
+        {
+            return await _dbContext.Document.MaxAsync(p => p.Id);
         }
     }
 }

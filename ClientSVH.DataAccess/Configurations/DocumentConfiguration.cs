@@ -50,13 +50,16 @@ namespace ClientSVH.PackagesDBCore.Configurations
                     .HasMaxLength(5);
             builder.Property(d => d.SizeDoc)
                     .IsRequired()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("size_doc");
             builder.Property(d => d.Idmd5)
                    .IsRequired()
+                   .ValueGeneratedOnAdd()
                    .HasColumnName("idmd5")
                    .HasMaxLength(32);
             builder.Property(d => d.IdSha256)
-                   .IsRequired()   
+                   .IsRequired()
+                   .ValueGeneratedOnAdd()
                    .HasColumnName("idsha256")
                    .HasMaxLength(64);
         }

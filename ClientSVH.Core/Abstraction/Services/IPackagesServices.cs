@@ -6,7 +6,7 @@ namespace ClientSVH.Core.Abstaction.Services
     {
     
         Task<int> LoadFile(Guid UserId, string FileName);
-        Task<int> Add(Guid UserId, Package Pkg);
+        Task<Package> Add(Package Pkg);
         Task<int> GetLastPkgId();
 
 

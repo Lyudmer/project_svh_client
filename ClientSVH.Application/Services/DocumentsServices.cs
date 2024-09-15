@@ -2,6 +2,7 @@
 using ClientSVH.Core.Abstaction.Services;
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
+using ClientSVH.DocsBodyCore.Models;
 
 
 namespace ClientSVH.Application.Services
@@ -14,9 +15,9 @@ namespace ClientSVH.Application.Services
             _docRepository = docRepository;
         }
 
-        public Task<int> Add(int PkgId, Document Doc)
+        public Task<int> Add(int PkgId, Document Doc, DocRecord docRecord)
         {
-            return _docRepository.Add(PkgId, Doc);
+            return _docRepository.Add(PkgId, Doc, docRecord);
         }
 
         public Task Delete(int Id)
