@@ -6,11 +6,10 @@ using ClientSVH.Core.Models;
 
 namespace ClientSVH.Application.Services
 {
-    public class PackagesServices(IPackagesServices pkgService,
-        ILoadFromFile loadFromFile,
+    public class PackagesServices(ILoadFromFile loadFromFile,
         IPackagesRepository pkgRepository) : IPackagesServices
     {
-        private readonly IPackagesServices _pkgService = pkgService;
+        
         private readonly ILoadFromFile _loadFromFile = loadFromFile;
         private readonly IPackagesRepository _pkgRepository = pkgRepository;
         public Task<int> LoadFile(Guid UserId, string FileName)
