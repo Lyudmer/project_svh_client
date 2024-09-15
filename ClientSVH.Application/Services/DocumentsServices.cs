@@ -15,9 +15,9 @@ namespace ClientSVH.Application.Services
             _docRepository = docRepository;
         }
 
-        public Task<int> Add(int PkgId, Document Doc, DocRecord docRecord)
+        public Task<Document> Add(Document Doc, DocRecord docRecord)
         {
-            return _docRepository.Add(PkgId, Doc, docRecord);
+            return _docRepository.Add(Doc, docRecord);
         }
 
         public Task Delete(int Id)
@@ -43,6 +43,10 @@ namespace ClientSVH.Application.Services
         public Task Update(int Id)
         {
             return _docRepository.GetById(Id);
+        }
+        public Task<int> GetLastDocId()
+        {
+            return _docRepository.GetLastDocId();
         }
     }
 }
