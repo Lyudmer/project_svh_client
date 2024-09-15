@@ -1,0 +1,6 @@
+services:
+  clientsvh:
+    image: ${DOCKER_REGISTRY-}clientsvh
+    build:
+      context: .
+      dockerfile: ClientSVH\Dockerfile
