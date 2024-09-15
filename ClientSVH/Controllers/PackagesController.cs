@@ -1,4 +1,5 @@
 ﻿using ClientSVH.Application.Services;
+using ClientSVH.Contracts;
 using ClientSVH.Core.Abstraction.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,16 @@ namespace ClientSVH.Controllers
             var uploads = _appEnvironment.WebRootPath;
             var filePath = Path.Combine(uploads, InName.FileName).ToString();
             await _pkgService.LoadFile( _userService.GetUserIdFromLogin(), filePath);
+
+            return Ok();
+        }
+        [HttpPost("send")]
+        public async Task<IActionResult> SendToServer(PkgSendResponse pkgSend)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            await _pkgService.SendToServer(pkgSend.Pid);
 
             return Ok();
         }

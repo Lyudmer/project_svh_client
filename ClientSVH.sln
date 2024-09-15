@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyDataAcces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyCore", "ClientSVH.DocsBodyCore\ClientSVH.DocsBodyCore.csproj", "{0CF26108-97B8-4800-AFAF-78E529D32775}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientSVH.SendServer", "..\SendServer\ClientSVH.SendServer.csproj", "{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{0CF26108-97B8-4800-AFAF-78E529D32775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CF26108-97B8-4800-AFAF-78E529D32775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CF26108-97B8-4800-AFAF-78E529D32775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

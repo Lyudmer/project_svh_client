@@ -1,7 +1,7 @@
-﻿namespace ClientSVH.Core.Abstraction.Repositories
+﻿namespace ClientSVH.Application.Interfaces.Auth
 {
     public interface ILoadFromFile
     {
-        Task<int> LoadFileXml(Guid userId, string FileName);
+        Task<int> LoadFile(Guid userId, string InFile);
     }
 }
