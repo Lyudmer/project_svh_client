@@ -33,7 +33,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyDataAcces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyCore", "ClientSVH.DocsBodyCore\ClientSVH.DocsBodyCore.csproj", "{0CF26108-97B8-4800-AFAF-78E529D32775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientSVH.SendServer", "..\SendServer\ClientSVH.SendServer.csproj", "{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.SendServer", "ClienSVH.SendServer\ClientSVH.SendServer.csproj", "{74347479-F9D3-4573-BE53-407779FB3E3A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2EB7EFF0-1700-445C-9346-D9C2529E006E} = {2EB7EFF0-1700-445C-9346-D9C2529E006E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,10 +80,10 @@ Global
 		{0CF26108-97B8-4800-AFAF-78E529D32775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CF26108-97B8-4800-AFAF-78E529D32775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CF26108-97B8-4800-AFAF-78E529D32775}.Release|Any CPU.Build.0 = Release|Any CPU
-		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{219BE55A-4E24-4BF5-A9E0-71914D7AC70E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74347479-F9D3-4573-BE53-407779FB3E3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74347479-F9D3-4573-BE53-407779FB3E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74347479-F9D3-4573-BE53-407779FB3E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74347479-F9D3-4573-BE53-407779FB3E3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

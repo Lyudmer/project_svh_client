@@ -6,15 +6,11 @@ namespace ClientSVH.Application.Services
 {
     public class DocRecordServices : IDocRecordServices
     {
-
-        private readonly IDocRecordServices _docRecordService;
         private readonly IDocRecordRepository _docRecordRepository;
 
-        public DocRecordServices(IDocRecordRepository docRecordRepository,
-             IDocRecordServices docRecordService)
+        public DocRecordServices(IDocRecordRepository docRecordRepository)
         {
             _docRecordRepository = docRecordRepository;
-            _docRecordService = docRecordService;
         }
 
         public async Task<DocRecord?> GetId(Guid docId) =>

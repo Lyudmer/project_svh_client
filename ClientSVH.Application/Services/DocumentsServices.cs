@@ -48,5 +48,9 @@ namespace ClientSVH.Application.Services
         {
             return _docRepository.GetLastDocId();
         }
+        public Task<DocRecord> GetDocWithRecord(Guid DocId)
+        {
+            return _docRepository.GetDocWithRecord(DocId);
+        }
     }
 }
