@@ -1,23 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
+
 using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Contracts;
-using ClientSVH.Application.Services;
+
 
 namespace ClientSVH.Controllers
 {
     [ApiController]
     [Route("svh/account")]
-    public class UsersController : ControllerBase
+    public class UsersController(IUsersService usersService
+            //, IWebHostEnvironment appEnvironment
+            ) : ControllerBase
     {
-        private readonly IUsersService _usersService;
-        private readonly IWebHostEnvironment _appEnvironment;
-        public UsersController(IUsersService usersService, IWebHostEnvironment appEnvironment)
-        {
-            _usersService = usersService;
-            _appEnvironment = appEnvironment;
+        private readonly IUsersService _usersService = usersService;
 
-        }
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser(LoginUserRequest userLogin)
         {
@@ -35,7 +31,7 @@ namespace ClientSVH.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _usersService.Register(userRegistr.username, userRegistr.passwordHash, userRegistr.email);
+                await _usersService.Register(userRegistr.UserName, userRegistr.PasswordHash, userRegistr.Email);
             return Ok();
         }
       

@@ -11,23 +11,17 @@ namespace ClientSVH.DocsBodyCore.Repositories
 {
     public class DocRecordRepository : IDocRecordRepository
     {
-        private readonly DocsBodyDBConnectionSettings _context;
-
         private readonly IMongoCollection<DocRecord> _docBodyCollection;
-        public DocRecordRepository(DocsBodyDBConnectionSettings context,
-            IOptions<DocsBodyDBConnectionSettings> DocBodyDBSettings)
+        public DocRecordRepository(IOptions<DocsBodyDBConnectionSettings> DocBodyDBSettings)
         {
-            _context = context;
-
-
             var mongoClient = new MongoClient(
                 DocBodyDBSettings.Value.MongoDBContext);
 
             var mongoDatabase = mongoClient.GetDatabase(
-               DocBodyDBSettings.Value.DatabaseName);
+               DocBodyDBSettings.Value.MongoDBName);
 
             _docBodyCollection = mongoDatabase.GetCollection<DocRecord>(
-                DocBodyDBSettings.Value.DBCollectionName);
+                DocBodyDBSettings.Value.MongoDBCollectionName);
         }
 
         public async Task<DocRecord?> GetByDocId(Guid docId) =>

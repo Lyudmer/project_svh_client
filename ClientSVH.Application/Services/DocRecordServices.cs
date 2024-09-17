@@ -4,14 +4,9 @@ using ClientSVH.DocsBodyCore.Models;
 
 namespace ClientSVH.Application.Services
 {
-    public class DocRecordServices : IDocRecordServices
+    public class DocRecordServices(IDocRecordRepository docRecordRepository) : IDocRecordServices
     {
-        private readonly IDocRecordRepository _docRecordRepository;
-
-        public DocRecordServices(IDocRecordRepository docRecordRepository)
-        {
-            _docRecordRepository = docRecordRepository;
-        }
+        private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
 
         public async Task<DocRecord?> GetId(Guid docId) =>
             await _docRecordRepository.GetByDocId(docId);

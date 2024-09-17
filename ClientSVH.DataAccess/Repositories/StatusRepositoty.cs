@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class StatusRepositoty : IStatusRepositoty
+    public class StatusRepositoty(ClientSVHDbContext dbContext) : IStatusRepositoty
     {
-        private readonly ClientSVHDbContext _dbContext;
-
-        public StatusRepositoty(ClientSVHDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        private readonly ClientSVHDbContext _dbContext = dbContext;
 
         public async Task Add(int Id, string StatusName, bool RunWf, bool MkRes)
         {

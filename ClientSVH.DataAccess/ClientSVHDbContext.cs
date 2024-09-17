@@ -1,7 +1,5 @@
 ﻿using ClientSVH.DataAccess.Configurations;
 using ClientSVH.DataAccess.Entities;
-using ClientSVH.PackagesDBCore.Configurations;
-using ClientSVH.PackagesDBDateAccess.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClientSVH.DataAccess
@@ -15,6 +13,7 @@ namespace ClientSVH.DataAccess
         public DbSet<DocumentEntity> Document { get; set; }
         public DbSet<StatusEntity> Status { get; set; }
         public DbSet<StatusGraphEntity> StatusGraph { get; set; }
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -23,6 +22,7 @@ namespace ClientSVH.DataAccess
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
             modelBuilder.ApplyConfiguration(new StatusGraphConfiguration());
             base.OnModelCreating(modelBuilder);
+
         }
 
 

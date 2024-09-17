@@ -1,7 +1,6 @@
 ﻿using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
-using ClientSVH.DocsBodyCore.Abstraction;
 using ClientSVH.DocsBodyCore.Models;
 using System.Data;
 using System.Security.Cryptography;
@@ -12,12 +11,11 @@ using System.Xml.Linq;
 namespace ClienSVH.XMLParser
 {
     public class LoadFromFile(IPackagesServices pkgServices,
-        IDocumentsServices docServices,
-        IDocRecordRepository docRecordRepository) : ILoadFromFile
+        IDocumentsServices docServices) : ILoadFromFile
     {
         private readonly IPackagesServices _pkgServices = pkgServices;
         private readonly IDocumentsServices _docServices = docServices;
-        private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
+
         public async Task<int> LoadFile(Guid userId, string InFile)
         {
             int Pid = 0;
@@ -27,7 +25,7 @@ namespace ClienSVH.XMLParser
                 XDocument xFile = XDocument.Load(InFile);
                 var xPkg = xFile.Element("Package")?
                     .Elements("*").Where(p => p.Attribute("ctmtd")?.Value == "CfgName");
-
+                
                 if (xPkg is not null)
                 {
                     //create package
@@ -66,26 +64,28 @@ namespace ClienSVH.XMLParser
 
             return Pid;
         }
-        public static string GetHashMd5(string text)
+        private static string GetHashMd5(string text)
         {
             string result = string.Empty;
             if (string.IsNullOrEmpty(text))
             {
                 var md5 = MD5.Create();
-                var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
-
-                result = Convert.ToBase64String(hash);
+                var hash = md5?.ComputeHash(Encoding.UTF8.GetBytes(text));
+                if(hash!=null) result = Convert.ToBase64String(hash);
             }
             return result;
         }
-        public static string GetSha256(string text)
+        private static string GetSha256(string text)
         {
             var sb = new StringBuilder();
             using (var hash = SHA256.Create())
             {
-                var result = hash.ComputeHash(Encoding.UTF8.GetBytes(text));
-                for (int i = 0; i < result.Length; i++)
-                    sb.Append(result[i].ToString("x2"));
+                var result = hash?.ComputeHash(Encoding.UTF8.GetBytes(text));
+                if (result != null)
+                {
+                    for (int i = 0; i < result.Length; i++)
+                        sb.Append(result[i].ToString("x2"));
+                }
             }
             return sb.ToString();
         }

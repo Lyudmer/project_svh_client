@@ -24,6 +24,6 @@
             var package = new Package(pid, userId, statusId, uuId, createDate, modifyDate);
             return package;
         }
-        public ICollection<Document> Documents { get; set; } = new List<Document>();
+        public ICollection<Document> Documents { get; set; } = [];
     }
 }

@@ -5,14 +5,10 @@ using ClientSVH.Core.Abstraction.Repositories;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class StatusGraphRepository : IStatusGraphRepository
+    public class StatusGraphRepository(ClientSVHDbContext dbContext) : IStatusGraphRepository
     {
-        private readonly ClientSVHDbContext _dbContext;
-        public StatusGraphRepository(ClientSVHDbContext dbContext)
-        {
-            _dbContext = dbContext;
+        private readonly ClientSVHDbContext _dbContext = dbContext;
 
-        }
         public async Task Add(int oldst, int newst, string maskbit)
         {
             var statusGraphEntity = new StatusGraphEntity

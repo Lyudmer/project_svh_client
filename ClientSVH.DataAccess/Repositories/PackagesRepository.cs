@@ -7,16 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class PackagesRepository : IPackagesRepository
+    public class PackagesRepository(ClientSVHDbContext dbContext, IMapper mapper) : IPackagesRepository
     {
-        private readonly ClientSVHDbContext _dbContext;
-        private readonly IMapper _mapper;
-       
-        public PackagesRepository(ClientSVHDbContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-        }
+        private readonly ClientSVHDbContext _dbContext = dbContext;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<Package> Add(Package Pkg)
         {

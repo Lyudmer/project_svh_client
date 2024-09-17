@@ -13,6 +13,7 @@
             ModeCode=modeCode;
             SizeDoc=sizeDoc;
             Idmd5=idmd5;
+            IdSha256=idSha256;
             CreateDate = createDate;
             ModifyDate = modifyDate;
             Pid=pid;

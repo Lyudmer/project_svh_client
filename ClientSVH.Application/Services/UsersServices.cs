@@ -6,24 +6,17 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ClientSVH.Application.Services
 {
-    public class UsersService : IUsersService
+    public class UsersService(
+        IUsersRepository userRepository,
+        IPasswordHasher passwordHasher,
+        IJwtProvider jwtprovider,
+        AuthorizationHandlerContext handlercontext
+           ) : IUsersService
     {
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly IUsersRepository _usersRepository;
-        private readonly IJwtProvider _jwtProvider;
-        private readonly AuthorizationHandlerContext _context;
-        public UsersService(
-            IUsersRepository userRepository,
-            IPasswordHasher passwordHasher,
-            IJwtProvider jwtprovider, 
-            AuthorizationHandlerContext context
-           )
-        {
-            _passwordHasher = passwordHasher;
-            _usersRepository = userRepository;
-            _jwtProvider = jwtprovider;
-            _context = context;  
-        }
+        private readonly IPasswordHasher _passwordHasher = passwordHasher;
+        private readonly IUsersRepository _usersRepository = userRepository;
+        private readonly IJwtProvider _jwtProvider = jwtprovider;
+        private readonly AuthorizationHandlerContext _handlercontext = handlercontext;
 
         async Task IUsersService.Register(string username, string password, string email)
         {
@@ -43,10 +36,7 @@ namespace ClientSVH.Application.Services
         }
         async Task<string> IUsersService.Login(string password, string email)
         {
-            var user = await _usersRepository.GetByEmail(email);
-            if (user == null)
-                throw new Exception("Invalid username");
-
+            var user = await _usersRepository.GetByEmail(email) ?? throw new Exception("Invalid username");
             var result = _passwordHasher.Verify(password, user.PasswordHash);
             if (result == false)
             {
@@ -59,7 +49,7 @@ namespace ClientSVH.Application.Services
 
         public Guid GetUserIdFromLogin()
         {
-            var UserClaim =  _context.User.Claims
+            var UserClaim = _handlercontext.User.Claims
                 .FirstOrDefault(u => u.Type == CustomClaims.UserId);
 
             bool resId =  Guid.TryParse(UserClaim?.Value, out Guid userId);

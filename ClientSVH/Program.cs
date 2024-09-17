@@ -11,6 +11,7 @@ using ClientSVH.DocsBodyDataAccess;
 using ClientSVH.Infrastructure;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 
 
@@ -20,21 +21,10 @@ var configuration = builder.Configuration;
 services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
 
 services.AddControllers();
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
 
-services.AddDbContext<ClientSVHDbContext>(
-    options =>
-    {
-        options.UseNpgsql(configuration.GetSection("ConnectionStrings").GetConnectionString(nameof(ClientSVHDbContext)));
-    });
-//mongodb
-services.Configure<DocsBodyDBConnectionSettings>(configuration.GetSection(nameof(DocsBodyDBConnectionSettings)));
-services.AddControllers()
-    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
-
-services.AddScoped<IUsersService, UsersService>();
 services.AddScoped<IUsersRepository, UsersRepository>();
+services.AddScoped<IUsersService, UsersService>();
+
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
 
@@ -48,6 +38,23 @@ services.AddScoped<IDocRecordRepository, DocRecordRepository>();
 services.AddAutoMapper(typeof(IUsersService).Assembly);
 services.AddAutoMapper(typeof(IPackagesServices).Assembly);
 services.AddAutoMapper(typeof(IDocumentsServices).Assembly);
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+//postgresql db
+builder.Services.AddDbContext<ClientSVHDbContext>(
+    options =>
+    {
+        options.UseNpgsql(configuration.GetConnectionString(nameof(ClientSVHDbContext)));
+    }
+    );
+//mongodb
+builder.Services.Configure<DocsBodyDBConnectionSettings>(
+builder.Configuration.GetSection("MongoDBContext"));
+builder.Services.AddSingleton<DocRecordServices>();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
 
 var app = builder.Build();
 

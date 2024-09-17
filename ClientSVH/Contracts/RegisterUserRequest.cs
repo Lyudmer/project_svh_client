@@ -3,11 +3,11 @@
 namespace ClientSVH.Contracts
 {
     public record RegisterUserRequest(
-         string username,
+         string UserName,
       [Required]
       [EmailAddress]
-        string email,
+        string Email,
       [Required]
-        string passwordHash
+        string PasswordHash
       );
 }

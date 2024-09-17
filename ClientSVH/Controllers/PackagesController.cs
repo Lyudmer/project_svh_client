@@ -8,18 +8,13 @@ namespace ClientSVH.Controllers
 {
     [ApiController]
     [Route("svh/packages")]
-    public class PackagesController : ControllerBase
+    public class PackagesController(IPackagesServices pkgService, IWebHostEnvironment appEnvironment,
+                              IUsersService userService) : ControllerBase
     {
-        private readonly IPackagesServices _pkgService;
-        private readonly IWebHostEnvironment _appEnvironment;
-        private readonly IUsersService _userService;
-        public PackagesController(IPackagesServices pkgService, IWebHostEnvironment appEnvironment, IUsersService userService)
-        {
-            _pkgService = pkgService;
-            _appEnvironment = appEnvironment;
-            _userService = userService;            
+        private readonly IPackagesServices _pkgService = pkgService;
+        private readonly IWebHostEnvironment _appEnvironment = appEnvironment;
+        private readonly IUsersService _userService = userService;
 
-        }
         [HttpPost("loadfile")]
         public async Task<IActionResult> LoadFile(IFormFile InName)
         {

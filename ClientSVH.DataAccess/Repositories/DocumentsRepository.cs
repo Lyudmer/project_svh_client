@@ -11,18 +11,12 @@ using ClientSVH.Core.Abstraction.Repositories;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class DocumentsRepository : IDocumentsRepository
+    public class DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper, DocRecordRepository docRecordRepository) : IDocumentsRepository
     {
-        private readonly ClientSVHDbContext _dbContext;
-        private readonly IDocRecordRepository _docRecordRepository;
-        private readonly IMapper _mapper;
+        private readonly ClientSVHDbContext _dbContext = dbContext;
+        private readonly DocRecordRepository _docRecordRepository = docRecordRepository;
+        private readonly IMapper _mapper = mapper;
 
-        public DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper, DocRecordRepository docRecordRepository)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-            _docRecordRepository = docRecordRepository;
-        }
         public async Task<Document> Add(Document Doc, DocRecord docRecord)
         {
             var docEntity = new DocumentEntity

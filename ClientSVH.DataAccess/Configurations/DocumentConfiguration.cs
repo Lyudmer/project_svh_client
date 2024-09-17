@@ -1,9 +1,8 @@
-﻿
-using ClientSVH.DataAccess.Entities;
+﻿using ClientSVH.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClientSVH.PackagesDBCore.Configurations
+namespace ClientSVH.DataAccess.Configurations
 {
     public class DocumentConfiguration : IEntityTypeConfiguration<DocumentEntity>
     {

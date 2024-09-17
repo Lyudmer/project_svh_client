@@ -16,7 +16,7 @@ namespace ClientSVH.Endpoints
         }
         private static async Task<IResult> Register(RegisterUserRequest request, UsersService usersService)
         {
-            await ((IUsersService)usersService).Register(request.username, request.passwordHash, request.email);
+            await ((IUsersService)usersService).Register(request.UserName, request.PasswordHash, request.Email);
             return Results.Ok();
         }
         private static async Task<IResult> Login(LoginUserRequest request, UsersService usersService,HttpContext context)
