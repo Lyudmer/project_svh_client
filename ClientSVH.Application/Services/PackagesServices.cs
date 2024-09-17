@@ -33,7 +33,7 @@ namespace ClientSVH.Application.Services
         }
         public async Task<int> SendToServer(int Pid)
         {
-            return await _sendToServer.SendToServer(Pid);
+            return await _sendToServer.SendPaskageToServer(Pid);
         }
     }
 }

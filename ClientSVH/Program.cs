@@ -26,7 +26,7 @@ services.AddSwaggerGen();
 services.AddDbContext<ClientSVHDbContext>(
     options =>
     {
-        options.UseNpgsql(configuration.GetConnectionString(nameof(ClientSVHDbContext)));
+        options.UseNpgsql(configuration.GetSection("ConnectionStrings").GetConnectionString(nameof(ClientSVHDbContext)));
     });
 //mongodb
 services.Configure<DocsBodyDBConnectionSettings>(configuration.GetSection(nameof(DocsBodyDBConnectionSettings)));
