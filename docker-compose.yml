@@ -2,7 +2,7 @@ services:
   clientsvh:
     image: ${DOCKER_REGISTRY-}clientsvh
     build:
-      context: .
+      context: ${PWD}/ClientSVH
       dockerfile: ClientSVH\Dockerfile
     environment:
      - ASPNETCORE_ENVIROMENT =Development
@@ -11,14 +11,16 @@ services:
   postgres:
     container_name: postgres
     image: postgres:latest
+    restart: always
     environment:
       POSTGRES_DB: "clientsvhdb"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "studadmin"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+       - "5432:5432"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -30,23 +32,9 @@ services:
     volumes:
        - mongodb-data:/var/lib/mongodb/data
   
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    ports:
-       -  8081:8081
-    environment:
-        ME_CONFIG_MONGODB_ADMINUSERNAME: studadmin
-        ME_CONFIG_MONGODB_ADMINPASSWORD: studadmin
-        ME_CONFIG_MONGODB_URL: mongodb://studadmin:studadmin@mongo:27017/
-        ME_CONFIG_MONGODB_SERVER: mongo
-        ME_CONFIG_MONGODB_PORT: 27017
-        ME_CONFIG_MONGODB_ENABLE_ADMIN: false
-        ME_CONFIG_MONGODB_AUTH_DATABASE: docbodysvh
-        ME_CONFIG_MONGODB_AUTH_USERNAME: studadmin
-        ME_CONFIG_MONGODB_AUTH_PASSWORD: studadmin
-        ME_CONFIG_BASICAUTH_USERNAME: studadmin
-        ME_CONFIG_BASICAUTH_PASSWORD: studadmin
+  
 volumes:
-  postgres-data:
+  postgres-db:
+    driver: local
   mongodb-data:
+     driver: local  

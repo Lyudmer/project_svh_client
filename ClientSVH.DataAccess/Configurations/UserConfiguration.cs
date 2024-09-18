@@ -14,7 +14,7 @@ namespace ClientSVH.DataAccess.Configurations
             builder.Property(b => b.Id)
               .IsRequired()
               .ValueGeneratedOnAdd()
-              .HasColumnType("bigint");
+              .HasColumnType("Guid");
 
             builder.Property(b => b.UserName)
                 .IsRequired();

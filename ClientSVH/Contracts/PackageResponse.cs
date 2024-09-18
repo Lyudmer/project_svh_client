@@ -4,7 +4,7 @@ namespace ClientSVH.Contracts
 {
     public record PackageResponse
     (
-        int Id,
+        int Pid,
         Guid UserId,
         DateTime CreateDate, 
         DateTime ModifyDate,

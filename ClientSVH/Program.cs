@@ -21,6 +21,16 @@ var configuration = builder.Configuration;
 services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
 
 services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+//postgresql db
+//var connectionString = builder.Configuration.GetConnectionString("ClientSVHDB");
+//services.AddDbContext<ClientSVHDbContext>(options =>{options.UseNpgsql(connectionString);});
+//mongodb
+services.Configure<DocsBodyDBConnectionSettings>(configuration.GetSection("MongoDBContext"));
+services.AddSingleton<DocRecordServices>();
+services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 services.AddScoped<IUsersRepository, UsersRepository>();
 services.AddScoped<IUsersService, UsersService>();
@@ -38,23 +48,6 @@ services.AddScoped<IDocRecordRepository, DocRecordRepository>();
 services.AddAutoMapper(typeof(IUsersService).Assembly);
 services.AddAutoMapper(typeof(IPackagesServices).Assembly);
 services.AddAutoMapper(typeof(IDocumentsServices).Assembly);
-
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
-//postgresql db
-builder.Services.AddDbContext<ClientSVHDbContext>(
-    options =>
-    {
-        options.UseNpgsql(configuration.GetConnectionString(nameof(ClientSVHDbContext)));
-    }
-    );
-//mongodb
-builder.Services.Configure<DocsBodyDBConnectionSettings>(
-builder.Configuration.GetSection("MongoDBContext"));
-builder.Services.AddSingleton<DocRecordServices>();
-builder.Services.AddControllers()
-    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
-
 
 var app = builder.Build();
 
