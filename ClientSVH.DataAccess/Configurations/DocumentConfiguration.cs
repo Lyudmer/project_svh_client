@@ -26,7 +26,7 @@ namespace ClientSVH.DataAccess.Configurations
                    .IsRequired()
                    .ValueGeneratedOnAdd()
                    .HasColumnName("docid")
-                   .HasColumnType("Guid");
+                   .HasColumnType("uuid");
             builder.Property(d => d.Pid)
                    .IsRequired()
                    .HasColumnName("pid");

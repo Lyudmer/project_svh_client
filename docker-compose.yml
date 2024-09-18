@@ -24,17 +24,26 @@ services:
   mongo:
     image: mongo:latest
     container_name: mongo
+    restart: always
     environment:
         MONGO_INITDB_ROOT_USERNAME: studadmin
         MONGO_INITDB_ROOT_PASSWORD: studadmin
     ports:
        -  27017:27017
-    volumes:
-       - mongodb-data:/var/lib/mongodb/data
-  
-  
+ 
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: studadmin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: studadmin
+    depends_on:
+      - mongo  
+ 
 volumes:
   postgres-db:
     driver: local
   mongodb-data:
-     driver: local  
+

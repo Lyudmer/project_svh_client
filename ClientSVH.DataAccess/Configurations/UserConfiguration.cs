@@ -10,12 +10,11 @@ namespace ClientSVH.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             builder.HasKey(x => x.Id);
-     
-            builder.Property(b => b.Id)
-              .IsRequired()
-              .ValueGeneratedOnAdd()
-              .HasColumnType("Guid");
 
+            builder.Property(b => b.Id)
+              .HasColumnType("uuid")
+              .ValueGeneratedOnAdd()
+              .IsRequired();
             builder.Property(b => b.UserName)
                 .IsRequired();
             builder.Property(b => b.PasswordHash)

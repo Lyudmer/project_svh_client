@@ -12,7 +12,7 @@ namespace ClientSVH.Endpoints
     {
         public static IEndpointRouteBuilder MapPackagesEndpoints(this IEndpointRouteBuilder app)
         {
-            var endpoints = app.MapGroup("Packages").RequireAuthorization();
+            var endpoints = app.MapGroup("Packages");
             app.MapPost("loadfile {UserId:guid}", LoadFile);
         //    app.MapGet("{id:guid}", GetPkgUser);
        //     app.MapGet("{id:int}", GetPkgId);

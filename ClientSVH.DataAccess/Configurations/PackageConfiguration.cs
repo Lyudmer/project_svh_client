@@ -30,7 +30,7 @@ namespace ClientSVH.DataAccess.Configurations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnName("uuid")
-                        .HasColumnType("Guid");
+                        .HasColumnType("uuid");
 
             builder.Property(p => p.CreateDate)
                         .HasColumnName("create_date")
