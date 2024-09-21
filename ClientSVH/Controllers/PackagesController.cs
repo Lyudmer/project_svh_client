@@ -1,4 +1,5 @@
-﻿using ClientSVH.Application.Services;
+﻿
+using ClientSVH.Application.Services;
 using ClientSVH.Contracts;
 using ClientSVH.Core.Abstraction.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,11 @@ namespace ClientSVH.Controllers
                 return BadRequest(ModelState);
             var uploads = _appEnvironment.WebRootPath;
             var filePath = Path.Combine(uploads, InName.FileName).ToString();
-            await _pkgService.LoadFile( _userService.GetUserIdFromLogin(), filePath);
-
+            var UserId =_userService.GetUserId().ToString();
+            if (Guid.TryParse(UserId, out var userId))
+            {
+                await _pkgService.LoadFile(userId, filePath);
+            }
             return Ok();
         }
         [HttpPost("send")]

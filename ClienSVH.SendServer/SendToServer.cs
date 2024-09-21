@@ -1,5 +1,6 @@
 ﻿
 using ClientSVH.Application.Interfaces.Auth;
+using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.DocsBodyCore.Abstraction;
 using System.Data;
@@ -8,12 +9,12 @@ using System.Xml.Linq;
 namespace ClientSVH.SendServer
 {
     public class SendToServer(
-       IDocumentsServices docServices, IDocRecordServices docRecordServices
+       IDocumentsRepository docRepository, IDocRecordRepository docRecordRepository
        ) : ISendToServer
     {
         
-        private readonly IDocumentsServices _docServices = docServices;
-        private readonly IDocRecordServices _docRecordServices = docRecordServices;
+        private readonly IDocumentsRepository _docRepository = docRepository;
+        private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
 
        
         async Task<int> ISendToServer.SendPaskageToServer(int Pid)
@@ -42,11 +43,11 @@ namespace ClientSVH.SendServer
 
             var elem = new XElement("Package");
             elem.SetAttributeValue("pid", Pid);
-            var docs = await _docServices.GetByFilter(Pid);
+            var docs = await _docRepository.GetByFilter(Pid);
             foreach (var docId in docs.AsParallel().Select(d => d.DocId).ToList()) 
                 foreach (var doc in docs)
             {
-                elem.Add(_docRecordServices.GetId(doc.DocId).ToString());
+                elem.Add(_docRecordRepository.GetByDocId(doc.DocId).ToString());
             }
             
             //foreach (var docId in docs.Select(d => d.DocId).ToList())

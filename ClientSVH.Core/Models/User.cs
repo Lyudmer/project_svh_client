@@ -1,6 +1,6 @@
 ﻿namespace ClientSVH.Core.Models
 {
-    public class User
+    public class User 
     {
         private User(Guid id, string username, string passwordHash, string email)
         {

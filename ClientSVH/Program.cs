@@ -1,6 +1,7 @@
+using AutoMapper;
+using ClienSVH.XMLParser;
 using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Application.Services;
-
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.DataAccess;
@@ -8,48 +9,54 @@ using ClientSVH.DataAccess.Repositories;
 using ClientSVH.DocsBodyCore.Abstraction;
 using ClientSVH.DocsBodyCore.Repositories;
 using ClientSVH.DocsBodyDataAccess;
+using ClientSVH.Extensions;
 using ClientSVH.Infrastructure;
+using ClientSVH.SendServer;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 var services = builder.Services;
 var configuration = builder.Configuration;
-services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
-
+services.AddApiAuthentication(configuration);
 services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
+services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+
 //postgresql db
-//var connectionString = builder.Configuration.GetConnectionString("ClientSVHDB");
-//services.AddDbContext<ClientSVHDbContext>(options =>{options.UseNpgsql(connectionString);});
-
-//mongodb
-services.Configure<DocsBodyDBConnectionSettings>(configuration.GetSection("MongoDBContext"));
-
+var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+services.AddDbContext<ClientSVHDbContext>(options =>{options.UseNpgsql(connectionString);});
 
 services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-services.AddScoped<IUsersRepository, UsersRepository>();
-services.AddScoped<IUsersService, UsersService>();
+services.AddTransient<IUsersService,UsersService>();
+services.AddTransient<IPackagesServices,PackagesServices>();
+//mongodb
+services.Configure<DocsBodyDBConnectionSettings>(configuration.GetSection("MongoDBContext"));
 
-services.AddScoped<IJwtProvider, JwtProvider>();
-services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-services.AddScoped<IPackagesServices, PackagesServices>();
-services.AddScoped<IPackagesRepository, PackagesRepository>();
-services.AddScoped<IDocumentsServices, DocumentsServices>();
-services.AddScoped<IDocumentsRepository, DocumentsRepository>();
-services.AddScoped<IDocRecordServices, DocRecordServices>();
-services.AddScoped<IDocRecordRepository, DocRecordRepository>();
 
-services.AddAutoMapper(typeof(IUsersService).Assembly);
-services.AddAutoMapper(typeof(IPackagesServices).Assembly);
-services.AddAutoMapper(typeof(IDocumentsServices).Assembly);
+services.AddTransient<IUsersRepository, UsersRepository>();
+services.AddTransient<IPackagesRepository, PackagesRepository>();
+services.AddTransient<IDocumentsRepository, DocumentsRepository>();
+services.AddTransient<IDocRecordRepository, DocRecordRepository>();
+
+services.AddTransient<ILoadFromFile, LoadFromFile>();
+services.AddTransient<ISendToServer, SendToServer>();
+
+services.AddTransient<IJwtProvider, JwtProvider>();
+services.AddTransient<IPasswordHasher, PasswordHasher>();
+
+services.AddAutoMapper(typeof(UsersService).Assembly);
+services.AddAutoMapper(typeof(PackagesServices).Assembly);
+
+services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -70,6 +77,7 @@ app.UseCookiePolicy(new CookiePolicyOptions
 
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 app.MapControllers();
 //app.UseCors(x =>

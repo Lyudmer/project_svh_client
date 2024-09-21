@@ -4,7 +4,6 @@
     {
         Task Register(string username, string password, string email);
         Task<string> Login(string password, string email);
-        Guid GetUserIdFromLogin();
-
+        public IEnumerable<Guid> GetUserId();
     }
 }

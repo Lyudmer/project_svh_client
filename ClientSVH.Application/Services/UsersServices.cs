@@ -1,8 +1,9 @@
 ﻿using ClientSVH.Application.Interfaces.Auth;
-using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+
 
 namespace ClientSVH.Application.Services
 {
@@ -10,13 +11,13 @@ namespace ClientSVH.Application.Services
         IUsersRepository userRepository,
         IPasswordHasher passwordHasher,
         IJwtProvider jwtprovider,
-        AuthorizationHandlerContext handlercontext
+        IHttpContextAccessor httpContextAccessor
            ) : IUsersService
     {
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly IUsersRepository _usersRepository = userRepository;
         private readonly IJwtProvider _jwtProvider = jwtprovider;
-        private readonly AuthorizationHandlerContext _handlercontext = handlercontext;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         async Task IUsersService.Register(string username, string password, string email)
         {
@@ -47,20 +48,17 @@ namespace ClientSVH.Application.Services
             return token;
         }
 
-        public Guid GetUserIdFromLogin()
+        public IEnumerable<Guid> GetUserId()
         {
-            var UserClaim = _handlercontext.User.Claims
-                .FirstOrDefault(u => u.Type == CustomClaims.UserId);
-
-            bool resId =  Guid.TryParse(UserClaim?.Value, out Guid userId);
-
-            if (!resId)
+            var UserId = _httpContextAccessor.HttpContext?.User.Claims
+                .FirstOrDefault(c => c.Type == CustomClaims.UserId);
+            if (UserId is null || Guid.TryParse(UserId.Value, out var userId))
             {
-                throw new Exception("failed to userid");
+                throw new Exception("failed to login");
             }
-            return userId;
 
+            yield return userId;
         }
-         
+
     }
 }

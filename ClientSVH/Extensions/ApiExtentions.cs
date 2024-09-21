@@ -3,9 +3,8 @@ using ClientSVH.Core.Models;
 using ClientSVH.Endpoints;
 using ClientSVH.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace ClientSVH.Extensions
@@ -15,15 +14,24 @@ namespace ClientSVH.Extensions
         public static void AddMappedEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapUsersEndpoints();
+            app.MapPackagesEndpoints();
         }
         public static void AddApiAuthentication(this IServiceCollection services, 
             IConfiguration configuration)
         {
            var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            services.AddAuthentication(Options =>
             {
+                Options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                Options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                Options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken=true;
                 options.TokenValidationParameters = new()
                 {
                     ValidateIssuer = false,

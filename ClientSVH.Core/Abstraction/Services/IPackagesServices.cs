@@ -6,9 +6,7 @@ namespace ClientSVH.Core.Abstraction.Services
     {
     
         Task<int> LoadFile(Guid UserId, string FileName);
-        Task<Package> Add(Package Pkg);
-        Task<Package> GetPkgId(int Pid);
-        Task<int> GetLastPkgId();
+      
         Task<int> SendToServer(int Pid);
 
     }

@@ -6,15 +6,16 @@ using ClientSVH.DocsBodyCore.Models;
 using ClientSVH.DocsBodyCore.Repositories;
 using ClientSVH.DocsBodyCore.Abstraction;
 using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.DocsBodyDataAccess.Entities;
 
 
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper, DocRecordRepository docRecordRepository) : IDocumentsRepository
+    public class DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper, IDocRecordRepository docRecordRepository) : IDocumentsRepository
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
-        private readonly DocRecordRepository _docRecordRepository = docRecordRepository;
+        private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
         private readonly IMapper _mapper = mapper;
 
         public async Task<Document> Add(Document Doc, DocRecord docRecord)
@@ -37,6 +38,7 @@ namespace ClientSVH.DataAccess.Repositories
             await _dbContext.AddAsync(docEntity);
             await _dbContext.SaveChangesAsync();
             await _docRecordRepository.Add(docRecord);
+            await _dbContext.AddAsync(docEntity);
             return Doc;
         }
         public async Task<Document> GetById(int id)

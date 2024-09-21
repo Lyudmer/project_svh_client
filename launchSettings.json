@@ -1,10 +1,13 @@
 {
   "profiles": {
-    "Docker Compose": {
+    "svh": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "clientsvh": "StartDebugging"
+        "clientsvh": "StartWithoutDebugging",
+        "mongo": "StartWithoutDebugging",
+        "mongo-express": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging"
       }
     }
   }

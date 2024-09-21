@@ -9,17 +9,17 @@ namespace ClientSVH.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
-            builder.HasKey(x => x.Id);
-
-            builder.Property(b => b.Id)
+            builder.HasKey(u => u.Id);
+           
+            builder.Property(u => u.Id)
               .HasColumnType("uuid")
               .ValueGeneratedOnAdd()
               .IsRequired();
-            builder.Property(b => b.UserName)
+            builder.Property(u => u.UserName)
                 .IsRequired();
-            builder.Property(b => b.PasswordHash)
+            builder.Property(u => u.PasswordHash)
                 .IsRequired();
-            builder.Property(b => b.Email)
+            builder.Property(u => u.Email)
                 .IsRequired();
 
         }
