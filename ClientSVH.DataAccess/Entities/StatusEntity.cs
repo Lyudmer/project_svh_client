@@ -9,9 +9,6 @@ namespace ClientSVH.DataAccess.Entities
         public bool MkRes { get; set; }
         public bool SendMess { get; set; }   
 
-        public int OldSt { get; set; }
-        public int NewSt { get; set; }
-        public StatusGraphEntity? StatusGraph { get; set; }
         
     }
 }

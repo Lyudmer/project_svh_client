@@ -12,7 +12,7 @@ namespace ClientSVH.DataAccess.Mapping
             CreateMap<DocumentEntity, Document>(MemberList.Destination);
             CreateMap<PackageEntity, Package>(MemberList.Destination);
             CreateMap<StatusEntity, Status>(MemberList.Destination);
-            CreateMap<StatusGraphEntity, StatusGraph>(MemberList.Destination);
+            
         }
     }
 }

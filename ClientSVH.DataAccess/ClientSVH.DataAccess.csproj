@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientSVH.Core\ClientSVH.Core.csproj" />
-    <ProjectReference Include="..\ClientSVH.DocsBodyDateAccess\ClientSVH.DocsBodyDataAccess.csproj" />
   </ItemGroup>
 
 </Project>

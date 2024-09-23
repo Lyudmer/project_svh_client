@@ -13,7 +13,7 @@ namespace ClientSVH.DataAccess
         public DbSet<PackageEntity> Packages { get; set; }
         public DbSet<DocumentEntity> Document { get; set; }
         public DbSet<StatusEntity> Status { get; set; }
-        public DbSet<StatusGraphEntity> StatusGraph { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace ClientSVH.DataAccess
             modelBuilder.ApplyConfiguration(new PackageConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentConfiguration());
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
-            modelBuilder.ApplyConfiguration(new StatusGraphConfiguration());
+            
           
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClientSVHDbContext).Assembly);

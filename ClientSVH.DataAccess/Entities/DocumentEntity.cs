@@ -1,6 +1,4 @@
 ﻿
-using ClientSVH.DocsBodyDataAccess.Entities;
-
 namespace ClientSVH.DataAccess.Entities
 { 
     public class DocumentEntity
@@ -17,6 +15,6 @@ namespace ClientSVH.DataAccess.Entities
         public int Pid { get; set; }
         public PackageEntity? Package { get; set; } 
         public Guid DocId { get; set; }
-        public DocRecordEntity? DocRecord { get; set; }
+        
     }
 }

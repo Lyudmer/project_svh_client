@@ -28,6 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DataAccess", "Cli
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyDataAccess", "ClientSVH.DocsBodyDateAccess\ClientSVH.DocsBodyDataAccess.csproj", "{D452470F-9E3A-47AD-ACCD-1BA57907801A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0CF26108-97B8-4800-AFAF-78E529D32775} = {0CF26108-97B8-4800-AFAF-78E529D32775}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyCore", "ClientSVH.DocsBodyCore\ClientSVH.DocsBodyCore.csproj", "{0CF26108-97B8-4800-AFAF-78E529D32775}"
 EndProject

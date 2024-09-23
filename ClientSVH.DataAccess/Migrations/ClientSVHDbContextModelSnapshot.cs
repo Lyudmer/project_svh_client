@@ -27,8 +27,9 @@ namespace ClientSVH.DataAccess.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("did")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                        .HasColumnName("did");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -45,9 +46,6 @@ namespace ClientSVH.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("docid");
-
-                    b.Property<Guid?>("DocRecordId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("IdSha256")
                         .IsRequired()
@@ -79,8 +77,8 @@ namespace ClientSVH.DataAccess.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("number");
 
-                    b.Property<int>("Pid")
-                        .HasColumnType("integer")
+                    b.Property<long>("Pid")
+                        .HasColumnType("bigint")
                         .HasColumnName("pid");
 
                     b.Property<int>("SizeDoc")
@@ -92,7 +90,7 @@ namespace ClientSVH.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocRecordId");
+                    b.HasIndex("Pid");
 
                     b.ToTable("documents", (string)null);
                 });
@@ -155,12 +153,6 @@ namespace ClientSVH.DataAccess.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("mkres");
 
-                    b.Property<int>("NewSt")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OldSt")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("RunWf")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -180,31 +172,7 @@ namespace ClientSVH.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OldSt")
-                        .IsUnique();
-
                     b.ToTable("pkg_status", (string)null);
-                });
-
-            modelBuilder.Entity("ClientSVH.DataAccess.Entities.StatusGraphEntity", b =>
-                {
-                    b.Property<int>("OldSt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("oldst");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OldSt"));
-
-                    b.Property<int>("NewSt")
-                        .HasColumnType("integer")
-                        .HasColumnName("newst");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OldSt");
-
-                    b.ToTable("pkg_status_graph", (string)null);
                 });
 
             modelBuilder.Entity("ClientSVH.DataAccess.Entities.UserEntity", b =>
@@ -233,43 +201,13 @@ namespace ClientSVH.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ClientSVH.DocsBodyDataAccess.Entities.DocRecordEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("DocId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("DocText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DocRecordEntity");
-                });
-
             modelBuilder.Entity("ClientSVH.DataAccess.Entities.DocumentEntity", b =>
                 {
-                    b.HasOne("ClientSVH.DocsBodyDataAccess.Entities.DocRecordEntity", "DocRecord")
-                        .WithMany()
-                        .HasForeignKey("DocRecordId");
-
                     b.HasOne("ClientSVH.DataAccess.Entities.PackageEntity", "Package")
                         .WithMany("Documents")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("Pid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DocRecord");
 
                     b.Navigation("Package");
                 });
@@ -293,25 +231,9 @@ namespace ClientSVH.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ClientSVH.DataAccess.Entities.StatusEntity", b =>
-                {
-                    b.HasOne("ClientSVH.DataAccess.Entities.StatusGraphEntity", "StatusGraph")
-                        .WithOne("Status")
-                        .HasForeignKey("ClientSVH.DataAccess.Entities.StatusEntity", "OldSt")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StatusGraph");
-                });
-
             modelBuilder.Entity("ClientSVH.DataAccess.Entities.PackageEntity", b =>
                 {
                     b.Navigation("Documents");
-                });
-
-            modelBuilder.Entity("ClientSVH.DataAccess.Entities.StatusGraphEntity", b =>
-                {
-                    b.Navigation("Status");
                 });
 #pragma warning restore 612, 618
         }

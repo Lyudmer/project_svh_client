@@ -1,9 +1,12 @@
 ﻿using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Core.Abstraction.Repositories;
-using ClientSVH.Core.Abstraction.Services;
+
 using ClientSVH.Core.Models;
+using ClientSVH.DocsBodyCore.Abstraction;
 using ClientSVH.DocsBodyCore.Models;
+
 using System.Data;
+
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
@@ -12,11 +15,11 @@ using System.Xml.Linq;
 namespace ClienSVH.XMLParser
 {
     public class LoadFromFile(IPackagesRepository pkgRepository,
-        IDocumentsRepository docRepository) : ILoadFromFile
+        IDocumentsRepository docRepository, IDocRecordRepository docRecordRepository) : ILoadFromFile
     {
         private readonly IPackagesRepository _pkgRepository = pkgRepository;
         private readonly IDocumentsRepository _docRepository = docRepository;
-
+        private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
         public async Task<int> LoadFile(Guid userId, string InFile)
         {
             int Pid = 0;
@@ -35,6 +38,7 @@ namespace ClienSVH.XMLParser
 
                     Pkg = await _pkgRepository.Add(Pkg);
                     Pid = Pkg.Pid;
+
                     var xDocs = from xDoc in xPkg?.AsParallel().Elements()
                                 select new
                                 {
@@ -48,12 +52,17 @@ namespace ClienSVH.XMLParser
                     {
                         var doc_1 = await _docRepository.GetLastDocId() + 1;
                         var DocId = Guid.NewGuid();
-                        var Doc = Document.Create(doc_1, DocId, doc.num, DateTime.Parse(doc.dat),
+                        var Doc = ClientSVH.Core.Models.Document.Create(doc_1, DocId, doc.num, DateTime.Parse(doc.dat),
                                       doc.doctext, doc.doctext.Length, GetHashMd5(doc.doctext), GetSha256(doc.doctext),
                                       Pid, DateTime.Now, DateTime.Now);
 
-                        DocRecord dRecord = DocRecord.Create(Guid.NewGuid(), DocId, doc.doctext, DateTime.Now, DateTime.Now);
-                        Doc = await _docRepository.Add(Doc, dRecord);
+                        
+                        Doc = await _docRepository.Add(Doc);
+                        if (Doc is not null)
+                        {
+                            DocRecord dRecord = DocRecord.Create(Guid.NewGuid(), Doc.DocId, doc.doctext, DateTime.Now, DateTime.Now);
+                            var dRecordId = await _docRecordRepository.Add(dRecord);
+                        }
                     }
                 }
             }
@@ -65,6 +74,9 @@ namespace ClienSVH.XMLParser
 
             return Pid;
         }
+
+       
+
         private static string GetHashMd5(string text)
         {
             string result = string.Empty;
@@ -90,5 +102,6 @@ namespace ClienSVH.XMLParser
             }
             return sb.ToString();
         }
+       
     }
 }

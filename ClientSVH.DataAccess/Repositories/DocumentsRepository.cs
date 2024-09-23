@@ -2,23 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using ClientSVH.Core.Models;
 using AutoMapper;
-using ClientSVH.DocsBodyCore.Models;
-using ClientSVH.DocsBodyCore.Repositories;
-using ClientSVH.DocsBodyCore.Abstraction;
 using ClientSVH.Core.Abstraction.Repositories;
-using ClientSVH.DocsBodyDataAccess.Entities;
-
-
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper, IDocRecordRepository docRecordRepository) : IDocumentsRepository
+    public class DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper) : IDocumentsRepository
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
-        private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
+        
         private readonly IMapper _mapper = mapper;
 
-        public async Task<Document> Add(Document Doc, DocRecord docRecord)
+        public async Task<Document> Add(Document Doc)
         {
             var docEntity = new DocumentEntity
             {
@@ -37,8 +31,7 @@ namespace ClientSVH.DataAccess.Repositories
 
             await _dbContext.AddAsync(docEntity);
             await _dbContext.SaveChangesAsync();
-            await _docRecordRepository.Add(docRecord);
-            await _dbContext.AddAsync(docEntity);
+            
             return Doc;
         }
         public async Task<Document> GetById(int id)
@@ -83,16 +76,7 @@ namespace ClientSVH.DataAccess.Repositories
                 .Where(u => u.Id == Id)
                 .ExecuteDeleteAsync();
         }
-        public async Task<DocRecord> GetDocWithRecord(Guid DocId)
-        {
-            var docEntity = await _dbContext.Document
-                .AsNoTracking()
-                .Include(d => d.DocRecord)
-                .FirstOrDefaultAsync(d => d.DocId == DocId)
-                ?? throw new Exception();
-
-            return _mapper.Map<DocRecord>(docEntity);
-        }
+        
         public async Task<int> GetLastDocId()
         {
             return await _dbContext.Document.MaxAsync(p => p.Id);
