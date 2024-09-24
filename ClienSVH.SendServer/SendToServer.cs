@@ -1,8 +1,7 @@
 ﻿
 using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Core.Abstraction.Repositories;
-using ClientSVH.Core.Abstraction.Services;
-using ClientSVH.DocsBodyCore.Abstraction;
+using ClientSVH.DocsRecordCore.Abstraction;
 using System.Data;
 using System.Xml.Linq;
 
@@ -49,12 +48,6 @@ namespace ClientSVH.SendServer
             {
                 elem.Add(_docRecordRepository.GetByDocId(doc.DocId).ToString());
             }
-            
-            //foreach (var docId in docs.Select(d => d.DocId).ToList())
-            //{
-            //    var docRec = _docRecordServices.GetId(docId).ToString();
-            //    elem.Add(docRec);
-            //}
             xPkg.Add(elem);
             return xPkg;
         }

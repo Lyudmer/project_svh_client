@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH", "ClientSVH\Clie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.Application", "ClientSVH.Application\ClientSVH.Application.csproj", "{2EB7EFF0-1700-445C-9346-D9C2529E006E}"
 	ProjectSection(ProjectDependencies) = postProject
+		{0CF26108-97B8-4800-AFAF-78E529D32775} = {0CF26108-97B8-4800-AFAF-78E529D32775}
 		{B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD} = {B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD}
 	EndProjectSection
 EndProject
@@ -27,12 +28,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DataAccess", "Cli
 		{B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD} = {B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyDataAccess", "ClientSVH.DocsBodyDateAccess\ClientSVH.DocsBodyDataAccess.csproj", "{D452470F-9E3A-47AD-ACCD-1BA57907801A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsRecordDataAccess", "ClientSVH.DocsBodyDateAccess\ClientSVH.DocsRecordDataAccess.csproj", "{D452470F-9E3A-47AD-ACCD-1BA57907801A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0CF26108-97B8-4800-AFAF-78E529D32775} = {0CF26108-97B8-4800-AFAF-78E529D32775}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsBodyCore", "ClientSVH.DocsBodyCore\ClientSVH.DocsBodyCore.csproj", "{0CF26108-97B8-4800-AFAF-78E529D32775}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsRecordCore", "ClientSVH.DocsBodyCore\ClientSVH.DocsRecordCore.csproj", "{0CF26108-97B8-4800-AFAF-78E529D32775}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.SendServer", "ClienSVH.SendServer\ClientSVH.SendServer.csproj", "{74347479-F9D3-4573-BE53-407779FB3E3A}"
 	ProjectSection(ProjectDependencies) = postProject

@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientSVH.Core\ClientSVH.Core.csproj" />
-    <ProjectReference Include="..\ClientSVH.DocsBodyCore\ClientSVH.DocsBodyCore.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,9 +7,10 @@ using ClientSVH.Core.Abstraction.Services;
 
 using ClientSVH.DataAccess;
 using ClientSVH.DataAccess.Repositories;
-using ClientSVH.DocsBodyCore.Abstraction;
+
 using ClientSVH.DocsBodyDataAccess;
-using ClientSVH.DocsBodyDataAccess.Repositories;
+using ClientSVH.DocsRecordCore.Abstraction;
+using ClientSVH.DocsRecordDataAccess;
 using ClientSVH.Extensions;
 using ClientSVH.Infrastructure;
 using ClientSVH.SendServer;
@@ -39,7 +40,7 @@ services.AddControllers()
 services.AddTransient<IUsersService,UsersService>();
 services.AddTransient<IPackagesServices,PackagesServices>();
 //mongodb
-services.Configure<DocsBodyDBConnectionSettings>(configuration.GetSection("MongoDBContext"));
+services.Configure<DocRecordDBSettings>(configuration.GetSection("MongoDBContext"));
 
 
 

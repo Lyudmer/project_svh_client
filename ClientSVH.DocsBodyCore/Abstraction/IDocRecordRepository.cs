@@ -1,6 +1,6 @@
-﻿using ClientSVH.DocsBodyCore.Models;
+﻿using ClientSVH.DocsRecordCore.Models;
 
-namespace ClientSVH.DocsBodyCore.Abstraction
+namespace ClientSVH.DocsRecordCore.Abstraction
 {
     public interface IDocRecordRepository
     {

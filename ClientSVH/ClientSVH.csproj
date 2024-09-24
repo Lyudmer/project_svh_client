@@ -30,7 +30,7 @@
     <ProjectReference Include="..\ClienSVH.XMLParser\ClienSVH.XMLParser.csproj" />
     <ProjectReference Include="..\ClientSVH.Application\ClientSVH.Application.csproj" />
     <ProjectReference Include="..\ClientSVH.DataAccess\ClientSVH.DataAccess.csproj" />
-    <ProjectReference Include="..\ClientSVH.DocsBodyDateAccess\ClientSVH.DocsBodyDataAccess.csproj" />
+    <ProjectReference Include="..\ClientSVH.DocsBodyDateAccess\ClientSVH.DocsRecordDataAccess.csproj" />
     <ProjectReference Include="..\ClientSVH.Infrastructure\ClientSVH.Infrastructure.csproj" />
   </ItemGroup>
 

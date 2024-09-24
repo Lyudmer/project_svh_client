@@ -2,8 +2,8 @@
 using ClientSVH.Core.Abstraction.Repositories;
 
 using ClientSVH.Core.Models;
-using ClientSVH.DocsBodyCore.Abstraction;
-using ClientSVH.DocsBodyCore.Models;
+using ClientSVH.DocsRecordCore.Abstraction;
+using ClientSVH.DocsRecordCore.Models;
 
 using System.Data;
 
