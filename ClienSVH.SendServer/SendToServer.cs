@@ -9,9 +9,10 @@ namespace ClientSVH.SendServer
 {
     public class SendToServer(
        IDocumentsRepository docRepository, IDocRecordRepository docRecordRepository
+        , IMessageProducer messagePublisher
        ) : ISendToServer
     {
-        
+        private readonly IMessageProducer _messagePublisher= messagePublisher;
         private readonly IDocumentsRepository _docRepository = docRepository;
         private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
 
@@ -24,7 +25,8 @@ namespace ClientSVH.SendServer
             {
 // собрать xml
                var xPkg = await CreatePaskageXml(Pid);
-// отправить на сервер 
+                // отправить на сервер 
+                _messagePublisher.SendMessage(xPkg,"SendPkg");
 
             }
             catch (Exception )

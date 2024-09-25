@@ -7,7 +7,7 @@ using ClientSVH.Contracts;
 namespace ClientSVH.Controllers
 {
     [ApiController]
-    [Route("svh/account")]
+    [Route("api/[controller]")]
     public class UsersController(IUsersService usersService
         //, IWebHostEnvironment appEnvironment
             ) : ControllerBase

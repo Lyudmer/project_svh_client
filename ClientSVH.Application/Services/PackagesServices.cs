@@ -8,13 +8,11 @@ using ClientSVH.Application.Interfaces.Auth;
 namespace ClientSVH.Application.Services
 {
     public class PackagesServices(ILoadFromFile loadFromFile,
-        IPackagesRepository pkgRepository,
         ISendToServer sendToServer
         ) : IPackagesServices
     {
         
         private readonly ILoadFromFile _loadFromFile = loadFromFile;
-        private readonly IPackagesRepository _pkgRepository = pkgRepository;
         private readonly ISendToServer _sendToServer = sendToServer;    
         public Task<int> LoadFile(Guid UserId, string FileName)
         {

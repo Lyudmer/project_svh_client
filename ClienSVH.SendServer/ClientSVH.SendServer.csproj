@@ -8,7 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientSVH.Application\ClientSVH.Application.csproj" />
-    <ProjectReference Include="..\ClientSVH.DocsBodyCore\ClientSVH.DocsRecordCore.csproj" />
+    <ProjectReference Include="..\ClientSVH.DocsRecordCore\ClientSVH.DocsRecordCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
   </ItemGroup>
 
 </Project>

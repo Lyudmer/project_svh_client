@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientSVH.Controllers
 {
     [ApiController]
-    [Route("svh/packages")]
+    [Route("api/[controller]")]
     public class PackagesController(IPackagesServices pkgService, IWebHostEnvironment appEnvironment,
                               IUsersService userService) : ControllerBase
     {

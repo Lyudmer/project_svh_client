@@ -1,24 +1,29 @@
-﻿using ClientSVH.Core.Abstraction.Repositories;
+﻿using AutoMapper;
+using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.Core.Models;
 using ClientSVH.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class StatusRepositoty(ClientSVHDbContext dbContext) : IStatusRepositoty
+    public class StatusRepositoty(ClientSVHDbContext dbContext, IMapper mapper) : IStatusRepositoty
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
+        private readonly IMapper _mapper = mapper;
 
-        public async Task Add(int Id, string StatusName, bool RunWf, bool MkRes)
+        public async Task<int> Add(int Id, string StatusName, bool RunWf, bool MkRes, bool SendMess)
         {
             var statusEntity = new StatusEntity
             {
                 Id = Id,
                 StatusName = StatusName,
                 RunWf = RunWf,
-                MkRes = MkRes
+                MkRes = MkRes,
+                SendMess=SendMess
             };
             await _dbContext.AddAsync(statusEntity);
             await _dbContext.SaveChangesAsync();
+            return statusEntity.Id;
         }
         public async Task Update(int Id, string StatusName, bool RunWf, bool MkRes)
         {
@@ -33,6 +38,16 @@ namespace ClientSVH.DataAccess.Repositories
             await _dbContext.Status
                 .Where(u => u.Id == Id)
                 .ExecuteDeleteAsync();
+           
+        }
+        public async Task<Status> GetById(int Id)
+        {
+            var stEntity = await _dbContext.Status
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id == Id) ?? throw new Exception();
+
+            return _mapper.Map<Status>(stEntity);
+
         }
     }
 }

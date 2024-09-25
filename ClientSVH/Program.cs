@@ -7,8 +7,6 @@ using ClientSVH.Core.Abstraction.Services;
 
 using ClientSVH.DataAccess;
 using ClientSVH.DataAccess.Repositories;
-
-using ClientSVH.DocsBodyDataAccess;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordDataAccess;
 using ClientSVH.Extensions;
@@ -16,6 +14,7 @@ using ClientSVH.Infrastructure;
 using ClientSVH.SendServer;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 
 
@@ -40,8 +39,15 @@ services.AddControllers()
 services.AddTransient<IUsersService,UsersService>();
 services.AddTransient<IPackagesServices,PackagesServices>();
 //mongodb
-services.Configure<DocRecordDBSettings>(configuration.GetSection("MongoDBContext"));
+services.Configure<DocRecordDBSettings>(configuration.GetSection("MongoDBSettings"));
 
+
+services.AddTransient<IMongoClient>(_ =>
+{
+    var connectionString = configuration.GetSection("MongoDBSettings:MongoDBConnectionString")?.Value;
+
+    return new MongoClient(connectionString);
+});
 
 
 services.AddTransient<IUsersRepository, UsersRepository>();
@@ -51,6 +57,7 @@ services.AddTransient<IDocRecordRepository, DocRecordRepository>();
 
 services.AddTransient<ILoadFromFile, LoadFromFile>();
 services.AddTransient<ISendToServer, SendToServer>();
+services.AddScoped<IMessageProducer, RabbitMQProducer>();
 
 services.AddTransient<IJwtProvider, JwtProvider>();
 services.AddTransient<IPasswordHasher, PasswordHasher>();

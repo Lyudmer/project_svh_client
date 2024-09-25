@@ -15,6 +15,7 @@ namespace ClientSVH.Extensions
         {
             app.MapUsersEndpoints();
             app.MapPackagesEndpoints();
+            app.MapStatusEndpoints();
         }
         public static void AddApiAuthentication(this IServiceCollection services, 
             IConfiguration configuration)
