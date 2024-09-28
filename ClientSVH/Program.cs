@@ -11,7 +11,8 @@ using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordDataAccess;
 using ClientSVH.Extensions;
 using ClientSVH.Infrastructure;
-using ClientSVH.SendServer;
+using ClientSVH.SendReceivServer;
+using ClientSVH.SendServer.Producer;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -57,7 +58,7 @@ services.AddTransient<IDocRecordRepository, DocRecordRepository>();
 
 services.AddTransient<ILoadFromFile, LoadFromFile>();
 services.AddTransient<ISendToServer, SendToServer>();
-services.AddScoped<IMessageProducer, RabbitMQProducer>();
+services.AddScoped<IMessagePublisher, RabbitMQProducer>();
 
 services.AddTransient<IJwtProvider, JwtProvider>();
 services.AddTransient<IPasswordHasher, PasswordHasher>();

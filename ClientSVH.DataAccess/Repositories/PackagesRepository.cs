@@ -27,6 +27,13 @@ namespace ClientSVH.DataAccess.Repositories
             return _mapper.Map<Package>(pkgEntity);
 
         }
+        public async Task<int> GetByStatus(int Pid)
+        {
+            var pkgEntity = await _dbContext.Packages
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(p => p.Id == Pid);
+            return _mapper.Map<Package>(pkgEntity).StatusId;
+        }
         public async Task<List<Package>> GetAll()
         {
             var query = _dbContext.Packages

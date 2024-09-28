@@ -6,7 +6,8 @@ services:
       dockerfile: ClientSVH/Dockerfile
 
   rabbit:
-    image: rabbitmq:3.8.25-management-alpine
+    container_name: svh-rabbitmq
+    image: rabbitmq:4.0.2-management-alpine
     restart: always
     hostname: localhost    
     environment:
@@ -64,3 +65,8 @@ volumes:
   postgres-db:
     driver: local
   mongodb-data:
+  rabbitmq_data:  
+  networks:
+  default:
+    name: svhLocalNetwork 
+    external: true  
