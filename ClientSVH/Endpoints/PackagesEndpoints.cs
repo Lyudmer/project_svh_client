@@ -14,7 +14,7 @@ namespace ClientSVH.Endpoints
         {
             var endpoints = app.MapGroup("Packages");
             app.MapPost("loadfile {UserId:guid}", LoadFile);
-        //    app.MapGet("{id:guid}", GetPkgUser);
+            app.MapGet("{Pid:int}", GetHistoryPkg);
        //     app.MapGet("{id:int}", GetPkgId);
        //     app.MapPut("{id:int}", UpdatePkg);
        //     app.MapDelete("{id:int}", DeletePkg);
@@ -34,6 +34,11 @@ namespace ClientSVH.Endpoints
         private static async Task<IResult> SendPkgToServer(int Pid, PackagesServices pkgService)
         {
             await ((IPackagesServices)pkgService).SendToServer(Pid);
+            return Results.Ok();
+        }
+        private static async Task<IResult> GetHistoryPkg(int Pid, PackagesServices pkgService)
+        {
+            await ((IPackagesServices)pkgService).HistoriPkgByPid(Pid);
             return Results.Ok();
         }
     }

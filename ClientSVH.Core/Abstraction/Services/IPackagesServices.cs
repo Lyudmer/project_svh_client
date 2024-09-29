@@ -8,6 +8,7 @@ namespace ClientSVH.Core.Abstraction.Services
         Task<int> LoadFile(Guid UserId, string FileName);
       
         Task<int> SendToServer(int Pid);
+        Task<HistoryPkg> HistoriPkgByPid(int Pid);
 
     }
 }

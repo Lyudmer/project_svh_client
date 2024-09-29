@@ -10,7 +10,11 @@ namespace ClientSVH.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             builder.HasKey(u => u.Id);
-           
+            builder
+                .HasMany(p => p.Packages)
+                .WithOne(s => s.User)
+                .HasForeignKey(s => s.UserId);
+
             builder.Property(u => u.Id)
               .HasColumnType("uuid")
               .ValueGeneratedOnAdd()

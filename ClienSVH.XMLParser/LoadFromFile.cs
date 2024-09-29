@@ -51,7 +51,7 @@ namespace ClienSVH.XMLParser
                     {
                         var doc_1 = await _docRepository.GetLastDocId() + 1;
                         var DocId = Guid.NewGuid();
-                        var Doc = ClientSVH.Core.Models.Document.Create(doc_1, DocId, doc.num, DateTime.Parse(doc.dat),
+                        var Doc = Document.Create(doc_1, DocId, doc.num, DateTime.Parse(doc.dat),
                                       doc.doctext, doc.doctext.Length, GetHashMd5(doc.doctext), GetSha256(doc.doctext),
                                       Pid, DateTime.Now, DateTime.Now);
 

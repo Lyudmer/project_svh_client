@@ -11,5 +11,6 @@
         public ICollection<DocumentEntity> Documents { get; set; } =  [];
         public int StatusId { get; set; }
         public StatusEntity? Status { get; set; }
+        
     }
 }

@@ -1,8 +1,9 @@
 ﻿using ClientSVH.DataAccess.Configurations;
 using ClientSVH.DataAccess.Entities;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Options;
+
 
 namespace ClientSVH.DataAccess
 {
@@ -13,7 +14,7 @@ namespace ClientSVH.DataAccess
         public DbSet<PackageEntity> Packages { get; set; }
         public DbSet<DocumentEntity> Document { get; set; }
         public DbSet<StatusEntity> Status { get; set; }
-        
+        public DbSet<HistoryPkgEntity> HistoryPkg { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,8 +22,7 @@ namespace ClientSVH.DataAccess
             modelBuilder.ApplyConfiguration(new PackageConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentConfiguration());
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
-            
-          
+            modelBuilder.ApplyConfiguration(new HistoryPkgConfiguration());
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClientSVHDbContext).Assembly);
 

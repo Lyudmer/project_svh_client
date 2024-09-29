@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClienSVH.SendServer\ClientSVH.SendServer.csproj" />
+    <ProjectReference Include="..\ClienSVH.SendReceivServer\ClientSVH.SendReceivServer.csproj" />
     <ProjectReference Include="..\ClienSVH.XMLParser\ClienSVH.XMLParser.csproj" />
     <ProjectReference Include="..\ClientSVH.Application\ClientSVH.Application.csproj" />
     <ProjectReference Include="..\ClientSVH.DataAccess\ClientSVH.DataAccess.csproj" />
