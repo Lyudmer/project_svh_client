@@ -38,7 +38,6 @@ namespace ClientSVH.DataAccess.Migrations
                         .HasDefaultValueSql("now()");
 
                     b.Property<DateTime>("DocDate")
-                        .HasMaxLength(5)
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("docdate");
 
@@ -46,6 +45,12 @@ namespace ClientSVH.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("docid");
+
+                    b.Property<string>("DocType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("doctype");
 
                     b.Property<string>("IdSha256")
                         .IsRequired()

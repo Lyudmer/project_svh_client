@@ -7,6 +7,7 @@ namespace ClientSVH.DataAccess.Entities
         public string Number { get; set; }=string.Empty;
         public DateTime DocDate { get; set; }
         public string ModeCode { get; set; } = string.Empty;
+        public string DocType { get; set; } = string.Empty;
         public int SizeDoc { get; set; }
         public string Idmd5 { get; set; } = string.Empty;       
         public string IdSha256 { get; set; } = string.Empty;

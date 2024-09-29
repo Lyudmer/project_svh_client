@@ -44,9 +44,12 @@ namespace ClientSVH.DataAccess.Configurations
             builder.Property(d => d.ModeCode)
                     .HasColumnName("modecode")
                     .HasMaxLength(5);
+            builder.Property(d => d.DocType)
+                    .HasColumnName("doctype")
+                    .HasMaxLength(50);
             builder.Property(d => d.DocDate)
-                    .HasColumnName("docdate")
-                    .HasMaxLength(5);
+                    .HasColumnName("docdate");
+                    
             builder.Property(d => d.SizeDoc)
                     .IsRequired()
                     .ValueGeneratedOnAdd()
