@@ -1,6 +1,4 @@
-﻿using ClientSVH.DataAccess.Entities;
-
-namespace ClientSVH.Contracts
+﻿namespace ClientSVH.Contracts
 {
     public record PackageResponse
     (

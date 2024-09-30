@@ -10,6 +10,7 @@ namespace ClientSVH.Core.Abstraction.Repositories
         Task<List<Package>> GetPkgUser(Guid UserId);
         Task<List<Package>> GetUserStatus(Guid UserId, int Status);
         Task<Package> GetById(int id);
+        Task<Package> GetByUUId(Guid uuid);
         Task<List<Package>> GetByPage(int Page, int Page_Size);
         Task<Package> GetPkgWithDoc(int Pid);
         Task UpdateStatus(int Pid, int Status);

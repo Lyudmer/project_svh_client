@@ -18,6 +18,15 @@ namespace ClientSVH.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
             return Pkg;
         }
+        public async Task<Package> GetByUUId(Guid uuid)
+        {
+            var pkgEntity = await _dbContext.Packages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.UUID == uuid) ?? throw new Exception();
+
+            return _mapper.Map<Package>(pkgEntity);
+
+        } 
         public async Task<Package> GetById(int Pid)
         {
             var pkgEntity = await _dbContext.Packages
