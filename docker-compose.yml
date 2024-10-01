@@ -25,7 +25,7 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_DB: "clientsvhdb"
+      POSTGRES_DB: "svhdb"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "studadmin"
     ports:
