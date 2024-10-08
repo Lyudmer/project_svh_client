@@ -6,7 +6,7 @@ using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
 using System.Data;
 
-using System.Security.Cryptography;
+using ClientSVH.Application.Common;
 using System.Text;
 using System.Xml.Linq;
 
@@ -52,7 +52,8 @@ namespace ClienSVH.XMLParser
                         var doc_1 = await _docRepository.GetLastDocId() + 1;
                         var DocId = Guid.NewGuid();
                         var Doc = Document.Create(doc_1, DocId, doc.num, DateTime.Parse(doc.dat),"",
-                                      doc.tdoc, doc.doctext.Length, GetHashMd5(doc.doctext), GetSha256(doc.doctext),
+                                      doc.tdoc, doc.doctext.Length, DopFunction.GetHashMd5(doc.doctext),
+                                      DopFunction.GetSha256(doc.doctext),
                                       Pid, DateTime.Now, DateTime.Now);
 
                         
@@ -76,31 +77,7 @@ namespace ClienSVH.XMLParser
 
        
 
-        private static string GetHashMd5(string text)
-        {
-            string result = string.Empty;
-            if (string.IsNullOrEmpty(text))
-            {
-                var md5 = MD5.Create();
-                var hash = md5?.ComputeHash(Encoding.UTF8.GetBytes(text));
-                if(hash!=null) result = Convert.ToBase64String(hash);
-            }
-            return result;
-        }
-        private static string GetSha256(string text)
-        {
-            var sb = new StringBuilder();
-            using (var hash = SHA256.Create())
-            {
-                var result = hash?.ComputeHash(Encoding.UTF8.GetBytes(text));
-                if (result != null)
-                {
-                    for (int i = 0; i < result.Length; i++)
-                        sb.Append(result[i].ToString("x2"));
-                }
-            }
-            return sb.ToString();
-        }
+      
        
     }
 }
