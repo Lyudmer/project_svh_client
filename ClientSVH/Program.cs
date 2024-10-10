@@ -13,7 +13,9 @@ using ClientSVH.DocsRecordDataAccess;
 using ClientSVH.Extensions;
 using ClientSVH.Infrastructure;
 using ClientSVH.SendReceivServer;
+using ClientSVH.SendReceivServer.Consumer;
 using ClientSVH.SendReceivServer.Producer;
+using ClientSVH.SendReceivServer.Settings;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -40,6 +42,7 @@ services.AddControllers()
 
 services.AddTransient<IUsersService,UsersService>();
 services.AddTransient<IPackagesServices,PackagesServices>();
+services.AddTransient<IDocumentsServices, DocumentsServices>();
 //mongodb
 services.Configure<DocRecordDBSettings>(configuration.GetSection("MongoDBSettings"));
 
@@ -60,13 +63,13 @@ services.AddTransient<IDocRecordRepository, DocRecordRepository>();
 services.AddTransient<ILoadFromFile, LoadFromFile>();
 services.AddTransient<ISendToServer, SendToServer>();
 services.AddScoped<IMessagePublisher, RabbitMQProducer>();
-
+services.AddScoped<IRabbitMQConsumer, RabbitMQConsumer>(); 
 services.AddTransient<IJwtProvider, JwtProvider>();
 services.AddTransient<IPasswordHasher, PasswordHasher>();
 
 services.AddAutoMapper(typeof(UsersService).Assembly);
 services.AddAutoMapper(typeof(PackagesServices).Assembly);
-
+services.AddAutoMapper(typeof(DocumentsServices).Assembly);
 services.AddHttpContextAccessor();
 
 var app = builder.Build();
