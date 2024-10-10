@@ -31,7 +31,7 @@ namespace ClientSVH.Controllers
             return Ok();
         }
         [HttpPost("send")]
-        public async Task<IActionResult> SendToServer(PkgSendResponse pkgSend)
+        public async Task<IActionResult> SendToServer(PackageRequest pkgSend)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -41,7 +41,7 @@ namespace ClientSVH.Controllers
             return Ok();
         }
         [HttpPost("GetHistory")]
-        public async Task<IActionResult> GetHistoryPkg(PkgSendResponse pkgSend)
+        public async Task<IActionResult> GetHistoryPkg(PackageRequest pkgSend)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -51,7 +51,7 @@ namespace ClientSVH.Controllers
             return Ok(result);
         }
         [HttpPost("GetPackage")]
-        public async Task<IActionResult> GetPkgId(PkgSendResponse pkgSend)
+        public async Task<IActionResult> GetPkgId(PackageRequest pkgSend)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -61,7 +61,7 @@ namespace ClientSVH.Controllers
             return Ok(result);
         } 
         [HttpPost("GetDocsPackage")]
-        public async Task<IActionResult> GetDocsPkg(PkgSendResponse pkgSend)
+        public async Task<IActionResult> GetDocsPkg(PackageRequest pkgSend)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -71,12 +71,22 @@ namespace ClientSVH.Controllers
             return Ok(result);
         }
         [HttpPost("DelPackage")]
-        public async Task<IActionResult> DeletePkg(PkgSendResponse pkgSend)
+        public async Task<IActionResult> DeletePkg(PackageRequest pkgSend)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             await _pkgService.DeletePkg(pkgSend.Pid);
+
+            return Ok();
+        }
+        [HttpPost("sendDelPkg")]
+        public async Task<IActionResult> SendDelPkgToServer(PackageRequest pkgSend)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _pkgService.SendDelPkgToServer(pkgSend.Pid);
 
             return Ok();
         }

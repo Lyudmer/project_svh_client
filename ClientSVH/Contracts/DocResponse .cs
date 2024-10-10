@@ -2,10 +2,10 @@
 
 namespace ClientSVH.Contracts
 {
-    public record DocResponse
+    public record PkgSendResponse
     (
         [Required]
-        int Id
+        int Pid
      
     );
     

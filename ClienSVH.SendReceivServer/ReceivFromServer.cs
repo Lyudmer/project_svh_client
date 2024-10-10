@@ -10,6 +10,7 @@ using ServerSVH.Application.Common;
 using System.Xml.Linq;
 namespace ClientSVH.SendReceivServer
 {
+    
     public class ResultMessage
     {
         public Guid UUID { get; set; }
@@ -35,19 +36,13 @@ namespace ClientSVH.SendReceivServer
             try
             {
                 // получить сообщение
-               
-                var resMess =_rabbitMQConsumer.LoadMessage("StatusPkg");
 
-                if (resMess != null )
+                var resMess = _rabbitMQConsumer.LoadMessage("StatusPkg");
+
+                if (resMess != null)
                 {
-                    var resRecord = ParsingMess(resMess,"Result");
-                    int olsstPkg = _pkgRepository.GetByUUId(resRecord.UUID).Result.StatusId;
-                    int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Pid;
-                    // поменять статус
-                    await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
-                    // добавить в историю
-                    var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.Now);
-                    await _historyPkgRepository.Add(hPkg);
+                    await LoadResultFormSerever(resMess, "LoadStatusFromServer");
+                    
                 }
                 // создать документ - если пришел документ,
                 var resMessDoc = _rabbitMQConsumer.LoadMessage("DocResultPkg");
@@ -60,6 +55,7 @@ namespace ClientSVH.SendReceivServer
                     await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
                     // добавить в историю
                     var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.Now);
+                   
                     await _historyPkgRepository.Add(hPkg);
                     // добавить документ
                     if (resRecord.DocRecord != null && await AddDocResPackage(resRecord))
@@ -68,7 +64,11 @@ namespace ClientSVH.SendReceivServer
                         await _historyPkgRepository.Add(hPkg);
                     }
                 }
-
+                var resMessDel = _rabbitMQConsumer.LoadMessage("DeletedPkg");
+                if (resMessDoc != null)
+                {
+                    await LoadResultFormSerever(resMessDel, "Del");
+                }
             }
             catch (Exception)
             {
@@ -76,6 +76,21 @@ namespace ClientSVH.SendReceivServer
 
             }
            return stPkg;
+        }
+
+        private async Task LoadResultFormSerever(string resMess,string typeMessage)
+        {
+            var resRecord = ParsingMess(resMess, "Result");
+            int olsstPkg = _pkgRepository.GetByUUId(resRecord.UUID).Result.StatusId;
+            int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Pid;
+            // поменять статус
+            await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
+            // добавить в историю
+            string sMess=string.Empty;
+            if (!typeMessage.Contains("Del")) sMess = resRecord.Message;
+            else sMess = "LoadStatusFromServer";
+            var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, olsstPkg, resRecord.Status, sMess, DateTime.Now);
+            await _historyPkgRepository.Add(hPkg);
         }
 
         private static ResultMessage ParsingMess(string resMess,string nodeDoc)
