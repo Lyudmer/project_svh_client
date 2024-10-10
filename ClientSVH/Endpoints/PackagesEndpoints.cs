@@ -14,11 +14,12 @@ namespace ClientSVH.Endpoints
         {
             var endpoints = app.MapGroup("Packages");
             app.MapPost("loadfile {UserId:guid}", LoadFile);
-            app.MapGet("{Pid:int}", GetHistoryPkg);
-       //     app.MapGet("{id:int}", GetPkgId);
-       //     app.MapPut("{id:int}", UpdatePkg);
-       //     app.MapDelete("{id:int}", DeletePkg);
+            app.MapGet("GetHistory{Pid:int}", GetHistoryPkg);
+            app.MapGet("GetPackage{Pid:int}", GetPkgId);
+            app.MapDelete("DelPackage{Pid:int}", DeletePkg);
             app.MapPost("send {Pid:int}", SendPkgToServer);
+            app.MapPost("sendDelPkg {Pid:int}", SendDelPkgToServer);
+            app.MapGet("GetDocsPackage{Pid:int}", GetDocsPkg);
             return app;
         }
         private static async Task<IResult> LoadFile(LoadFileRequest request, PackagesServices pkgService, Guid UserId)
@@ -26,19 +27,35 @@ namespace ClientSVH.Endpoints
             await ((IPackagesServices)pkgService).LoadFile(UserId,request.FileName);
             return Results.Ok();
         }
-        //private static async Task<IResult> GetPkgUser(PackageResponse respons, PackagesServices pkgService)
-        //{
-        //    await ((IPackagesService)pkgService).OpenPkg();
-        //    return Results.Ok();
-        //}
+        
         private static async Task<IResult> SendPkgToServer(int Pid, PackagesServices pkgService)
         {
             await ((IPackagesServices)pkgService).SendToServer(Pid);
             return Results.Ok();
         }
+        private static async Task<IResult> SendDelPkgToServer(int Pid, PackagesServices pkgService)
+        {
+            await ((IPackagesServices)pkgService).SendDelPkgToServer(Pid);
+            return Results.Ok();
+        }
         private static async Task<IResult> GetHistoryPkg(int Pid, PackagesServices pkgService)
         {
             await ((IPackagesServices)pkgService).HistoriPkgByPid(Pid);
+            return Results.Ok();
+        }
+        private static async Task<IResult> GetPkgId(int Pid, PackagesServices pkgService)
+        {
+            await ((IPackagesServices)pkgService).GetPkgId(Pid);
+            return Results.Ok();
+        }  
+        private static async Task<IResult> DeletePkg(int Pid, PackagesServices pkgService)
+        {
+            await ((IPackagesServices)pkgService).DeletePkg(Pid);
+            return Results.Ok();
+        } 
+        private static async Task<IResult> GetDocsPkg(int Pid, PackagesServices pkgService)
+        {
+            await ((IPackagesServices)pkgService).GetDocsPkg(Pid);
             return Results.Ok();
         }
     }

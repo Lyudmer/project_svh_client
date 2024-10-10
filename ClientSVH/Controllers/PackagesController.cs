@@ -40,5 +40,45 @@ namespace ClientSVH.Controllers
 
             return Ok();
         }
+        [HttpPost("GetHistory")]
+        public async Task<IActionResult> GetHistoryPkg(PkgSendResponse pkgSend)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+           var result= await _pkgService.HistoriPkgByPid(pkgSend.Pid);
+
+            return Ok(result);
+        }
+        [HttpPost("GetPackage")]
+        public async Task<IActionResult> GetPkgId(PkgSendResponse pkgSend)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _pkgService.GetPkgId(pkgSend.Pid);
+
+            return Ok(result);
+        } 
+        [HttpPost("GetDocsPackage")]
+        public async Task<IActionResult> GetDocsPkg(PkgSendResponse pkgSend)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _pkgService.GetDocsPkg(pkgSend.Pid);
+
+            return Ok(result);
+        }
+        [HttpPost("DelPackage")]
+        public async Task<IActionResult> DeletePkg(PkgSendResponse pkgSend)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _pkgService.DeletePkg(pkgSend.Pid);
+
+            return Ok();
+        }
     }
 }

@@ -4,10 +4,10 @@ using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
+using ServerSVH.Application.Common;
 using System.Data;
 
-using ClientSVH.Application.Common;
-using System.Text;
+
 using System.Xml.Linq;
 
 

@@ -1,5 +1,7 @@
 ﻿using ClientSVH.Application.Interfaces;
+using ClientSVH.Application.Services;
 using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.SendReceivServer.Producer;
@@ -9,7 +11,8 @@ namespace ClientSVH.SendReceivServer
 {
     public class SendToServer(IPackagesRepository pkgRepository,
        IDocumentsRepository docRepository, IDocRecordRepository docRecordRepository
-        , IMessagePublisher messagePublisher, IHistoryPkgRepository historyPkgRepository
+        , IMessagePublisher messagePublisher, IHistoryPkgRepository historyPkgRepository,
+       IPackagesServices packagesServices
        ) : ISendToServer
     {
         private readonly IMessagePublisher _messagePublisher = messagePublisher;
@@ -17,6 +20,7 @@ namespace ClientSVH.SendReceivServer
         private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
         private readonly IPackagesRepository _pkgRepository = pkgRepository;
         private readonly IHistoryPkgRepository _historyPkgRepository= historyPkgRepository;
+        private readonly IPackagesServices _packagesServices = packagesServices;
         async Task<int> ISendToServer.SendPaskageToServer(int Pid)
         {
 
@@ -45,7 +49,33 @@ namespace ClientSVH.SendReceivServer
             }
             return stPkg;
         }
-
+        async Task<bool> ISendToServer.SendDelPkgToServer(int Pid)
+        {
+            try 
+            {
+                var xPkg = new XDocument();
+                var elem = new XElement("Package");
+                elem.SetAttributeValue("pid", Pid);
+                var elem_props = new XElement("package-properties",
+                    new XElement("props", new XAttribute("name", "uuid"), _pkgRepository.GetById(Pid).Result.UUID.ToString()));
+                elem.Add(elem_props);
+                var resDel = _messagePublisher.SendMessage(xPkg, "DelPkg",0);
+                if (resDel == -1)
+                {
+                    await _packagesServices.DeletePkg(Pid);
+                    return true;
+                }
+                else
+                { 
+                    return false;
+                }
+                
+            }
+            catch {
+                return false;
+            }
+            
+        }
         private async Task<XDocument> CreatePaskageXml(int Pid, int stPkg)
         {
             var xPkg = new XDocument();

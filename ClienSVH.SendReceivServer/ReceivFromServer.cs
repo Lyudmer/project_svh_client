@@ -1,11 +1,12 @@
-﻿using ClientSVH.Application.Common;
+﻿
 using ClientSVH.Application.Interfaces;
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
-using ClientSVH.DataAccess.Repositories;
+
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
 using ClientSVH.SendReceivServer.Consumer;
+using ServerSVH.Application.Common;
 using System.Xml.Linq;
 namespace ClientSVH.SendReceivServer
 {

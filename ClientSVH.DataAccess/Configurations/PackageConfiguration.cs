@@ -19,7 +19,8 @@ namespace ClientSVH.DataAccess.Configurations
             builder
                 .HasMany(p => p.Documents)
                 .WithOne(d => d.Package)
-                .HasForeignKey(d => d.Pid);
+                .HasForeignKey(d => d.Pid)
+                .OnDelete(DeleteBehavior.Cascade);
             //свойства полей
             builder.Property(p => p.Id)
                    .IsRequired()

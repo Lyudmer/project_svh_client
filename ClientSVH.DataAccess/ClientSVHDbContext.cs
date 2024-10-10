@@ -15,7 +15,7 @@ namespace ClientSVH.DataAccess
         public DbSet<DocumentEntity> Document { get; set; }
         public DbSet<StatusEntity> Status { get; set; }
         public DbSet<HistoryPkgEntity> HistoryPkg { get; set; }
-
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -29,7 +29,7 @@ namespace ClientSVH.DataAccess
             base.OnModelCreating(modelBuilder);
 
         }
-      
+        
        
     }
     public class MyAppDbContextFactory : IDesignTimeDbContextFactory<ClientSVHDbContext>

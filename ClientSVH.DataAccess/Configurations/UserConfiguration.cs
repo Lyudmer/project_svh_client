@@ -13,7 +13,8 @@ namespace ClientSVH.DataAccess.Configurations
             builder
                 .HasMany(p => p.Packages)
                 .WithOne(s => s.User)
-                .HasForeignKey(s => s.UserId);
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade); 
 
             builder.Property(u => u.Id)
               .HasColumnType("uuid")
