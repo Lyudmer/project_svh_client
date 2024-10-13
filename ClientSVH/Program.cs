@@ -1,4 +1,4 @@
-using AutoMapper;
+
 using ClienSVH.XMLParser;
 using ClientSVH.Application.Interfaces;
 using ClientSVH.Application.Interfaces.Auth;
@@ -27,49 +27,55 @@ var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 var configuration = builder.Configuration;
+
 services.AddApiAuthentication(configuration);
 services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
-services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+
 
 //postgresql db
-var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
-services.AddDbContext<ClientSVHDbContext>(options =>{options.UseNpgsql(connectionString);});
+
+services.AddDbContext<ClientSVHDbContext>(options =>
+{
+    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+});
 
 services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-services.AddTransient<IUsersService,UsersService>();
-services.AddTransient<IPackagesServices,PackagesServices>();
-services.AddTransient<IDocumentsServices, DocumentsServices>();
 //mongodb
-services.Configure<DocRecordDBSettings>(configuration.GetSection("MongoDBSettings"));
+services.Configure<Settings>(configuration.GetSection("MongoConnection"));
 
 
 services.AddTransient<IMongoClient>(_ =>
 {
-    var connectionString = configuration.GetSection("MongoDBSettings:MongoDBConnectionString")?.Value;
+    var connectionString = configuration.GetSection("MongoConnection:ConnectionString")?.Value;
 
     return new MongoClient(connectionString);
 });
-
+services.Configure<JwtOptions>(configuration.GetSection("JWT"));
+services.AddTransient<IUsersService, UsersService>();
+services.AddTransient<IPackagesServices, PackagesServices>();
+services.AddTransient<IDocumentsServices, DocumentsServices>();
+services.AddTransient<IHistoryPkgRepository, HistoryPkgRepository>();
+//services.AddTransient<IStatusServices, StatusServices>();
 
 services.AddTransient<IUsersRepository, UsersRepository>();
 services.AddTransient<IPackagesRepository, PackagesRepository>();
 services.AddTransient<IDocumentsRepository, DocumentsRepository>();
 services.AddTransient<IDocRecordRepository, DocRecordRepository>();
-
-services.AddTransient<ILoadFromFile, LoadFromFile>();
-services.AddTransient<ISendToServer, SendToServer>();
-services.AddScoped<IMessagePublisher, RabbitMQProducer>();
-services.AddScoped<IRabbitMQConsumer, RabbitMQConsumer>(); 
 services.AddTransient<IJwtProvider, JwtProvider>();
 services.AddTransient<IPasswordHasher, PasswordHasher>();
 
-services.AddAutoMapper(typeof(UsersService).Assembly);
-services.AddAutoMapper(typeof(PackagesServices).Assembly);
-services.AddAutoMapper(typeof(DocumentsServices).Assembly);
+services.AddTransient<ILoadFromFile, LoadFromFile>();
+services.AddTransient<IRabbitMQBase, RabbitMQBase>();
+services.AddTransient<IMessagePublisher, RabbitMQProducer>();
+services.AddTransient<IRabbitMQConsumer, RabbitMQConsumer>();
+services.AddTransient<ISendToServer, SendToServer>();
+services.AddTransient<IReceivFromServer, ReceivFromServer>();
+
+
 services.AddHttpContextAccessor();
 
 var app = builder.Build();

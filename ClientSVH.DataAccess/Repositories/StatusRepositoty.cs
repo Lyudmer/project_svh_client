@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using ClientSVH.DataAccess.Entities;
@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class StatusRepositoty(ClientSVHDbContext dbContext, IMapper mapper) : IStatusRepositoty
+    public class StatusRepositoty(ClientSVHDbContext dbContext) : IStatusRepositoty
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
-        private readonly IMapper _mapper = mapper;
-
+        
         public async Task<int> Add(int Id, string StatusName, bool RunWf, bool MkRes, bool SendMess)
         {
             var statusEntity = new StatusEntity
@@ -45,8 +44,9 @@ namespace ClientSVH.DataAccess.Repositories
             var stEntity = await _dbContext.Status
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == Id) ?? throw new Exception();
+            var resSt = Status.Create(stEntity.Id, stEntity.StatusName, stEntity.RunWf, stEntity.MkRes, stEntity.SendMess);
 
-            return _mapper.Map<Status>(stEntity);
+            return resSt;
 
         }
     }

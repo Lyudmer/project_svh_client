@@ -1,6 +1,6 @@
 ﻿using ClientSVH.Core.Models;
 
-using AutoMapper;
+
 using Microsoft.EntityFrameworkCore;
 
 using ClientSVH.DataAccess.Entities;
@@ -8,11 +8,9 @@ using ClientSVH.Core.Abstraction.Repositories;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class UsersRepository(ClientSVHDbContext context, IMapper mapper) : IUsersRepository
+    public class UsersRepository(ClientSVHDbContext context) : IUsersRepository
     {
         private readonly ClientSVHDbContext _context = context;
-        private readonly IMapper _mapper = mapper;
-
         public async Task<Guid> Add(User user)
         {
             var userEntity = new UserEntity
@@ -31,10 +29,10 @@ namespace ClientSVH.DataAccess.Repositories
             var userEntity = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
-
-            return _mapper.Map<User>(userEntity);
+            var resUser = User.Create(userEntity.Id, userEntity.UserName, userEntity.PasswordHash,userEntity.Email);
+            return resUser;
         }
-
+        
         public async Task<Guid> Update(Guid id, string username, string password, string email)
         {
             await _context.Users

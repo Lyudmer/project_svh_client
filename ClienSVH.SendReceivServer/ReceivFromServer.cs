@@ -1,4 +1,5 @@
 ﻿
+using ClientSVH.Application.Common;
 using ClientSVH.Application.Interfaces;
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
@@ -6,11 +7,10 @@ using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
 using ClientSVH.SendReceivServer.Consumer;
-using ServerSVH.Application.Common;
 using System.Xml.Linq;
 namespace ClientSVH.SendReceivServer
 {
-    
+
     public class ResultMessage
     {
         public Guid UUID { get; set; }
@@ -86,7 +86,7 @@ namespace ClientSVH.SendReceivServer
             // поменять статус
             await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
             // добавить в историю
-            string sMess=string.Empty;
+            string sMess;
             if (!typeMessage.Contains("Del")) sMess = resRecord.Message;
             else sMess = "LoadStatusFromServer";
             var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, olsstPkg, resRecord.Status, sMess, DateTime.Now);
@@ -147,7 +147,7 @@ namespace ClientSVH.SendReceivServer
                     if (Doc is not null)
                     {
                         DocRecord dRecord = DocRecord.Create(Guid.NewGuid(), Doc.DocId, doctext, DateTime.Now, DateTime.Now);
-                        var dRecordId = await _docRecordRepository.Add(dRecord);
+                        var dRecordId = await _docRecordRepository.AddRecord(dRecord);
 
                     }
                     

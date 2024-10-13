@@ -5,6 +5,8 @@ namespace ClientSVH.Contracts
     public record LoadFileRequest(
 
       [Required]
-        string FileName
+        string FileName,
+      [Required]
+      string Token
       );
 }

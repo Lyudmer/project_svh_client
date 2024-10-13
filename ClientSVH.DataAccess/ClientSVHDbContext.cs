@@ -32,15 +32,15 @@ namespace ClientSVH.DataAccess
         
        
     }
-    public class MyAppDbContextFactory : IDesignTimeDbContextFactory<ClientSVHDbContext>
-    {
-        public ClientSVHDbContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<ClientSVHDbContext>();
-            optionsBuilder.UseNpgsql("Host=localhost;User ID=postgres;Password=studadmin;Port=5432;Database=svhdb;");
-            var b = optionsBuilder.Options;
+    //public class MyAppDbContextFactory : IDesignTimeDbContextFactory<ClientSVHDbContext>
+    //{
+    //    public ClientSVHDbContext CreateDbContext(string[] args)
+    //    {
+    //        var optionsBuilder = new DbContextOptionsBuilder<ClientSVHDbContext>();
+    //        optionsBuilder.UseNpgsql("Host=localhost;User ID=postgres;Password=studadmin;Port=5432;Database=svhdb;");
+    //        var b = optionsBuilder.Options;
             
-            return new ClientSVHDbContext(b);
-        }
-    }
+    //        return new ClientSVHDbContext(b);
+    //    }
+    //}
 }

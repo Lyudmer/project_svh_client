@@ -1,5 +1,6 @@
 ﻿using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Core.Models;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,11 +12,28 @@ namespace ClientSVH.Infrastructure
     public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
     {
         private readonly JwtOptions _options = options.Value;
-
-
-        public string GenerateToken(User user)
+      
+        public string ReadToken(string token)
         {
-            Claim[] claims = [new(CustomClaims.UserId, user.Id.ToString())];
+            var handler = new JwtSecurityTokenHandler();
+            var validations = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+            string resUserId = string.Empty;
+            var claims = handler.ValidateToken(token, validations, out var tokenSecure);
+            var resN = claims.FindFirstValue("userId");
+            if (resN != null) { resUserId = resN; }
+           
+            return resUserId;
+        }
+
+        public string GenerateToken(Guid userId)
+        {
+            Claim[] claims = [new(CustomClaims.UserId, userId.ToString())];
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),

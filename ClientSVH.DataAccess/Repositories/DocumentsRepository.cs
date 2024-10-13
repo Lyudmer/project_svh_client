@@ -1,17 +1,16 @@
-﻿using ClientSVH.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ClientSVH.Core.Models;
-using AutoMapper;
 using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.DataAccess.Entities;
+using Microsoft.VisualBasic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Security.Cryptography;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper) : IDocumentsRepository
+    public class DocumentsRepository(ClientSVHDbContext dbContext) : IDocumentsRepository
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
-        
-        private readonly IMapper _mapper = mapper;
-
         public async Task<Document> Add(Document Doc)
         {
             await _dbContext.AddAsync(Doc);
@@ -25,7 +24,7 @@ namespace ClientSVH.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(d => d.Id == id) ?? throw new Exception();
 
-            return _mapper.Map<Document>(docEntity);
+            return MappedObj(docEntity);
 
         }
         public async Task<List<Document>> GetByFilter(int pid)
@@ -35,7 +34,7 @@ namespace ClientSVH.DataAccess.Repositories
             if (pid > 0) { query = query.Where(p => p.Pid == pid); }
 
             var docs = await query.ToListAsync();
-            return _mapper.Map<List<Document>>(docs);
+            return MappedObj(docs);
 
         }
         public async Task<List<Document>> GetByPage(int page, int page_size)
@@ -46,7 +45,7 @@ namespace ClientSVH.DataAccess.Repositories
                 .Take(page_size);
 
             var docs = await query.ToListAsync();
-            return _mapper.Map<List<Document>>(docs);
+            return MappedObj(docs);
         }
 
         public async Task Update(int Id)
@@ -65,6 +64,20 @@ namespace ClientSVH.DataAccess.Repositories
         public async Task<int> GetLastDocId()
         {
             return await _dbContext.Document.MaxAsync(p => p.Id);
+        }
+        private static Document MappedObj(DocumentEntity docEntity)
+        {
+            return Document.Create(docEntity.Id, docEntity.DocId, docEntity.Number, docEntity.DocDate, docEntity.ModeCode, docEntity.DocType, 
+                                   docEntity.SizeDoc,docEntity.Idmd5, docEntity.IdSha256, docEntity.Pid, docEntity.CreateDate, docEntity.ModifyDate);
+        }
+        private static List<Document> MappedObj(List<DocumentEntity> docEntity)
+        {
+            List<Document> result = [];
+            foreach (DocumentEntity doc in docEntity)
+            {
+                result.Add(MappedObj(doc));
+            }
+            return result;
         }
     }
 }

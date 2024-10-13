@@ -1,11 +1,12 @@
 ﻿using ClientSVH.Core.Models;
+using System.Xml.Linq;
 
 namespace ClientSVH.Core.Abstraction.Services
 {
     public interface IPackagesServices
     {
     
-        Task<int> LoadFile(Guid UserId, string FileName);
+        Task<int> LoadFile(Guid UserId, string xFile);
       
         Task<int> SendToServer(int Pid);
         Task<bool> SendDelPkgToServer(int Pid);

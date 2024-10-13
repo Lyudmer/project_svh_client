@@ -3,6 +3,9 @@ using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
 using Microsoft.AspNetCore.Http;
+using System.Data;
+using System.Globalization;
+using System.Security.Claims;
 
 
 namespace ClientSVH.Application.Services
@@ -10,16 +13,15 @@ namespace ClientSVH.Application.Services
     public class UsersService(
         IUsersRepository userRepository,
         IPasswordHasher passwordHasher,
-        IJwtProvider jwtprovider,
-        IHttpContextAccessor httpContextAccessor
+        IJwtProvider jwtprovider
            ) : IUsersService
     {
         private readonly IPasswordHasher _passwordHasher = passwordHasher;
         private readonly IUsersRepository _usersRepository = userRepository;
         private readonly IJwtProvider _jwtProvider = jwtprovider;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        
 
-        async Task IUsersService.Register(string username, string password, string email)
+        public async Task Register(string username, string password, string email)
         {
             try
             {
@@ -35,29 +37,35 @@ namespace ClientSVH.Application.Services
             }
 
         }
-        async Task<string> IUsersService.Login(string password, string email)
-        {
-            var user = await _usersRepository.GetByEmail(email) ?? throw new Exception("Invalid username");
-            var result = _passwordHasher.Verify(password, user.PasswordHash);
-            if (result == false)
-            {
-                throw new Exception("failed to login");
-            }
-            var token = _jwtProvider.GenerateToken(user);
 
-            return token;
+        public async Task<string> Login(string password, string email)
+        {
+            var user = await _usersRepository.GetByEmail(email);
+            if (user.PasswordHash.Length>0)
+            {
+                var result = _passwordHasher.Verify(password, user.PasswordHash);
+                if (result == false)
+                {
+                    throw new Exception("failed to login");
+                }
+              
+                var token = _jwtProvider.GenerateToken(user.Id);
+                var resUser = GetUserId(token);
+
+                return resUser;
+            }
+            else throw new Exception("failed to login");
         }
 
-        public IEnumerable<Guid> GetUserId()
+        private string GetUserId(string token)
         {
-            var UserId = _httpContextAccessor.HttpContext?.User.Claims
-                .FirstOrDefault(c => c.Type == CustomClaims.UserId);
-            if (UserId is null || Guid.TryParse(UserId.Value, out var userId))
+            var UserId =  _jwtProvider.ReadToken(token);
+            if (UserId.Length==0 || !Guid.TryParse(UserId, out var userId))
             {
                 throw new Exception("failed to login");
             }
 
-            yield return userId;
+           return userId.ToString();
         }
 
     }

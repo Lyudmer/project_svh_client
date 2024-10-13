@@ -2,6 +2,9 @@
 using ClientSVH.Application.Services;
 using ClientSVH.Contracts;
 using ClientSVH.Core.Abstraction.Services;
+using Microsoft.AspNetCore.Hosting;
+using System.Text;
+using System.Xml.Linq;
 
 
 
@@ -24,7 +27,18 @@ namespace ClientSVH.Endpoints
         }
         private static async Task<IResult> LoadFile(LoadFileRequest request, PackagesServices pkgService, Guid UserId)
         {
-            await ((IPackagesServices)pkgService).LoadFile(UserId,request.FileName);
+            
+            using (var fileStream = new FileStream(request.FileName, FileMode.Create))
+            {
+                
+                fileStream.Position = 0;
+                using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
+                {
+                    var resFile = reader.ReadToEnd();
+                    await ((IPackagesServices)pkgService).LoadFile(UserId, resFile);
+                }
+            }
+            
             return Results.Ok();
         }
         

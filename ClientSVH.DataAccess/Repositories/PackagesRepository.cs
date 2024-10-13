@@ -1,16 +1,16 @@
-﻿using AutoMapper;
+﻿
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
-
+using ClientSVH.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class PackagesRepository(ClientSVHDbContext dbContext, IMapper mapper) : IPackagesRepository
+    public class PackagesRepository(ClientSVHDbContext dbContext) : IPackagesRepository
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
-        private readonly IMapper _mapper = mapper;
+      
 
         public async Task<Package> Add(Package Pkg)
         {
@@ -23,17 +23,19 @@ namespace ClientSVH.DataAccess.Repositories
             var pkgEntity = await _dbContext.Packages
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.UUID == uuid) ?? throw new Exception();
+            return MappedObj(pkgEntity);
 
-            return _mapper.Map<Package>(pkgEntity);
+        }
 
-        } 
+       
+
         public async Task<Package> GetById(int Pid)
         {
             var pkgEntity = await _dbContext.Packages
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == Pid) ?? throw new Exception();
 
-            return _mapper.Map<Package>(pkgEntity);
+            return MappedObj(pkgEntity);
 
         } 
         public async Task<List<Package>> GetAll()
@@ -43,7 +45,7 @@ namespace ClientSVH.DataAccess.Repositories
                 .OrderBy(p => p.UserId)
                 .ThenBy(p => p.Id);
             var pkgList = await query.ToListAsync();
-            return _mapper.Map<List<Package>>(pkgList);
+            return MappedObj(pkgList);
         }
         public async Task<List<Package>> GetPkgUser(Guid UserId)
         {
@@ -51,7 +53,7 @@ namespace ClientSVH.DataAccess.Repositories
                 .AsNoTracking()
                 .OrderBy(p => p.Id);
             var pkgList = await query.ToListAsync();
-            return _mapper.Map<List<Package>>(pkgList);
+            return MappedObj(pkgList);
         }
         public async Task<Package> GetPkgWithDoc(int Pid)
         {
@@ -61,7 +63,7 @@ namespace ClientSVH.DataAccess.Repositories
                 .FirstOrDefaultAsync(p => p.Id == Pid)
                 ?? throw new Exception();
 
-            return _mapper.Map<Package>(pkgEntity);
+            return MappedObj(pkgEntity);
 
         }
         public async Task<List<Package>> GetUserStatus(Guid UserId, int Status)
@@ -73,7 +75,7 @@ namespace ClientSVH.DataAccess.Repositories
             if (Status > -1)
             { query = query.Where(p => p.StatusId == Status); }
             var pkgList = await query.ToListAsync();
-            return _mapper.Map<List<Package>>(pkgList);
+            return MappedObj(pkgList);
         }
         public async Task<List<Package>> GetByPage(int Page, int Page_Size)
         {
@@ -82,7 +84,7 @@ namespace ClientSVH.DataAccess.Repositories
                 .Skip((Page - 1) * Page_Size)
                 .Take(Page_Size);
             var pkgList = await query.ToListAsync();
-            return _mapper.Map<List<Package>>(pkgList);
+            return MappedObj(pkgList);
 
         }
         public async Task UpdateStatus(int Pid, int Status)
@@ -100,9 +102,23 @@ namespace ClientSVH.DataAccess.Repositories
         }
         public async Task<int> GetLastPkgId()
         {
-            return await _dbContext.Packages.MaxAsync(p => p.Id);
+            var cPkg=await _dbContext.Packages.CountAsync();
+
+            return cPkg;
         }
-     
-        
+
+        private static Package MappedObj(PackageEntity pkgEntity)
+        {
+            return Package.Create(pkgEntity.Id, pkgEntity.UserId, pkgEntity.StatusId, pkgEntity.UUID, pkgEntity.CreateDate, pkgEntity.ModifyDate);
+        }
+        private static List<Package> MappedObj(List<PackageEntity> pkgEntity)
+        {
+             List<Package> result =[];
+            foreach(PackageEntity pkg in pkgEntity) 
+            {
+                result.Add(MappedObj(pkg));
+            }
+             return result;
+        }
     }
 }

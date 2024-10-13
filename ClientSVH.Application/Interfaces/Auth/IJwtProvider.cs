@@ -4,6 +4,7 @@ namespace ClientSVH.Application.Interfaces.Auth
 {
     public interface IJwtProvider
     {
-        string GenerateToken(User user);
+        string GenerateToken(Guid userId);
+        string ReadToken(string token);
     }
 }

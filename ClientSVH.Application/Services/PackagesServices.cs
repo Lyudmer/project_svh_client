@@ -3,13 +3,15 @@ using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Application.Interfaces;
+using System.Xml.Linq;
+using Microsoft.AspNetCore.Http;
 
 
 
 namespace ClientSVH.Application.Services
 {
     public class PackagesServices(ILoadFromFile loadFromFile,
-        ISendToServer sendToServer, IReceivFromServer receivFromServer,
+        ISendToServer sendToServer, IReceivFromServer receivFromServer, IHttpContextAccessor httpContextAccessor,
         IPackagesRepository pkgRepository, IDocumentsRepository documentsRepository,
         IHistoryPkgRepository hPkgRepository, IDocumentsServices documentServices
         ) : IPackagesServices
@@ -22,13 +24,25 @@ namespace ClientSVH.Application.Services
         private readonly IPackagesRepository _pkgRepository = pkgRepository;
         private readonly IDocumentsRepository _documentsRepository = documentsRepository;
         private readonly IDocumentsServices _documentServices= documentServices;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        public IEnumerable<Guid> GetUserId()
+        {
+            var UserId = _httpContextAccessor.HttpContext?.User.Claims
+                .FirstOrDefault(c => c.Type == CustomClaims.UserId);
+            if (UserId is null || Guid.TryParse(UserId.Value, out var userId))
+            {
+                throw new Exception("failed to login");
+            }
+
+            yield return userId;
+        }
         public async Task<HistoryPkg> HistoriPkgByPid(int Pid)
         {
             return await _hPkgRepository.GetById(Pid);
         }
-        public Task<int> LoadFile(Guid UserId, string FileName)
+        public Task<int> LoadFile(Guid UserId,string  FileName)
         {
-            return _loadFromFile.LoadFile(UserId, FileName);
+            return _loadFromFile.LoadFileXml(UserId, FileName);
         }
       public async Task<int> SendToServer(int Pid)
         {

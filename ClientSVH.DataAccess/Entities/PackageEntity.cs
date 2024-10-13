@@ -7,10 +7,10 @@
         public DateTime ModifyDate { get; set; }
         public Guid UUID { get; set; }
         public Guid UserId { get; set; }
-        public UserEntity? User { get; set; }
+        public UserEntity User { get; set; }
         public ICollection<DocumentEntity> Documents { get; set; } =  [];
         public int StatusId { get; set; }
-        public StatusEntity? Status { get; set; }
+        public StatusEntity Status { get; set; }
         
     }
 }

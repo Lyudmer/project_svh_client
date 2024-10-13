@@ -14,7 +14,7 @@ namespace ClientSVH.DataAccess.Entities
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
         public int Pid { get; set; }
-        public PackageEntity? Package { get; set; } 
+        public PackageEntity Package { get; set; } 
         public Guid DocId { get; set; }
         
     }

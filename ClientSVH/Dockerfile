@@ -13,12 +13,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ClientSVH/ClientSVH.csproj", "ClientSVH/"]
-COPY ["ClienSVH.XMLParser/ClienSVH.XMLParser.csproj", "ClienSVH.XMLParser/"]
+COPY ["ClienSVH.SendReceivServer/ClientSVH.SendReceivServer.csproj", "ClienSVH.SendReceivServer/"]
 COPY ["ClientSVH.Application/ClientSVH.Application.csproj", "ClientSVH.Application/"]
 COPY ["ClientSVH.Core/ClientSVH.Core.csproj", "ClientSVH.Core/"]
-COPY ["ClientSVH.DocsBodyCore/ClientSVH.DocsBodyCore.csproj", "ClientSVH.DocsBodyCore/"]
-COPY ["ClientSVH.DocsBodyDateAccess/ClientSVH.DocsBodyDataAccess.csproj", "ClientSVH.DocsBodyDateAccess/"]
+COPY ["ClientSVH.DocsRecordCore/ClientSVH.DocsRecordCore.csproj", "ClientSVH.DocsRecordCore/"]
 COPY ["ClientSVH.DataAccess/ClientSVH.DataAccess.csproj", "ClientSVH.DataAccess/"]
+COPY ["ClientSVH.DocsRecordDateAccess/ClientSVH.DocsRecordDataAccess.csproj", "ClientSVH.DocsRecordDateAccess/"]
+COPY ["ClienSVH.XMLParser/ClienSVH.XMLParser.csproj", "ClienSVH.XMLParser/"]
 COPY ["ClientSVH.Infrastructure/ClientSVH.Infrastructure.csproj", "ClientSVH.Infrastructure/"]
 RUN dotnet restore "./ClientSVH/ClientSVH.csproj"
 COPY . .

@@ -1,7 +1,6 @@
 ﻿using ClientSVH.Application.Interfaces;
 using ClientSVH.Application.Services;
 using ClientSVH.Core.Abstraction.Repositories;
-using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.SendReceivServer.Producer;
@@ -11,8 +10,7 @@ namespace ClientSVH.SendReceivServer
 {
     public class SendToServer(IPackagesRepository pkgRepository,
        IDocumentsRepository docRepository, IDocRecordRepository docRecordRepository
-        , IMessagePublisher messagePublisher, IHistoryPkgRepository historyPkgRepository,
-       IPackagesServices packagesServices
+        , IMessagePublisher messagePublisher, IHistoryPkgRepository historyPkgRepository
        ) : ISendToServer
     {
         private readonly IMessagePublisher _messagePublisher = messagePublisher;
@@ -20,7 +18,7 @@ namespace ClientSVH.SendReceivServer
         private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
         private readonly IPackagesRepository _pkgRepository = pkgRepository;
         private readonly IHistoryPkgRepository _historyPkgRepository= historyPkgRepository;
-        private readonly IPackagesServices _packagesServices = packagesServices;
+        
         async Task<int> ISendToServer.SendPaskageToServer(int Pid)
         {
 
@@ -53,6 +51,7 @@ namespace ClientSVH.SendReceivServer
         {
             try 
             {
+                int stPkg = _pkgRepository.GetById(Pid).Result.StatusId;
                 var xPkg = new XDocument();
                 var elem = new XElement("Package");
                 elem.SetAttributeValue("pid", Pid);
@@ -62,7 +61,11 @@ namespace ClientSVH.SendReceivServer
                 var resDel = _messagePublisher.SendMessage(xPkg, "DelPkg",0);
                 if (resDel == -1)
                 {
-                    await _packagesServices.DeletePkg(Pid);
+                    await _pkgRepository.UpdateStatus(Pid, 107);
+
+                    var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, stPkg, 107, "SendPkgToServer", DateTime.Now);
+                    await _historyPkgRepository.Add(hPkg);
+                    
                     return true;
                 }
                 else

@@ -7,7 +7,7 @@ namespace ClientSVH.Core.Abstraction.Repositories
         Task<List<User>> GetUsers();
         Task<Guid> Add(User user);
         Task<User> GetByEmail(string email);
-
+        
         Task<Guid> Update(Guid id, string username, string passwordHash, string email);
         Task<Guid> Delete(Guid id);
 

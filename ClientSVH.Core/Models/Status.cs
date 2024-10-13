@@ -14,7 +14,7 @@ namespace ClientSVH.Core.Models
             SendMess = sendMess;
         }
         public int Id { get; set; }
-        public string? StatusName { get; set; }
+        public string StatusName { get; set; } = string.Empty;
         public bool RunWf { get; set; }
         public bool MkRes { get; set; }
         public bool SendMess { get; set; }

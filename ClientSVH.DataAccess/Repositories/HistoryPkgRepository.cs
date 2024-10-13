@@ -1,15 +1,16 @@
 ﻿
-using AutoMapper;
+
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
+using ClientSVH.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class HistoryPkgRepository(ClientSVHDbContext dbContext, IMapper mapper) : IHistoryPkgRepository
+    public class HistoryPkgRepository(ClientSVHDbContext dbContext) : IHistoryPkgRepository
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
-        private readonly IMapper _mapper = mapper;
+        
         public async Task<HistoryPkg> Add(HistoryPkg HpPkg)
         {
             await _dbContext.AddAsync(HpPkg);
@@ -22,8 +23,13 @@ namespace ClientSVH.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Pid == Pid) ?? throw new Exception();
 
-            return _mapper.Map<HistoryPkg>(hpPkgEntity);
+            return MappedObj(hpPkgEntity);
 
         }
+        private static HistoryPkg MappedObj(HistoryPkgEntity hPkgEntity)
+        {
+            return HistoryPkg.Create(hPkgEntity.Id, hPkgEntity.Pid, hPkgEntity.Oldst, hPkgEntity.Newst, hPkgEntity.Comment, hPkgEntity.CreateDate);
+        }
+        
     }
 }

@@ -53,14 +53,6 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: studadmin
     depends_on:
       - mongo
-
-  iplookup:
-    build: ./WebApi
-    restart: always
-    ports:
-      - 8080:80
-    depends_on:
-      - mongo
 volumes:
   postgres-db:
     driver: local

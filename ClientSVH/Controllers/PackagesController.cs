@@ -1,32 +1,48 @@
-﻿
-using ClientSVH.Application.Services;
+﻿using Microsoft.AspNetCore.Hosting;
 using ClientSVH.Contracts;
 using ClientSVH.Core.Abstraction.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Xml.Linq;
+using SharpCompress.Compressors.Xz;
+using System.Text;
+using Microsoft.AspNetCore.Http;
+using ClientSVH.Infrastructure;
+using ClientSVH.Core.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 
 namespace ClientSVH.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PackagesController(IPackagesServices pkgService, IWebHostEnvironment appEnvironment,
+    public class PackagesController(IPackagesServices pkgService, IWebHostEnvironment webHostEnvironment,
                               IUsersService userService) : ControllerBase
     {
+        private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
         private readonly IPackagesServices _pkgService = pkgService;
-        private readonly IWebHostEnvironment _appEnvironment = appEnvironment;
+        
         private readonly IUsersService _userService = userService;
 
         [HttpPost("loadfile")]
-        public async Task<IActionResult> LoadFile(IFormFile InName)
+        public async Task<IActionResult> LoadFile(IFormFile InName,string UserId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var uploads = _appEnvironment.WebRootPath;
-            var filePath = Path.Combine(uploads, InName.FileName).ToString();
-            var UserId =_userService.GetUserId().ToString();
-            if (Guid.TryParse(UserId, out var userId))
+            using (var fileStream = new FileStream(_webHostEnvironment.WebRootPath + InName.FileName, FileMode.Create))
             {
-                await _pkgService.LoadFile(userId, filePath);
+                await InName.CopyToAsync(fileStream);
+                fileStream.Position = 0;
+                using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
+                {
+                    var resFile = reader.ReadToEnd();
+
+                    if (resFile.Length>0 && Guid.TryParse(UserId, out var userId))
+                    {
+                        await _pkgService.LoadFile(userId, resFile);
+                    }
+                }
             }
             return Ok();
         }
