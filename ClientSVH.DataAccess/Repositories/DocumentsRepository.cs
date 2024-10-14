@@ -67,7 +67,7 @@ namespace ClientSVH.DataAccess.Repositories
         }
         private static Document MappedObj(DocumentEntity docEntity)
         {
-            return Document.Create(docEntity.Id, docEntity.DocId, docEntity.Number, docEntity.DocDate, docEntity.ModeCode, docEntity.DocType, 
+            return Document.Create(docEntity.Number, docEntity.DocDate, docEntity.ModeCode, docEntity.DocType, 
                                    docEntity.SizeDoc,docEntity.Idmd5, docEntity.IdSha256, docEntity.Pid, docEntity.CreateDate, docEntity.ModifyDate);
         }
         private static List<Document> MappedObj(List<DocumentEntity> docEntity)

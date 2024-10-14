@@ -35,7 +35,7 @@ namespace ClientSVH.SendReceivServer
                 {
                      
                     await _pkgRepository.UpdateStatus(Pid, resStatus);
-                    var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, stPkg, resStatus, "SendPkgToServer", DateTime.Now);
+                    var hPkg = HistoryPkg.Create( Pid, stPkg, resStatus, "SendPkgToServer", DateTime.Now);
                     await _historyPkgRepository.Add(hPkg);
                     stPkg= resStatus;
                 }
@@ -62,8 +62,7 @@ namespace ClientSVH.SendReceivServer
                 if (resDel == -1)
                 {
                     await _pkgRepository.UpdateStatus(Pid, 107);
-
-                    var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, stPkg, 107, "SendPkgToServer", DateTime.Now);
+                    var hPkg = HistoryPkg.Create( Pid, stPkg, 107, "SendPkgToServer", DateTime.Now);
                     await _historyPkgRepository.Add(hPkg);
                     
                     return true;

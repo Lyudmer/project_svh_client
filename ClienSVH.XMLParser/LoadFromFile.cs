@@ -31,7 +31,7 @@ namespace ClienSVH.XMLParser
                 if (xPkg is not null)
                 {
                     //create package
-                    var Pkg = Package.Create( userId, 0, Guid.NewGuid(), DateTime.Now, DateTime.Now);
+                    var Pkg = Package.Create( userId, 0, DateTime.Now, DateTime.Now);
 
                     Pkg = await _pkgRepository.Add(Pkg);
                     Pid = Pkg.Pid;
@@ -47,9 +47,7 @@ namespace ClienSVH.XMLParser
                                 };
                     foreach (var doc in xDocs)
                     {
-                        var doc_1 = await _docRepository.GetLastDocId() + 1;
-                        var DocId = Guid.NewGuid();
-                        var Doc = Document.Create(doc_1, DocId, doc.num, DateTime.Parse(doc.dat),"",
+                        var Doc = Document.Create( doc.num, DateTime.Parse(doc.dat),"",
                                       doc.tdoc, doc.doctext.Length, DopFunction.GetHashMd5(doc.doctext),
                                       DopFunction.GetSha256(doc.doctext),
                                       Pid, DateTime.Now, DateTime.Now);

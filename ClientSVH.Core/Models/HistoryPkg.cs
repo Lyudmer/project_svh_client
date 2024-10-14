@@ -2,9 +2,9 @@
 {
     public class HistoryPkg
     {
-        private HistoryPkg(Guid id, int pid, int oldst, int newst, string comment, DateTime createDate)
+        private HistoryPkg( int pid, int oldst, int newst, string comment, DateTime createDate)
         {
-            Id = id;
+           
             Pid = pid;
             Oldst = oldst;
             Newst = newst;
@@ -17,9 +17,9 @@
         public int Newst { get; set; }
         public string Comment { get; set; } = string.Empty;
         public DateTime CreateDate { get; set; } = DateTime.Now;
-        public static HistoryPkg Create(Guid Id, int pid, int oldst, int newst, string comment, DateTime createDate)
+        public static HistoryPkg Create( int pid, int oldst, int newst, string comment, DateTime createDate)
         {
-            var historyPkg = new HistoryPkg(Id, pid, oldst, newst, comment, createDate);
+            var historyPkg = new HistoryPkg( pid, oldst, newst, comment, createDate);
             return historyPkg;
         }
 

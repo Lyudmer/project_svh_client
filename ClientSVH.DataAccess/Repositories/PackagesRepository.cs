@@ -109,7 +109,7 @@ namespace ClientSVH.DataAccess.Repositories
 
         private static Package MappedObj(PackageEntity pkgEntity)
         {
-            return Package.Create(pkgEntity.Id, pkgEntity.UserId, pkgEntity.StatusId, pkgEntity.UUID, pkgEntity.CreateDate, pkgEntity.ModifyDate);
+            return Package.Create( pkgEntity.UserId, pkgEntity.StatusId,  pkgEntity.CreateDate, pkgEntity.ModifyDate);
         }
         private static List<Package> MappedObj(List<PackageEntity> pkgEntity)
         {

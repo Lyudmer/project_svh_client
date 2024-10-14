@@ -29,7 +29,7 @@ namespace ClientSVH.DataAccess.Repositories
             var userEntity = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
-            var resUser = User.Create(userEntity.Id, userEntity.UserName, userEntity.PasswordHash,userEntity.Email);
+            var resUser = User.Create( userEntity.UserName, userEntity.PasswordHash,userEntity.Email);
             return resUser;
         }
         
@@ -57,7 +57,7 @@ namespace ClientSVH.DataAccess.Repositories
                  .AsNoTracking()
                  .ToListAsync();
             var users = userEntites
-                .Select(u => User.Create(u.Id, u.UserName, u.PasswordHash, u.Email))
+                .Select(u => User.Create(u.UserName, u.PasswordHash, u.Email))
                 .ToList();
             return users;
         }

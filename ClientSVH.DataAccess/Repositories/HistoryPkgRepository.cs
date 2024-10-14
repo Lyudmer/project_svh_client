@@ -28,7 +28,7 @@ namespace ClientSVH.DataAccess.Repositories
         }
         private static HistoryPkg MappedObj(HistoryPkgEntity hPkgEntity)
         {
-            return HistoryPkg.Create(hPkgEntity.Id, hPkgEntity.Pid, hPkgEntity.Oldst, hPkgEntity.Newst, hPkgEntity.Comment, hPkgEntity.CreateDate);
+            return HistoryPkg.Create( hPkgEntity.Pid, hPkgEntity.Oldst, hPkgEntity.Newst, hPkgEntity.Comment, hPkgEntity.CreateDate);
         }
         
     }

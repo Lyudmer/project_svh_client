@@ -2,12 +2,11 @@
 { 
     public class Document
     {
-        private Document(int id, Guid docId, string number, DateTime docDate,
+        private Document( string number, DateTime docDate,
                          string modeCode,string docType, int sizeDoc,string idmd5,string idSha256,
                          int pid, DateTime createDate, DateTime modifyDate)
         {
-            Id = id;
-            DocId = docId;
+           
             Number=number;
             DocDate=docDate;
             ModeCode=modeCode;
@@ -33,11 +32,11 @@
         public string IdSha256 { get; set; } = string.Empty;
         public int Pid { get; set; }
 
-        public static Document Create(int id, Guid docId,string number, DateTime docDate, 
+        public static Document Create(string number, DateTime docDate, 
                                       string modeCode, string docType, int sizeDoc, string idmd5, string idSha256, 
                                       int pid, DateTime createDate, DateTime modifyDate)
         {
-            var document = new Document(id,docId,number,docDate,modeCode,docType, sizeDoc,
+            var document = new Document(number,docDate,modeCode,docType, sizeDoc,
                                         idmd5,idSha256,pid,createDate, modifyDate);
 
             return document;

@@ -2,7 +2,7 @@
 using ClientSVH.DataAccess.Entities;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
+
 
 
 namespace ClientSVH.DataAccess

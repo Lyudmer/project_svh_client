@@ -2,9 +2,9 @@
 {
     public class User 
     {
-        private User(Guid id, string username, string passwordHash, string email)
+        private User( string username, string passwordHash, string email)
         {
-            Id = id;
+           
             UserName = username;
             PasswordHash = passwordHash;
             Email = email;
@@ -16,9 +16,9 @@
         public string PasswordHash { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
 
-        public static User Create(Guid id, string username, string passwordHash, string email)
+        public static User Create( string username, string passwordHash, string email)
         {
-            var user = new User(id, username, passwordHash, email);
+            var user = new User( username, passwordHash, email);
             return user;
         }
     }
