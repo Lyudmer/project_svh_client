@@ -1,15 +1,13 @@
 ﻿using ClientSVH.Core.Models;
 
-namespace ClientSVH.Core.Abstraction.Repositories
+namespace ClientSVH.DataAccess.Repositories
 {
     public interface IUsersRepository
     {
-        Task<List<User>> GetUsers();
-        Task<User> Add(User user);
-        Task<User> GetByEmail(string email);
-        
-        Task<Guid> Update(Guid id, string username, string passwordHash, string email);
+        Task<Guid> Add(User user);
         Task<Guid> Delete(Guid id);
-
+        Task<User> GetByEmail(string email);
+        Task<List<User>> GetUsers();
+        Task<Guid> Update(User user);
     }
 }

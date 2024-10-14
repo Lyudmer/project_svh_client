@@ -50,7 +50,7 @@ namespace ClientSVH.SendReceivServer
                 {
                     var resRecord = ParsingMess(resMessDoc, "Package");
                     int olsstPkg = _pkgRepository.GetByUUId(resRecord.UUID).Result.StatusId;
-                    int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Pid;
+                    int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Id;
                     // поменять статус
                     await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
                     // добавить в историю
@@ -82,7 +82,7 @@ namespace ClientSVH.SendReceivServer
         {
             var resRecord = ParsingMess(resMess, "Result");
             int olsstPkg = _pkgRepository.GetByUUId(resRecord.UUID).Result.StatusId;
-            int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Pid;
+            int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Id;
             // поменять статус
             await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
             // добавить в историю

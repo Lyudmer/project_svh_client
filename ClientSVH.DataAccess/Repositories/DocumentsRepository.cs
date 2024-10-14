@@ -4,7 +4,6 @@ using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.DataAccess.Entities;
 using AutoMapper;
 
-
 namespace ClientSVH.DataAccess.Repositories
 {
     public class DocumentsRepository(ClientSVHDbContext dbContext, IMapper mapper) : IDocumentsRepository
@@ -13,11 +12,10 @@ namespace ClientSVH.DataAccess.Repositories
         private readonly IMapper _mapper = mapper;
         public async Task<Document> Add(Document Doc)
         {
+            var docEntity = _mapper.Map<DocumentEntity>(Doc);
             await _dbContext.AddAsync(Doc);
             await _dbContext.SaveChangesAsync();
-            var nRes = await _dbContext.SaveChangesAsync();
-            if (nRes > 0) return Doc;
-            else return null;
+            return _mapper.Map<Document>(docEntity);
            
         }
         public async Task<Document> GetById(int id)
@@ -65,8 +63,8 @@ namespace ClientSVH.DataAccess.Repositories
         public async Task<int> GetLastDocId()
         {
             var cDoc = await _dbContext.Document.CountAsync();
-
             return cDoc;
         }
+     
     }
 }

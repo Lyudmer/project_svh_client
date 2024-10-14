@@ -3,7 +3,7 @@
 using AutoMapper;
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
-
+using ClientSVH.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClientSVH.DataAccess.Repositories
@@ -14,11 +14,10 @@ namespace ClientSVH.DataAccess.Repositories
         private readonly IMapper _mapper = mapper;
         public async Task<HistoryPkg> Add(HistoryPkg HpPkg)
         {
-            await _dbContext.AddAsync(HpPkg);
+            var HpPkgEntity = _mapper.Map<HistoryPkgEntity>(HpPkg);
+            await _dbContext.AddAsync(HpPkgEntity);
             await _dbContext.SaveChangesAsync();
-            var nRes = await _dbContext.SaveChangesAsync();
-            if (nRes > 0) return HpPkg;
-            else return null;
+            return _mapper.Map<HistoryPkg>(HpPkgEntity);
            
         }
         public async Task<HistoryPkg> GetById(int Pid)
@@ -27,8 +26,8 @@ namespace ClientSVH.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Pid == Pid) ?? throw new Exception();
             return _mapper.Map<HistoryPkg>(hpPkgEntity);
+
         }
-       
         
     }
 }

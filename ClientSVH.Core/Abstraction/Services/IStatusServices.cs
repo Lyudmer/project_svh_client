@@ -1,8 +1,10 @@
-﻿namespace ClientSVH.Core.Abstraction.Services
+﻿using ClientSVH.Core.Models;
+
+namespace ClientSVH.Core.Abstraction.Services
 {
     public interface IStatusServices
     {
-        Task<int> AddStatus(int Id, string StName, bool RunWf, bool MkRes, bool SendMess);
+        Task<int> AddStatus(Status status);
         Task<bool> DelStatus(int Id);
     }
 }

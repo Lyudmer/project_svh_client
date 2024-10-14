@@ -13,10 +13,10 @@ namespace ClientSVH.DataAccess.Repositories
         private readonly IMapper _mapper = mapper;
         public async Task<int> Add(Status status)
         {
-            await _dbContext.AddAsync(status);
-            var nRes = await _dbContext.SaveChangesAsync();
-            if (nRes > 0) return status.Id;
-            else return -1;
+            var stEntity = _mapper.Map<StatusEntity>(status);
+            await _dbContext.AddAsync(stEntity);
+            await _dbContext.SaveChangesAsync();
+            return _mapper.Map<Status>(stEntity).Id;
         }
         public async Task Update(Status status)
         {
@@ -31,17 +31,13 @@ namespace ClientSVH.DataAccess.Repositories
             await _dbContext.Status
                 .Where(u => u.Id == Id)
                 .ExecuteDeleteAsync();
-
         }
         public async Task<Status> GetById(int Id)
         {
             var stEntity = await _dbContext.Status
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == Id) ?? throw new Exception();
-
             return _mapper.Map<Status>(stEntity);
-            
-
         }
     }
 }

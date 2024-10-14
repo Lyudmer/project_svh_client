@@ -31,10 +31,9 @@ namespace ClienSVH.XMLParser
                 if (xPkg is not null)
                 {
                     //create package
-                    var Pkg = Package.Create(Pid, userId, 0,Guid.NewGuid(), DateTime.Now, DateTime.Now);
-
+                    var Pkg = Package.Create(Pid, userId, 0, Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow);
                     Pkg = await _pkgRepository.Add(Pkg);
-                    Pid = Pkg.Pid;
+                    Pid = Pkg.Id;
 
                     var xDocs = from xDoc in xPkg?.AsParallel().Elements()
                                 select new

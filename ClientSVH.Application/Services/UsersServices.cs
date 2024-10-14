@@ -2,6 +2,7 @@
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
+using ClientSVH.DataAccess.Repositories;
 using Microsoft.AspNetCore.Http;
 using System.Data;
 using System.Globalization;
@@ -26,10 +27,7 @@ namespace ClientSVH.Application.Services
             try
             {
                 var hasherPassword = _passwordHasher.Generate(password);
-
-                var user = User.Create(Guid.NewGuid(), username, hasherPassword, email);
-                
-                await _usersRepository.Add(user);
+                await _usersRepository.Add(User.Create(Guid.NewGuid(), username, hasherPassword, email));
             }
             catch (Exception e)
             {

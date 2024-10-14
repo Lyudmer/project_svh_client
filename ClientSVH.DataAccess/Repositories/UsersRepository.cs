@@ -13,13 +13,12 @@ namespace ClientSVH.DataAccess.Repositories
     {
         private readonly ClientSVHDbContext _context = context;
         private readonly IMapper _mapper = mapper;
-        public async Task<User> Add(User user)
+        public async Task<Guid> Add(User user)
         {
-            await _context.AddAsync(user);
-            var nRes = await _context.SaveChangesAsync();
-            if (nRes > 0) return user;
-            return null;
-
+            var userEntity = _mapper.Map<UserEntity>(user);
+            await _context.Users.AddAsync(userEntity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<User>(userEntity).Id;
         }
         public async Task<User> GetByEmail(string email)
         {
@@ -27,26 +26,27 @@ namespace ClientSVH.DataAccess.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
             return _mapper.Map<User>(userEntity);
-            
         }
-        
-        public async Task<Guid> Update(Guid id, string username, string password, string email)
+
+        public async Task<Guid> Update(User user)
         {
-            await _context.Users
-                 .Where(u => u.Id == id)
-                 .ExecuteUpdateAsync(s => s
-                     .SetProperty(u => u.UserName, u => username)
-                     .SetProperty(u => u.PasswordHash, u => password)
-                     .SetProperty(u => u.Email, u => email)
-                 );
-            return id;
+            var resId = await _context.Users
+                         .Where(u => u.Id == user.Id)
+                         .ExecuteUpdateAsync(s => s
+                         .SetProperty(u => u.UserName, u => user.UserName)
+                         .SetProperty(u => u.PasswordHash, u => user.PasswordHash)
+                         .SetProperty(u => u.Email, u => user.Email));
+            if (resId > 0) return user.Id;
+            else return Guid.Empty;
         }
         public async Task<Guid> Delete(Guid id)
         {
-            await _context.Users
-                .Where(u => u.Id == id)
-                .ExecuteDeleteAsync();
-            return id;
+            var resId = await _context.Users
+                        .Where(u => u.Id == id)
+                        .ExecuteDeleteAsync();
+            if (resId > 0) return id;
+            else return Guid.Empty;
+
         }
         public async Task<List<User>> GetUsers()
         {

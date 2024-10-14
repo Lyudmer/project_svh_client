@@ -9,9 +9,8 @@ namespace ClientSVH.Application.Services
     public class StatusServices(IStatusRepositoty statusRepository) : IStatusServices
     {
         private readonly IStatusRepositoty _statusRepository = statusRepository;
-        public async Task<int> AddStatus(int Id, string StName, bool RunWf, bool MkRes, bool SendMess)
+        public async Task<int> AddStatus(Status status)
         {
-            var status = Status.Create(Id, StName, RunWf, MkRes, SendMess);
             return await _statusRepository.Add(status);
         }
 

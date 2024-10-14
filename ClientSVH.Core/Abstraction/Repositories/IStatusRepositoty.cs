@@ -7,7 +7,7 @@ namespace ClientSVH.Core.Abstraction.Repositories
     {
         Task<int> Add(Status status);
         Task Delete(int Id);
-        Task<Status> GetById(int Id);
         Task Update(Status status);
+        Task<Status> GetById(int Id);
     }
 }

@@ -4,6 +4,7 @@ using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using ClientSVH.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 
 namespace ClientSVH.DataAccess.Repositories
@@ -12,14 +13,12 @@ namespace ClientSVH.DataAccess.Repositories
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
         private readonly IMapper _mapper = mapper;
-
         public async Task<Package> Add(Package Pkg)
         {
-            await _dbContext.AddAsync(Pkg);
-            var nRes=await _dbContext.SaveChangesAsync();
-
-            if(nRes>0) return Pkg; 
-            else return null;
+            var PkgEntity = _mapper.Map<PackageEntity>(Pkg);
+            await _dbContext.AddAsync(PkgEntity);
+            await _dbContext.SaveChangesAsync();
+            return _mapper.Map<Package>(PkgEntity);
         }
         public async Task<Package> GetByUUId(Guid uuid)
         {
@@ -107,18 +106,5 @@ namespace ClientSVH.DataAccess.Repositories
             return cPkg;
         }
 
-        //private static Package MappedObj(PackageEntity pkgEntity)
-        //{
-        //    return Package.Create(pkgEntity.UserId, pkgEntity.StatusId, pkgEntity.CreateDate, pkgEntity.ModifyDate);
-        //}
-        //private static List<Package> MappedObj(List<PackageEntity> pkgEntity)
-        //{
-        //    List<Package> result = [];
-        //    foreach (PackageEntity pkg in pkgEntity)
-        //    {
-        //        result.Add(MappedObj(pkg));
-        //    }
-        //    return result;
-        //}
     }
 }
