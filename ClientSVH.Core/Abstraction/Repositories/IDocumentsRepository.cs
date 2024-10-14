@@ -11,5 +11,6 @@ namespace ClientSVH.Core.Abstraction.Repositories
         Task<Document> GetById(int id);
         Task<List<Document>> GetByPage(int page, int page_size);
         Task Update(int Id);
+        Task<int> GetLastDocId();
     }
 }

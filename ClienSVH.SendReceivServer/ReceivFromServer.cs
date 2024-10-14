@@ -136,9 +136,9 @@ namespace ClientSVH.SendReceivServer
                     var doctext = xDoc.ToString();
                     var docNum = (xDoc.Elements().Elements().FirstOrDefault(n => n.Name == "RegNum")?.Value is not null).ToString();
 
+                    var LastDocId = _docRepository.GetLastDocId().Result + 1;
 
-
-                    var Doc = Document.Create( docNum, docDate, "", "ConfirmWHDocReg.cfg.xml", doctext.Length,
+                    var Doc = Document.Create(LastDocId,Guid.NewGuid(), docNum, docDate, "", "ConfirmWHDocReg.cfg.xml", doctext.Length,
                                               DopFunction.GetHashMd5(doctext), DopFunction.GetSha256(doctext),
                                               resRecord.Pid, DateTime.Now, DateTime.Now);
 

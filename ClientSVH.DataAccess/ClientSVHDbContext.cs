@@ -2,6 +2,7 @@
 using ClientSVH.DataAccess.Entities;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 
 
@@ -39,7 +40,7 @@ namespace ClientSVH.DataAccess
     //        var optionsBuilder = new DbContextOptionsBuilder<ClientSVHDbContext>();
     //        optionsBuilder.UseNpgsql("Host=localhost;User ID=postgres;Password=studadmin;Port=5432;Database=svhdb;");
     //        var b = optionsBuilder.Options;
-            
+
     //        return new ClientSVHDbContext(b);
     //    }
     //}

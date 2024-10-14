@@ -3,6 +3,7 @@ using System;
 using ClientSVH.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClientSVH.DataAccess.Migrations
 {
     [DbContext(typeof(ClientSVHDbContext))]
-    partial class ClientSVHDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241014165000_UpdateClientDbValueGenerated")]
+    partial class UpdateClientDbValueGenerated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -62,6 +62,11 @@ namespace ClientSVH.DataAccess.Repositories
                     .Where(u => u.Id == Id)
                     .ExecuteDeleteAsync();
         }
-       
+        public async Task<int> GetLastDocId()
+        {
+            var cDoc = await _dbContext.Document.CountAsync();
+
+            return cDoc;
+        }
     }
 }

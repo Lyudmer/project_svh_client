@@ -17,7 +17,8 @@ namespace ClientSVH.DataAccess.Repositories
         {
             await _dbContext.AddAsync(Pkg);
             var nRes=await _dbContext.SaveChangesAsync();
-            if(nRes>0) return Pkg;
+
+            if(nRes>0) return Pkg; 
             else return null;
         }
         public async Task<Package> GetByUUId(Guid uuid)
@@ -99,20 +100,25 @@ namespace ClientSVH.DataAccess.Repositories
                 .Where(u => u.Id == Pid)
                 .ExecuteDeleteAsync();
         }
-        
+        public async Task<int> GetLastPkgId()
+        {
+            var cPkg = await _dbContext.Packages.CountAsync();
+
+            return cPkg;
+        }
 
         //private static Package MappedObj(PackageEntity pkgEntity)
         //{
-        //    return Package.Create( pkgEntity.UserId, pkgEntity.StatusId,  pkgEntity.CreateDate, pkgEntity.ModifyDate);
+        //    return Package.Create(pkgEntity.UserId, pkgEntity.StatusId, pkgEntity.CreateDate, pkgEntity.ModifyDate);
         //}
         //private static List<Package> MappedObj(List<PackageEntity> pkgEntity)
         //{
-        //     List<Package> result =[];
-        //    foreach(PackageEntity pkg in pkgEntity) 
+        //    List<Package> result = [];
+        //    foreach (PackageEntity pkg in pkgEntity)
         //    {
         //        result.Add(MappedObj(pkg));
         //    }
-        //     return result;
+        //    return result;
         //}
     }
 }

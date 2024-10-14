@@ -21,7 +21,7 @@ namespace ClienSVH.XMLParser
         private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
         public async Task<int> LoadFileXml(Guid userId, string inFile)
         {
-            int Pid = 0;
+            int Pid = _pkgRepository.GetLastPkgId().Result+1;
             try
             {
                 XDocument xFile = XDocument.Parse(inFile.Trim());
@@ -31,7 +31,7 @@ namespace ClienSVH.XMLParser
                 if (xPkg is not null)
                 {
                     //create package
-                    var Pkg = Package.Create( userId, 0, DateTime.Now, DateTime.Now);
+                    var Pkg = Package.Create(Pid, userId, 0,Guid.NewGuid(), DateTime.Now, DateTime.Now);
 
                     Pkg = await _pkgRepository.Add(Pkg);
                     Pid = Pkg.Pid;
@@ -47,7 +47,8 @@ namespace ClienSVH.XMLParser
                                 };
                     foreach (var doc in xDocs)
                     {
-                        var Doc = Document.Create( doc.num, DateTime.Parse(doc.dat),"",
+                        var LastDocId=_docRepository.GetLastDocId().Result+1;
+                        var Doc = Document.Create(LastDocId, Guid.NewGuid(), doc.num, DateTime.Parse(doc.dat), "",
                                       doc.tdoc, doc.doctext.Length, DopFunction.GetHashMd5(doc.doctext),
                                       DopFunction.GetSha256(doc.doctext),
                                       Pid, DateTime.Now, DateTime.Now);

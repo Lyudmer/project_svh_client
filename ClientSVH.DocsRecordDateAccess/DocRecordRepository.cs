@@ -3,7 +3,7 @@ using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
+
 using MongoDB.Driver;
 namespace ClientSVH.DocsRecordDataAccess
 {

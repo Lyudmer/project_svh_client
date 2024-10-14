@@ -5,16 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 using ClientSVH.DataAccess.Entities;
 using ClientSVH.Core.Abstraction.Repositories;
+using AutoMapper;
 
 namespace ClientSVH.DataAccess.Repositories
 {
-    public class UsersRepository(ClientSVHDbContext context) : IUsersRepository
+    public class UsersRepository(ClientSVHDbContext context, IMapper mapper) : IUsersRepository
     {
         private readonly ClientSVHDbContext _context = context;
+        private readonly IMapper _mapper = mapper;
         public async Task<User> Add(User user)
         {
             await _context.AddAsync(user);
-            await _context.SaveChangesAsync();
             var nRes = await _context.SaveChangesAsync();
             if (nRes > 0) return user;
             return null;
@@ -25,8 +26,8 @@ namespace ClientSVH.DataAccess.Repositories
             var userEntity = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
-            var resUser = User.Create( userEntity.UserName, userEntity.PasswordHash,userEntity.Email);
-            return resUser;
+            return _mapper.Map<User>(userEntity);
+            
         }
         
         public async Task<Guid> Update(Guid id, string username, string password, string email)
@@ -52,10 +53,7 @@ namespace ClientSVH.DataAccess.Repositories
             var userEntites = await _context.Users
                  .AsNoTracking()
                  .ToListAsync();
-            var users = userEntites
-                .Select(u => User.Create(u.UserName, u.PasswordHash, u.Email))
-                .ToList();
-            return users;
+            return _mapper.Map<List<User>>(userEntites);
         }
 
     }

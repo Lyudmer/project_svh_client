@@ -16,14 +16,14 @@ namespace ClientSVH.DataAccess.Mapping
                     return true;
                 }
                 ));
-            CreateMap<PackageEntity, Package>()
-                .ForAllMembers(x => x.Condition((src, dest, prop) =>
-                {
-                    if (prop == null) return false;
-                    if (prop.GetType() == typeof(string) && string.IsNullOrEmpty((string)prop)) return false;
-                    return true;
-                }
-                ));
+            CreateMap<PackageEntity, Package>();
+                //.ForAllMembers(x => x.Condition((src, dest, prop) =>
+                //{
+                //    if (prop == null) return false;
+                //    if (prop.GetType() == typeof(string) && string.IsNullOrEmpty((string)prop)) return false;
+                //    return true;
+                //}
+                //));
             CreateMap<StatusEntity, Status>()
                 .ForAllMembers(x => x.Condition((src, dest, prop) =>
                 {
