@@ -14,7 +14,6 @@ namespace ClientSVH.Core.Abstraction.Repositories
         Task<List<Package>> GetByPage(int Page, int Page_Size);
         Task<Package> GetPkgWithDoc(int Pid);
         Task UpdateStatus(int Pid, int Status);
-        Task<int> GetLastPkgId();
       
     }
 }

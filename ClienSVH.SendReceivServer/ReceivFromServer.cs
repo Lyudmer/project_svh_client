@@ -54,13 +54,13 @@ namespace ClientSVH.SendReceivServer
                     // поменять статус
                     await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
                     // добавить в историю
-                    var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.Now);
+                    var hPkg = HistoryPkg.Create( Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.Now);
                    
                     await _historyPkgRepository.Add(hPkg);
                     // добавить документ
                     if (resRecord.DocRecord != null && await AddDocResPackage(resRecord))
                     {
-                        hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, olsstPkg, resRecord.Status, "Add ConfirmWHDocReg", DateTime.Now);
+                        hPkg = HistoryPkg.Create( Pid, olsstPkg, resRecord.Status, "Add ConfirmWHDocReg", DateTime.Now);
                         await _historyPkgRepository.Add(hPkg);
                     }
                 }
@@ -89,7 +89,7 @@ namespace ClientSVH.SendReceivServer
             string sMess;
             if (!typeMessage.Contains("Del")) sMess = resRecord.Message;
             else sMess = "LoadStatusFromServer";
-            var hPkg = HistoryPkg.Create(Guid.NewGuid(), Pid, olsstPkg, resRecord.Status, sMess, DateTime.Now);
+            var hPkg = HistoryPkg.Create( Pid, olsstPkg, resRecord.Status, sMess, DateTime.Now);
             await _historyPkgRepository.Add(hPkg);
         }
 
@@ -131,14 +131,14 @@ namespace ClientSVH.SendReceivServer
                 XDocument xDoc = XDocument.Load(resRecord.DocRecord);
                 if (xDoc != null)
                 {
-                    var doc_1 = await _docRepository.GetLastDocId() + 1;
+                   
                     var docDate = ConverterValue.ConvertTo<DateTime>((xDoc.Elements().Elements().FirstOrDefault(n => n.Name == "RegDate")?.Value is not null).ToString());
                     var doctext = xDoc.ToString();
                     var docNum = (xDoc.Elements().Elements().FirstOrDefault(n => n.Name == "RegNum")?.Value is not null).ToString();
 
 
 
-                    var Doc = Document.Create(doc_1, Guid.NewGuid(), docNum, docDate, "", "ConfirmWHDocReg.cfg.xml", doctext.Length,
+                    var Doc = Document.Create( docNum, docDate, "", "ConfirmWHDocReg.cfg.xml", doctext.Length,
                                               DopFunction.GetHashMd5(doctext), DopFunction.GetSha256(doctext),
                                               resRecord.Pid, DateTime.Now, DateTime.Now);
 

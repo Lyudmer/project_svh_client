@@ -9,35 +9,28 @@ namespace ClientSVH.DataAccess.Repositories
     public class StatusRepositoty(ClientSVHDbContext dbContext) : IStatusRepositoty
     {
         private readonly ClientSVHDbContext _dbContext = dbContext;
-        
-        public async Task<int> Add(int Id, string StatusName, bool RunWf, bool MkRes, bool SendMess)
+
+        public async Task<int> Add(Status status)
         {
-            var statusEntity = new StatusEntity
-            {
-                Id = Id,
-                StatusName = StatusName,
-                RunWf = RunWf,
-                MkRes = MkRes,
-                SendMess=SendMess
-            };
-            await _dbContext.AddAsync(statusEntity);
-            await _dbContext.SaveChangesAsync();
-            return statusEntity.Id;
+            await _dbContext.AddAsync(status);
+            var nRes = await _dbContext.SaveChangesAsync();
+            if (nRes > 0) return status.Id;
+            else return -1;
         }
-        public async Task Update(int Id, string StatusName, bool RunWf, bool MkRes)
+        public async Task Update(Status status)
         {
             await _dbContext.Status
-                .Where(u => u.Id == Id)
-                .ExecuteUpdateAsync(s => s.SetProperty(u => u.StatusName, StatusName)
-                                          .SetProperty(u => u.RunWf, RunWf)
-                                          .SetProperty(u => u.MkRes, MkRes));
+                .Where(u => u.Id == status.Id)
+                .ExecuteUpdateAsync(s => s.SetProperty(u => u.StatusName, status.StatusName)
+                                          .SetProperty(u => u.RunWf, status.RunWf)
+                                          .SetProperty(u => u.MkRes, status.MkRes));
         }
         public async Task Delete(int Id)
         {
             await _dbContext.Status
                 .Where(u => u.Id == Id)
                 .ExecuteDeleteAsync();
-           
+
         }
         public async Task<Status> GetById(int Id)
         {

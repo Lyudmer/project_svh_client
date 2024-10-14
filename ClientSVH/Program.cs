@@ -7,6 +7,7 @@ using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Abstraction.Services;
 
 using ClientSVH.DataAccess;
+using ClientSVH.DataAccess.Mapping;
 using ClientSVH.DataAccess.Repositories;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordDataAccess;
@@ -59,7 +60,6 @@ services.AddTransient<IUsersService, UsersService>();
 services.AddTransient<IPackagesServices, PackagesServices>();
 services.AddTransient<IDocumentsServices, DocumentsServices>();
 services.AddTransient<IHistoryPkgRepository, HistoryPkgRepository>();
-//services.AddTransient<IStatusServices, StatusServices>();
 
 services.AddTransient<IUsersRepository, UsersRepository>();
 services.AddTransient<IPackagesRepository, PackagesRepository>();
@@ -75,7 +75,7 @@ services.AddTransient<IRabbitMQConsumer, RabbitMQConsumer>();
 services.AddTransient<ISendToServer, SendToServer>();
 services.AddTransient<IReceivFromServer, ReceivFromServer>();
 
-
+services.AddAutoMapper(typeof(MapperProfile));
 services.AddHttpContextAccessor();
 
 var app = builder.Build();

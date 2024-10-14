@@ -11,18 +11,14 @@ namespace ClientSVH.DataAccess.Repositories
     public class UsersRepository(ClientSVHDbContext context) : IUsersRepository
     {
         private readonly ClientSVHDbContext _context = context;
-        public async Task<Guid> Add(User user)
+        public async Task<User> Add(User user)
         {
-            var userEntity = new UserEntity
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                PasswordHash = user.PasswordHash,
-                Email = user.Email
-            };
-            await _context.Users.AddAsync(userEntity);
+            await _context.AddAsync(user);
             await _context.SaveChangesAsync();
-            return userEntity.Id;
+            var nRes = await _context.SaveChangesAsync();
+            if (nRes > 0) return user;
+            return null;
+
         }
         public async Task<User> GetByEmail(string email)
         {
