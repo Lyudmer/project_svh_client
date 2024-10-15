@@ -10,7 +10,7 @@ namespace ClientSVH.Core.Abstraction.Repositories
         Task<List<Document>> GetByFilter(int pid);
         Task<Document> GetById(int id);
         Task<List<Document>> GetByPage(int page, int page_size);
-        Task Update(int Id);
+        Task Update(Guid DocId, Document Doc);
         Task<int> GetLastDocId();
     }
 }

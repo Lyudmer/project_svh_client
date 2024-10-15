@@ -48,23 +48,34 @@ namespace ClientSVH.DataAccess.Repositories
             return _mapper.Map<List<Document>>(docs);
         }
 
-        public async Task Update(int Id)
+        public async Task Update(Guid DocId, Document Doc)
         {
             await _dbContext.Document
-                .Where(p => p.Id == Id)
-                .ExecuteUpdateAsync(s => s.SetProperty(p => p.ModifyDate, DateTime.Now));
+                .Where(p => p.DocId == DocId)
+                .ExecuteUpdateAsync(s => s.SetProperty(p => p.ModifyDate, DateTime.Now)
+                                          .SetProperty(p => p.SizeDoc, Doc.SizeDoc)
+                                          .SetProperty(p => p.DocType, Doc.DocType)
+                                          .SetProperty(p => p.Idmd5, Doc.Idmd5)
+                                          .SetProperty(p => p.IdSha256, Doc.IdSha256)
+                                    );
         }
         public async Task Delete(int Id)
         {
-             await _dbContext.Document
-                    .Where(u => u.Id == Id)
-                    .ExecuteDeleteAsync();
+            await _dbContext.Document
+                .Where(u => u.Id == Id)
+                .ExecuteDeleteAsync();
+        }
+        public async Task Delete(Guid Id)
+        {
+            await _dbContext.Document
+                .Where(u => u.DocId == Id)
+                .ExecuteDeleteAsync();
         }
         public async Task<int> GetLastDocId()
         {
-            var cDoc = await _dbContext.Document.CountAsync();
-            return cDoc;
+            return await _dbContext.Document.MaxAsync(p => p.Id);
         }
-     
+
+       
     }
 }
