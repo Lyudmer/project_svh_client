@@ -25,17 +25,19 @@ namespace ClienSVH.XMLParser
             try
             {
                 XDocument xFile = XDocument.Parse(inFile.Trim());
+
                 var xPkg = xFile.Element("Package")?
                     .Elements().Where(p => p.FirstAttribute?.Name.LocalName == "CfgName");
                 
                 if (xPkg is not null)
                 {
+                    
                     //create package
                     var Pkg = Package.Create(Pid, userId, 0, Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow);
                     Pkg = await _pkgRepository.Add(Pkg);
                     Pid = Pkg.Id;
 
-                    var xDocs = from xDoc in xPkg?.AsParallel().Elements()
+                    var xDocs = from xDoc in xPkg?.AsParallel()
                                 select new
                                 {
                                     tdoc = xDoc.Name?.LocalName,
@@ -47,16 +49,21 @@ namespace ClienSVH.XMLParser
                     foreach (var doc in xDocs)
                     {
                         var LastDocId=_docRepository.GetLastDocId().Result+1;
-                        var Doc = Document.Create(LastDocId, Guid.NewGuid(), doc.num, DateTime.Parse(doc.dat), "",
+                        string docCode = doc.tdoc.Contains("CONOSAMENT") ? "02011" : "09999";
+                        DateTime DocDate = DateTime.UtcNow;
+                        if (doc.dat is not null)
+                            _ = DateTime.TryParse(doc.dat, out DocDate);
+
+                        var Doc = Document.Create(LastDocId, Guid.NewGuid(), doc.num, DocDate, docCode,
                                       doc.tdoc, doc.doctext.Length, DopFunction.GetHashMd5(doc.doctext),
                                       DopFunction.GetSha256(doc.doctext),
-                                      Pid, DateTime.Now, DateTime.Now);
+                                      Pid, DateTime.UtcNow, DateTime.UtcNow);
 
                         
                         Doc = await _docRepository.Add(Doc);
                         if (Doc is not null)
                         {
-                            DocRecord dRecord = DocRecord.Create(Guid.NewGuid(), Doc.DocId, doc.doctext, DateTime.Now, DateTime.Now);
+                            DocRecord dRecord = DocRecord.Create(Doc.DocId, doc.doctext);
                             var dRecordId = await _docRecordRepository.AddRecord(dRecord);
                         }
                     }

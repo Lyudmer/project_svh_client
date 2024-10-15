@@ -25,7 +25,7 @@ namespace ClientSVH.Controllers
         
         private readonly IUsersService _userService = userService;
 
-        [HttpPost("loadfile")]
+        [HttpPost("LoadFile")]
         public async Task<IActionResult> LoadFile(IFormFile InName,string UserId)
         {
             if (!ModelState.IsValid)
@@ -37,6 +37,7 @@ namespace ClientSVH.Controllers
                 using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
                 {
                     var resFile = reader.ReadToEnd();
+                    reader.Close();
 
                     if (resFile.Length>0 && Guid.TryParse(UserId, out var userId))
                     {

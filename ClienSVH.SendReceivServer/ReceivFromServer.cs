@@ -138,7 +138,7 @@ namespace ClientSVH.SendReceivServer
 
                     var LastDocId = _docRepository.GetLastDocId().Result + 1;
 
-                    var Doc = Document.Create(LastDocId,Guid.NewGuid(), docNum, docDate, "", "ConfirmWHDocReg.cfg.xml", doctext.Length,
+                    var Doc = Document.Create(LastDocId,Guid.NewGuid(), docNum, docDate, "09999", "ConfirmWHDocReg.cfg.xml", doctext.Length,
                                               DopFunction.GetHashMd5(doctext), DopFunction.GetSha256(doctext),
                                               resRecord.Pid, DateTime.Now, DateTime.Now);
 
@@ -146,7 +146,7 @@ namespace ClientSVH.SendReceivServer
                     Doc = await _docRepository.Add(Doc);
                     if (Doc is not null)
                     {
-                        DocRecord dRecord = DocRecord.Create(Guid.NewGuid(), Doc.DocId, doctext, DateTime.Now, DateTime.Now);
+                        DocRecord dRecord = DocRecord.Create( Doc.DocId, doctext);
                         var dRecordId = await _docRecordRepository.AddRecord(dRecord);
 
                     }

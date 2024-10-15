@@ -15,9 +15,9 @@ namespace ClientSVH.DataAccess.Repositories
         public async Task<HistoryPkg> Add(HistoryPkg HpPkg)
         {
             var HpPkgEntity = _mapper.Map<HistoryPkgEntity>(HpPkg);
-            await _dbContext.AddAsync(HpPkgEntity);
+            var resEntity=await _dbContext.AddAsync(HpPkgEntity);
             await _dbContext.SaveChangesAsync();
-            return _mapper.Map<HistoryPkg>(HpPkgEntity);
+            return _mapper.Map<HistoryPkg>(resEntity.Entity);
            
         }
         public async Task<HistoryPkg> GetById(int Pid)

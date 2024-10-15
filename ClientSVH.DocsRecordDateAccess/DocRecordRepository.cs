@@ -10,9 +10,12 @@ namespace ClientSVH.DocsRecordDataAccess
     public class DocRecordRepository : IDocRecordRepository
     {
 
-        private readonly DocRecordContext _docRecordCollection;
-        public DocRecordRepository(IOptions<Settings> settings) => _docRecordCollection = new DocRecordContext(settings);
+        private readonly IDocRecordContext _docRecordCollection;
+        public DocRecordRepository(IOptions<Settings> settings)
+        { 
+             _docRecordCollection = new DocRecordContext(settings);
 
+        }
         public async Task<DocRecord> GetByDocId(Guid docId)
         {
             var filter = Builders<DocRecord>.Filter.Eq("DocId", docId);
@@ -32,7 +35,8 @@ namespace ClientSVH.DocsRecordDataAccess
         {
             try
             {
-                await _docRecordCollection.DocRecords.InsertOneAsync(item);
+                var options = new InsertOneOptions { BypassDocumentValidation = true };
+                await _docRecordCollection.DocRecords.InsertOneAsync(item,options);
                 return item.DocId;
             }
             catch (Exception)
@@ -43,9 +47,7 @@ namespace ClientSVH.DocsRecordDataAccess
         public async Task<long> UpdateRecord(Guid DocId, DocRecord docRecord)
         {
             var filter = Builders<DocRecord>.Filter.Eq(s => s.DocId, DocId);
-            var update = Builders<DocRecord>.Update
-                            .Set(s => s.DocText, docRecord.DocText)
-                            .Set(s => s.ModifyDate, DateTime.Now);
+            var update = Builders<DocRecord>.Update.Set(s => s.DocText, docRecord.DocText);
             try
             {
                 var resUpdate = await _docRecordCollection.DocRecords.UpdateOneAsync(filter, update);

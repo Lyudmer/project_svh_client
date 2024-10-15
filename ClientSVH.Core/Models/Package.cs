@@ -4,9 +4,9 @@ namespace ClientSVH.Core.Models
 {
     public class Package
     {
-        private Package(int pid, Guid userId, int statusId, Guid uuId, DateTime createDate, DateTime modifyDate)
+        private Package(int id, Guid userId, int statusId, Guid uuId, DateTime createDate, DateTime modifyDate)
         {
-            Id = pid;
+            Id = id;
             UserId = userId;
             StatusId = statusId;
             UUID = uuId;    
@@ -18,12 +18,12 @@ namespace ClientSVH.Core.Models
         public int StatusId { get; set; }
      
         public Guid UUID { get; set; }
-        public DateTime CreateDate { get; set; } = DateTime.Now;
-        public DateTime ModifyDate { get; set; } = DateTime.Now;
-        public static Package Create(int pid, Guid userId, int statusId, Guid uuId, 
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime ModifyDate { get; set; } = DateTime.UtcNow;
+        public static Package Create(int id, Guid userId, int statusId, Guid uuId, 
                                      DateTime createDate, DateTime modifyDate)
         {
-            var package = new Package(pid,userId, statusId, uuId, createDate, modifyDate);
+            var package = new Package(id,userId, statusId, uuId, createDate, modifyDate);
             return package;
         }
         public ICollection<Document> Documents { get; set; } = [];

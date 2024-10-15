@@ -13,9 +13,9 @@ namespace ClientSVH.DataAccess.Repositories
         public async Task<Document> Add(Document Doc)
         {
             var docEntity = _mapper.Map<DocumentEntity>(Doc);
-            await _dbContext.AddAsync(Doc);
+            var resEntity = await _dbContext.AddAsync(docEntity);
             await _dbContext.SaveChangesAsync();
-            return _mapper.Map<Document>(docEntity);
+            return _mapper.Map<Document>(resEntity.Entity);
            
         }
         public async Task<Document> GetById(int id)
@@ -73,7 +73,9 @@ namespace ClientSVH.DataAccess.Repositories
         }
         public async Task<int> GetLastDocId()
         {
-            return await _dbContext.Document.MaxAsync(p => p.Id);
+            var cDoc = await _dbContext.Document.CountAsync();
+            return cDoc;
+            
         }
 
        

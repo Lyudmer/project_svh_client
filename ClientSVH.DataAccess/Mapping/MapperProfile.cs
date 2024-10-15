@@ -11,7 +11,9 @@ namespace ClientSVH.DataAccess.Mapping
             CreateMap<DocumentEntity, Document>().ReverseMap();
 
             CreateMap<PackageEntity, Package>().ReverseMap();
-              
+
+            CreateMap<Package, PackageEntity>().ReverseMap();
+
             CreateMap<StatusEntity, Status>().ReverseMap();
                 
             CreateMap<UserEntity, User>().ReverseMap();

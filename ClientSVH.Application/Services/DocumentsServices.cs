@@ -31,7 +31,7 @@ namespace ClientSVH.Application.Services
                 {
                     var dRecord = await _docRecordRepository.GetByDocId(rDoc.DocId);
                     if (dRecord != null)
-                        await _docRecordRepository.DeleteId(dRecord.Id);
+                        await _docRecordRepository.DeleteId(dRecord.DocId);
                     await _documentsRepository.Delete(Id);
                 }
                 return true;
