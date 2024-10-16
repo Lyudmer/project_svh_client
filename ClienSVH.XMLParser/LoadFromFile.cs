@@ -33,7 +33,6 @@ namespace ClienSVH.XMLParser
 
                 if (xPkg is not null)
                 {
-                    var cDoc = xPkg.Count(); 
                     //create package
                     var Pkg = Package.Create(Pid, userId, 0, Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow);
                     Pkg = await _pkgRepository.Add(Pkg);

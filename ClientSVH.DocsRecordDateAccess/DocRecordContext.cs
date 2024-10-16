@@ -15,8 +15,6 @@ namespace ClientSVH.DocsRecordDataAccess
             if (client != null)
             {
                 _database = client.GetDatabase(settings.Value.Database);
-               
-
             }
         }
         public IMongoCollection<DocRecord> DocRecords
@@ -25,9 +23,7 @@ namespace ClientSVH.DocsRecordDataAccess
             {
                 return GeDocRecord();
             }
-
         }
-
         private  IMongoCollection<DocRecord> GeDocRecord()
         {
             var collection = _database.GetCollection<DocRecord>("DocRecord");
