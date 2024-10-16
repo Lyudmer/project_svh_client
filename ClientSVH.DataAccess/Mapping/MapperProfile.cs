@@ -9,7 +9,7 @@ namespace ClientSVH.DataAccess.Mapping
         public MapperProfile()
         {
             CreateMap<DocumentEntity, Document>().ReverseMap();
-
+            CreateMap<Document,DocumentEntity>().ReverseMap();
             CreateMap<PackageEntity, Package>().ReverseMap();
 
             CreateMap<Package, PackageEntity>().ReverseMap();

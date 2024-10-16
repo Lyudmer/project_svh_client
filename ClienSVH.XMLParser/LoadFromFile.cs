@@ -47,11 +47,11 @@ namespace ClienSVH.XMLParser
                         var dat = xDoc.Elements().Elements("RegDate").FirstOrDefault()?.Value.ToString();
                         var doctext = xDoc.ToString();
                         string docCode = tdoc.Contains("CONOSAMENT") ? "02011" : "09999";
-                        DateTime DocDate = DateTime.UtcNow;
+                        DateTime DocDate = DateTime.Now;
                         if (dat is not null)
                             _ = DateTime.TryParse(dat, out DocDate);
 
-                        var Doc = Document.Create(LastDocId, Guid.NewGuid(), num, DocDate, docCode,
+                        var Doc = Document.Create(LastDocId, Guid.NewGuid(), (num is not null)?num:string.Empty, DocDate, docCode,
                                       tdoc, doctext.Length, DopFunction.GetHashMd5(doctext),
                                       DopFunction.GetSha256(doctext),
                                       Pid, DateTime.UtcNow, DateTime.UtcNow);

@@ -38,7 +38,7 @@ namespace ClientSVH.DataAccess.Migrations
                         .HasDefaultValueSql("now()");
 
                     b.Property<DateTime>("DocDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("date")
                         .HasColumnName("docdate");
 
                     b.Property<Guid>("DocId")

@@ -17,13 +17,12 @@ namespace ClientSVH.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PackagesController(IPackagesServices pkgService, IWebHostEnvironment webHostEnvironment,
-                              IUsersService userService) : ControllerBase
+    public class PackagesController(IPackagesServices pkgService,
+                                    IWebHostEnvironment webHostEnvironment): ControllerBase
     {
         private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
         private readonly IPackagesServices _pkgService = pkgService;
-        
-        private readonly IUsersService _userService = userService;
+       
 
         [HttpPost("LoadFile")]
         public async Task<IActionResult> LoadFile(IFormFile InName,string UserId)
@@ -47,7 +46,7 @@ namespace ClientSVH.Controllers
             }
             return Ok();
         }
-        [HttpPost("send")]
+        [HttpPost("SendToServer")]
         public async Task<IActionResult> SendToServer(PackageRequest pkgSend)
         {
             if (!ModelState.IsValid)
@@ -97,7 +96,7 @@ namespace ClientSVH.Controllers
 
             return Ok();
         }
-        [HttpPost("sendDelPkg")]
+        [HttpPost("SendToServerDelPkg")]
         public async Task<IActionResult> SendDelPkgToServer(PackageRequest pkgSend)
         {
             if (!ModelState.IsValid)

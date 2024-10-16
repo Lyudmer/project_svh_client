@@ -25,11 +25,12 @@ namespace ClientSVH.Application.Common
         public static string GetHashMd5(string text)
         {
             string result = string.Empty;
-            if (string.IsNullOrEmpty(text))
+            if (!string.IsNullOrEmpty(text))
             {
                 var md5 = MD5.Create();
                 var hash = md5?.ComputeHash(Encoding.UTF8.GetBytes(text));
                 if (hash != null) result = Convert.ToBase64String(hash);
+                
             }
             return result;
         }
@@ -44,6 +45,7 @@ namespace ClientSVH.Application.Common
                     for (int i = 0; i < result.Length; i++)
                         sb.Append(result[i].ToString("x2"));
                 }
+                else sb.Append(string.Empty);
             }
             return sb.ToString();
         }

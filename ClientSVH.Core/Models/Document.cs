@@ -22,10 +22,10 @@
 
         public int Id { get; set; }
         public Guid DocId { get; set; }
-        public DateTime CreateDate { get; set; }= DateTime.Now;
-        public DateTime ModifyDate { get; set; } = DateTime.Now;
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime ModifyDate { get; set; } = DateTime.UtcNow;
         public string Number { get; set; }=string.Empty;
-        public DateTime DocDate { get; set; }
+        public DateTime DocDate { get; set; } = DateTime.Now;
         public string ModeCode { get; set; } = string.Empty;
         public string DocType { get; set; } = string.Empty;
         public int SizeDoc { get; set; }

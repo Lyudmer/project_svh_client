@@ -34,6 +34,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.DocsRecordCore", "ClientSVH.DocsRecordCore\ClientSVH.DocsRecordCore.csproj", "{0C4E2831-376C-41C0-940F-BDA8D52A33BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientSVH.SendReceivServer", "ClienSVH.SendReceivServer\ClientSVH.SendReceivServer.csproj", "{AA68082C-B4D0-4A00-98FC-3627F3F1963F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD} = {B48D0F7B-A6B4-449E-9EE1-CEFE04C4CCBD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

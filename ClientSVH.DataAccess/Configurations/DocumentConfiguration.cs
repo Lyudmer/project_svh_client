@@ -48,7 +48,8 @@ namespace ClientSVH.DataAccess.Configurations
                     .HasColumnName("doctype")
                     .HasMaxLength(50);
             builder.Property(d => d.DocDate)
-                    .HasColumnName("docdate");
+                    .HasColumnName("docdate")
+                    .HasColumnType("date"); 
                     
             builder.Property(d => d.SizeDoc)
                     .IsRequired()

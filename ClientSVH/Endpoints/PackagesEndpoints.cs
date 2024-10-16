@@ -16,12 +16,12 @@ namespace ClientSVH.Endpoints
         public static IEndpointRouteBuilder MapPackagesEndpoints(this IEndpointRouteBuilder app)
         {
             var endpoints = app.MapGroup("Packages");
-            app.MapPost("loadfile {UserId:guid}", LoadFile);
+            app.MapPost("LoadFile {UserId:guid}", LoadFile);
             app.MapGet("GetHistory{Pid:int}", GetHistoryPkg);
             app.MapGet("GetPackage{Pid:int}", GetPkgId);
             app.MapDelete("DelPackage{Pid:int}", DeletePkg);
-            app.MapPost("send {Pid:int}", SendPkgToServer);
-            app.MapPost("sendDelPkg {Pid:int}", SendDelPkgToServer);
+            app.MapPost("SendToServer {Pid:int}", SendPkgToServer);
+            app.MapPost("SendToServerDelPkg {Pid:int}", SendDelPkgToServer);
             app.MapGet("GetDocsPackage{Pid:int}", GetDocsPkg);
             return app;
         }

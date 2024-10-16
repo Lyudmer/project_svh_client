@@ -1,11 +1,12 @@
 ﻿using ClientSVH.Application.Interfaces;
-using ClientSVH.Application.Services;
+
 using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
+
 using ClientSVH.SendReceivServer.Producer;
-using System.Data;
 using System.Xml.Linq;
+
 namespace ClientSVH.SendReceivServer
 {
     public class SendToServer(IPackagesRepository pkgRepository,
@@ -90,17 +91,21 @@ namespace ClientSVH.SendReceivServer
                 , new XElement("props", new XAttribute("name", "UserId"), _pkgRepository.GetById(Pid).Result.UserId.ToString()));
             elem.Add(elem_props);
             var docs = await _docRepository.GetByFilter(Pid);
-            foreach (var docId in docs.AsParallel().Select(d => d.DocId).ToList())
-                foreach (var doc in docs)
+            foreach (var doc in docs)
+            {
+                var docRecord = _docRecordRepository.GetByDocId(doc.DocId).Result.DocText.ToString();
+                if (docRecord != null)
                 {
-                    elem.SetAttributeValue("docid", doc.DocId.ToString());
-                    elem.SetAttributeValue("doctype", doc.DocType);
-                    elem.SetAttributeValue("createdate", doc.CreateDate);
-                    elem.Add(_docRecordRepository.GetByDocId(doc.DocId).ToString());
+                    XElement elem_doc = XElement.Parse(docRecord);
+                    elem_doc.SetAttributeValue("docid", doc.DocId.ToString());
+                    elem_doc.SetAttributeValue("doctype", doc.DocType);
+                    elem_doc.SetAttributeValue("createdate", doc.CreateDate);
+                    elem.Add(elem_doc);
                 }
+            }
             xPkg.Add(elem);
             return xPkg;
         }
-
+      
     }
 }
