@@ -56,6 +56,11 @@ namespace ClientSVH.Application.Services
         {
             return await _receivFromServer.LoadMessage();
         }
+    
+        public async Task<List<Package>> GetAll()
+        {
+            return await  _pkgRepository.GetAll();
+        }
 
         public async Task<Package> GetPkgId(int Pid)
         {

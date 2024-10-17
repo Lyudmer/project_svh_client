@@ -31,7 +31,7 @@ namespace ClientSVH.SendReceivServer
                 var xPkg = await CreatePaskageXml(Pid, stPkg);
                 // отправить на сервер 
 
-                var resStatus = _messagePublisher.SendMessage(xPkg, "SendPkg", stPkg);
+                var resStatus = _messagePublisher.SendMessage(xPkg.ToString(), "SendPkg", stPkg);
                 if (resStatus != stPkg)
                 {
                      
@@ -53,13 +53,13 @@ namespace ClientSVH.SendReceivServer
             try 
             {
                 int stPkg = _pkgRepository.GetById(Pid).Result.StatusId;
-                var xPkg = new XDocument();
+                var xPkg = new XDocument(new XDeclaration("1.0", "UTF-8", null));
                 var elem = new XElement("Package");
                 elem.SetAttributeValue("pid", Pid);
                 var elem_props = new XElement("package-properties",
                     new XElement("props", new XAttribute("name", "uuid"), _pkgRepository.GetById(Pid).Result.UUID.ToString()));
                 elem.Add(elem_props);
-                var resDel = _messagePublisher.SendMessage(xPkg, "DelPkg",0);
+                var resDel = _messagePublisher.SendMessage(xPkg.ToString(), "DelPkg",0);
                 if (resDel == -1)
                 {
                     await _pkgRepository.UpdateStatus(Pid, 107);
@@ -81,7 +81,7 @@ namespace ClientSVH.SendReceivServer
         }
         private async Task<XDocument> CreatePaskageXml(int Pid, int stPkg)
         {
-            var xPkg = new XDocument();
+            var xPkg = new XDocument(new XDeclaration("1.0","UTF-8",null));
             var elem = new XElement("Package");
             elem.SetAttributeValue("pid", Pid);
             var elem_props = new XElement("package-properties" 

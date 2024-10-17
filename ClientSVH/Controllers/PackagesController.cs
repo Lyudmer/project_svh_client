@@ -11,6 +11,7 @@ using ClientSVH.Infrastructure;
 using ClientSVH.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace ClientSVH.Controllers
@@ -28,10 +29,12 @@ namespace ClientSVH.Controllers
         public async Task<IActionResult> LoadFile(IFormFile InName,string UserId)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(ModelState);  
+            int result=0;
             using (var fileStream = new FileStream(_webHostEnvironment.WebRootPath + InName.FileName, FileMode.Create))
             {
                 await InName.CopyToAsync(fileStream);
+              
                 fileStream.Position = 0;
                 using (StreamReader reader = new StreamReader(fileStream, Encoding.UTF8))
                 {
@@ -40,11 +43,11 @@ namespace ClientSVH.Controllers
 
                     if (resFile.Length>0 && Guid.TryParse(UserId, out var userId))
                     {
-                        await _pkgService.LoadFile(userId, resFile);
+                       result= await _pkgService.LoadFile(userId, resFile);
                     }
                 }
             }
-            return Ok();
+            return Ok(result);
         }
         [HttpPost("SendToServer")]
         public async Task<IActionResult> SendToServer(PackageRequest pkgSend)
@@ -52,9 +55,9 @@ namespace ClientSVH.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            await _pkgService.SendToServer(pkgSend.Pid);
+           var result= await _pkgService.SendToServer(pkgSend.Pid);
 
-            return Ok();
+            return Ok(result);
         }
         [HttpPost("GetHistory")]
         public async Task<IActionResult> GetHistoryPkg(PackageRequest pkgSend)
@@ -63,6 +66,16 @@ namespace ClientSVH.Controllers
                 return BadRequest(ModelState);
 
            var result= await _pkgService.HistoriPkgByPid(pkgSend.Pid);
+
+            return Ok(result);
+        }
+        [HttpPost("GetAllPackage")]
+        public async Task<IActionResult> GetAll()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _pkgService.GetAll();
 
             return Ok(result);
         }

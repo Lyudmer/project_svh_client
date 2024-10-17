@@ -12,6 +12,7 @@ namespace ClientSVH.Core.Abstraction.Services
         Task<bool> SendDelPkgToServer(int Pid);
         Task<HistoryPkg> HistoriPkgByPid(int Pid);
         Task<Package> GetPkgId(int Pid);
+        Task<List<Package>> GetAll();
         Task<List<Document>> GetDocsPkg(int Pid);
         Task DeletePkg(int Pid);
     }
