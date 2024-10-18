@@ -31,7 +31,7 @@ namespace ClientSVH.SendReceivServer
                 var xPkg = await CreatePaskageXml(Pid, stPkg);
                 // отправить на сервер 
 
-                var resStatus = _messagePublisher.SendMessage(xPkg.ToString(), "SendPkg", stPkg);
+                var resStatus = _messagePublisher.SendMessage(xPkg.ToString(), "sendpkg", stPkg);
                 if (resStatus != stPkg)
                 {
                      

@@ -37,9 +37,9 @@ namespace ClientSVH.SendReceivServer
             {
                 // получить сообщение
 
-                var resMess = _rabbitMQConsumer.LoadMessage("StatusPkg");
+                var resMess = _rabbitMQConsumer.LoadMessage("statuspkg");
 
-                if (resMess != null)
+                if (resMess != null && resMess.Length>0)
                 {
                     await LoadResultFormSerever(resMess, "LoadStatusFromServer");
                     
@@ -98,7 +98,7 @@ namespace ClientSVH.SendReceivServer
             var resload = new ResultMessage();
             try
             {
-                XDocument xMess = XDocument.Load(resMess);
+                XDocument xMess = XDocument.Parse(resMess);
                 
                 var xRes = xMess.Element(nodeDoc)?.Elements("package-properties");
                 if (xRes != null)

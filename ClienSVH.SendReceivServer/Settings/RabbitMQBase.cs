@@ -1,6 +1,8 @@
 ﻿using ClientSVH.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
+using System.Collections;
+
 
 
 namespace ClientSVH.SendReceivServer.Settings
@@ -33,5 +35,17 @@ namespace ClientSVH.SendReceivServer.Settings
             return factory.CreateConnection();
         }
 
+        public bool CloseModelRabbitMQ(IModel channel)
+        {
+            try
+            {
+                channel.Close();
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

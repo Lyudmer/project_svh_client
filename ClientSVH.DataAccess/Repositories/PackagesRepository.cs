@@ -91,7 +91,7 @@ namespace ClientSVH.DataAccess.Repositories
             await _dbContext.Packages
                 .Where(p => p.Id == Pid)
                 .ExecuteUpdateAsync(s => s.SetProperty(p => p.StatusId, Status)
-                                          .SetProperty(p => p.ModifyDate, DateTime.Now));
+                                          .SetProperty(p => p.ModifyDate, DateTime.UtcNow));
         }
         public async Task Delete(int Pid)
         {

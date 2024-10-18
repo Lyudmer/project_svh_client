@@ -6,7 +6,7 @@ services:
       dockerfile: ClientSVH/Dockerfile
 
   rabbit:
-    container_name: svh-rabbitmq
+    container_name: client-rabbitmq
     image: rabbitmq:4.0.2-management-alpine
     restart: always
     hostname: localhost    
@@ -17,8 +17,9 @@ services:
       - ./rabbitmq/data/:/var/lib/rabbitmq/
       - ./rabbitmq/log/:/var/log/rabbitmq/
     ports:
-      - "5672:5672"
       - "15672:15672"
+      - "5672:5672"
+   
 
   postgres:
     container_name: postgres

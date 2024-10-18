@@ -7,7 +7,7 @@ namespace ClientSVH.Core.Abstraction.Services
     {
     
         Task<int> LoadFile(Guid UserId, string xFile);
-      
+        Task<int> LoadMessage();
         Task<int> SendToServer(int Pid);
         Task<bool> SendDelPkgToServer(int Pid);
         Task<HistoryPkg> HistoriPkgByPid(int Pid);

@@ -59,6 +59,15 @@ namespace ClientSVH.Controllers
 
             return Ok(result);
         }
+        [HttpPost("LoadMessage")]
+        public async Task<IActionResult> LoadMess()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var result = await _pkgService.LoadMessage();
+
+            return Ok(result);
+        }
         [HttpPost("GetHistory")]
         public async Task<IActionResult> GetHistoryPkg(PackageRequest pkgSend)
         {

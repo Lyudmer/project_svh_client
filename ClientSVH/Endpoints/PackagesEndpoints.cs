@@ -1,7 +1,9 @@
-﻿using ClientSVH.Application.Interfaces.Auth;
+﻿using Amazon.Runtime.Internal.Util;
+using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Application.Services;
 using ClientSVH.Contracts;
 using ClientSVH.Core.Abstraction.Services;
+using ClientSVH.Core.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.Text;
 using System.Xml.Linq;
@@ -17,6 +19,7 @@ namespace ClientSVH.Endpoints
         {
             var endpoints = app.MapGroup("Packages");
             app.MapPost("LoadFile {UserId:guid}", LoadFile);
+            app.MapGet("LoadPackage", LoadMessage);
             app.MapGet("GetHistory{Pid:int}", GetHistoryPkg);
             app.MapGet("GetAllPackage", GetAllPkg);
             app.MapGet("GetPackage{Pid:int}", GetPkgId);
@@ -25,6 +28,11 @@ namespace ClientSVH.Endpoints
             app.MapPost("SendToServerDelPkg {Pid:int}", SendDelPkgToServer);
             app.MapGet("GetDocsPackage{Pid:int}", GetDocsPkg);
             return app;
+        }
+        private static async Task<IResult> LoadMessage(PackagesServices pkgService)
+        {
+           var res= await ((IPackagesServices)pkgService).LoadMessage();
+            return Results.Ok(res);
         }
         private static async Task<IResult> LoadFile(LoadFileRequest request, PackagesServices pkgService, Guid UserId)
         {
