@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
+﻿
 namespace ClientSVH.Application.Common
 {
     public class ConverterValue
     {
-        public static T? ConvertTo<T>(string? valStr)
+        public static T ConvertTo<T>(string valStr)
         {
             if (typeof(T) == typeof(int))
             {

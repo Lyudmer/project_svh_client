@@ -30,45 +30,60 @@ namespace ClientSVH.SendReceivServer
         private readonly IHistoryPkgRepository _historyPkgRepository = historyPkgRepository;
         private readonly IDocumentsRepository _docRepository = docRepository;
         private readonly IDocRecordRepository _docRecordRepository = docRecordRepository;
-        async Task<int> IReceivFromServer.LoadMessage()
+        public async Task<int> LoadMessage()
         {
+
+            // получить сообщение с пакетом
+            //    var resMessEmul = _rabbitMQConsumer.LoadMessage("EmulSendDoc");
+            //var resMess = _rabbitMQConsumer.LoadMessage("statuspkg");
+            var resMess = _rabbitMQConsumer.LoadMessage("sendpkg");
+            if (resMess != null && resMess.Length > 0)
+            {
+                return await LoadMessageFile(resMess, "sedpkg");
+            }
+            return 0;
+        }
+        public async Task<int> LoadMessageFile(string resMess, string typeMess)
+        {
+           
             int stPkg = 0;
             try
             {
-                // получить сообщение
-
-                var resMess = _rabbitMQConsumer.LoadMessage("statuspkg");
-
-                if (resMess != null && resMess.Length>0)
+                if (resMess != null && resMess.Length > 0)
                 {
-                    await LoadResultFormSerever(resMess, "LoadStatusFromServer");
-                    
-                }
-                // создать документ - если пришел документ,
-                var resMessDoc = _rabbitMQConsumer.LoadMessage("DocResultPkg");
-                if (resMessDoc != null)
-                {
-                    var resRecord = ParsingMess(resMessDoc, "Package");
-                    int olsstPkg = _pkgRepository.GetByUUId(resRecord.UUID).Result.StatusId;
-                    int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Id;
-                    // поменять статус
-                    await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
-                    // добавить в историю
-                    var hPkg = HistoryPkg.Create( Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.Now);
-                   
-                    await _historyPkgRepository.Add(hPkg);
-                    // добавить документ
-                    if (resRecord.DocRecord != null && await AddDocResPackage(resRecord))
+                    // получить сообщение
+                    if (resMess != null && resMess.Length > 0)
                     {
-                        hPkg = HistoryPkg.Create( Pid, olsstPkg, resRecord.Status, "Add ConfirmWHDocReg", DateTime.Now);
-                        await _historyPkgRepository.Add(hPkg);
+                        await LoadResultFormSerever(resMess, "LoadStatusFromServer");
+
                     }
-                }
-                var resMessDel = _rabbitMQConsumer.LoadMessage("DeletedPkg");
-                if (resMessDoc != null)
-                {
-                    await LoadResultFormSerever(resMessDel, "Del");
-                }
+                    // создать документ - если пришел документ,
+                    var resMessDoc = _rabbitMQConsumer.LoadMessage("DocResultPkg");
+                    if (resMessDoc != null)
+                    {
+                        var resRecord = ParsingMess(resMessDoc, "Package");
+                        int olsstPkg = _pkgRepository.GetByUUId(resRecord.UUID).Result.StatusId;
+                        int Pid = _pkgRepository.GetByUUId(resRecord.UUID).Result.Id;
+                        // поменять статус
+                        await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
+                        // добавить в историю
+                        var hPkg = HistoryPkg.Create(Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.Now);
+
+                        await _historyPkgRepository.Add(hPkg);
+                        // добавить документ
+                        if (resRecord.DocRecord != null && await AddDocResPackage(resRecord))
+                        {
+                            hPkg = HistoryPkg.Create(Pid, olsstPkg, resRecord.Status, "Add ConfirmWHDocReg", DateTime.Now);
+                            await _historyPkgRepository.Add(hPkg);
+                        }
+                    }
+                    var resMessDel = _rabbitMQConsumer.LoadMessage("DeletedPkg");
+                    if (resMessDoc != null)
+                    {
+                        await LoadResultFormSerever(resMessDel, "Del");
+                    }
+                } else 
+                    stPkg = 0;
             }
             catch (Exception)
             {

@@ -30,16 +30,19 @@ namespace ClientSVH.SendReceivServer
                 // собрать xml
                 var xPkg = await CreatePaskageXml(Pid, stPkg);
                 // отправить на сервер 
-
-                var resStatus = _messagePublisher.SendMessage(xPkg.ToString(), "sendpkg", stPkg);
-                if (resStatus != stPkg)
+                if (xPkg is not null)
                 {
-                     
-                    await _pkgRepository.UpdateStatus(Pid, resStatus);
-                    var hPkg = HistoryPkg.Create( Pid, stPkg, resStatus, "SendPkgToServer", DateTime.Now);
-                    await _historyPkgRepository.Add(hPkg);
-                    stPkg= resStatus;
+                    var resStatus = _messagePublisher.SendMessage(xPkg.ToString(), "sendpkg", stPkg);
+                    if (resStatus != stPkg)
+                    {
+
+                        await _pkgRepository.UpdateStatus(Pid, resStatus);
+                        var hPkg = HistoryPkg.Create(Pid, stPkg, resStatus, "SendPkgToServer", DateTime.Now);
+                        await _historyPkgRepository.Add(hPkg);
+                        stPkg = resStatus;
+                    }
                 }
+                else stPkg = -1;
             }
             catch (Exception)
             {
@@ -59,7 +62,7 @@ namespace ClientSVH.SendReceivServer
                 var elem_props = new XElement("package-properties",
                     new XElement("props", new XAttribute("name", "uuid"), _pkgRepository.GetById(Pid).Result.UUID.ToString()));
                 elem.Add(elem_props);
-                var resDel = _messagePublisher.SendMessage(xPkg.ToString(), "DelPkg",0);
+                var resDel = _messagePublisher.SendMessage(xPkg.ToString(), "delpkg",0);
                 if (resDel == -1)
                 {
                     await _pkgRepository.UpdateStatus(Pid, 107);
@@ -93,10 +96,11 @@ namespace ClientSVH.SendReceivServer
             var docs = await _docRepository.GetByFilter(Pid);
             foreach (var doc in docs)
             {
-                var docRecord = _docRecordRepository.GetByDocId(doc.DocId).Result.DocText.ToString();
+                var docRecord = _docRecordRepository.GetByDocId(doc.DocId);
+                
                 if (docRecord != null)
                 {
-                    XElement elem_doc = XElement.Parse(docRecord);
+                    XElement elem_doc = XElement.Parse(docRecord.Result.DocText.ToString());
                     elem_doc.SetAttributeValue("docid", doc.DocId.ToString());
                     elem_doc.SetAttributeValue("doctype", doc.DocType);
                     elem_doc.SetAttributeValue("createdate", doc.CreateDate);

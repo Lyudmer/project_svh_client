@@ -4,13 +4,7 @@ using System.Text;
 
 namespace ClientSVH.Application.Common
 {
-    public record class DocFromXml
-    (
-        string TypeDoc,
-        Guid DocId,
-        DateTime DocCreate,
-        string DocText
-    );
+   
     public class ResLoadPackage
     {
         public Guid UUID { get; set; } = Guid.Empty;

@@ -21,7 +21,7 @@ namespace ClientSVH.SendReceivServer.Producer
             {
                 if (resStatus == 0) resStatus = 1;
             }
-            _rabbitMQBase.CloseModelRabbitMQ(channel);
+           // _rabbitMQBase.CloseModelRabbitMQ(channel);
             return resStatus;
         }
 

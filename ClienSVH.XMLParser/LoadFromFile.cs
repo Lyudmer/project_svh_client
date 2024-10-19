@@ -5,12 +5,11 @@ using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
-using System;
+
 using System.Data;
 
-
 using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 
 namespace ClienSVH.XMLParser
@@ -40,7 +39,8 @@ namespace ClienSVH.XMLParser
                    
                     foreach (var xDoc in xPkg)
                     {
-                        var LastDocId=_docRepository.GetLastDocId().Result+1;
+                        var LastDocId = _docRepository.GetLastDocId().Result + 1;
+                        
                         var tdoc = xDoc.Name.LocalName;
                         var num = xDoc.Elements().Elements("RegNum").FirstOrDefault()?.Value.ToString();
                         var dat = xDoc.Elements().Elements("RegDate").FirstOrDefault()?.Value.ToString();
@@ -68,7 +68,7 @@ namespace ClienSVH.XMLParser
             catch (Exception ex)
             {
                 string mess = ex.Message;
-                //
+                
             }
 
             return Pid;

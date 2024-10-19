@@ -101,8 +101,15 @@ namespace ClientSVH.DataAccess.Repositories
         }
         public async Task<int> GetLastPkgId()
         {
-            var cPkg = await _dbContext.Packages.CountAsync();
-
+            int cPkg = 0;
+            try
+            {
+                cPkg = await _dbContext.Packages.CountAsync();
+            }
+            catch (Exception ex)
+            { 
+                Console.WriteLine(ex.Message);
+            }
             return cPkg;
         }
 

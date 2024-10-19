@@ -6,7 +6,7 @@ services:
       dockerfile: ClientSVH/Dockerfile
 
   rabbit:
-    container_name: client-rabbitmq
+    container_name: rabbitmq
     image: rabbitmq:4.0.2-management-alpine
     restart: always
     hostname: localhost    
@@ -17,8 +17,8 @@ services:
       - ./rabbitmq/data/:/var/lib/rabbitmq/
       - ./rabbitmq/log/:/var/log/rabbitmq/
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - "15671:15672"
+      - "5671:5672"
    
 
   postgres:
@@ -30,7 +30,7 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "studadmin"
     ports:
-       - "5432:5432"
+       - "5433:5432"
     volumes:
       - postgres-db:/var/lib/postgresql/data
     
@@ -42,7 +42,7 @@ services:
         MONGO_INITDB_ROOT_USERNAME: studadmin
         MONGO_INITDB_ROOT_PASSWORD: studadmin
     ports:
-       -  27017:27017
+       -  27018:27017
 
   mongo-express:
     image: mongo-express
@@ -55,11 +55,16 @@ services:
     depends_on:
       - mongo
 volumes:
+  clientsvh:
+   name: clientsvh
+   driver: local
   postgres-db:
     driver: local
   mongodb-data:
+    driver: local
   rabbitmq_data:  
-  networks:
-  default:
-    name: svhLocalNetwork 
+    driver: local
+networks:
+  clientsvh:
+    name: clientsvh
     external: true  
