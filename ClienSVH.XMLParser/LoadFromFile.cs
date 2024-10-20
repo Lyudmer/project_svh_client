@@ -74,9 +74,5 @@ namespace ClienSVH.XMLParser
             return Pid;
         }
 
-       
-
-      
-       
     }
 }

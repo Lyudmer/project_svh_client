@@ -12,8 +12,6 @@ namespace ClientSVH.Controllers
     public class DocumentsController(IDocumentsServices docService) : ControllerBase
     {
         private readonly IDocumentsServices _docService = docService;
-      
-      
 
         [HttpPost("GetDocument")]
         public async Task<IActionResult> GetDocId(DocRequest docR)
@@ -22,18 +20,20 @@ namespace ClientSVH.Controllers
                 return BadRequest(ModelState);
 
             var result = await _docService.GetDocId(docR.Id);
-
-            return Ok(result);
+            if (result == null) 
+                return BadRequest(ModelState);
+            else  return Ok(result);
         } 
         [HttpPost("GetDocRecord")]
         public async Task<IActionResult> GetDocRecId(DocRequest docR)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+                
             var result = await _docService.GetDocRecord(docR.Id);
-
-            return Ok(result);
+            if (result == null)
+                return BadRequest(ModelState);
+            else return Ok(result);
         }
         [HttpPost("DeleteDoc")]
         public async Task<IActionResult> DeleteDoc(DocRequest docR)

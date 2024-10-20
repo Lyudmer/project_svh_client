@@ -17,6 +17,7 @@ namespace ClientSVH.DataAccess.Repositories
             var HpPkgEntity = _mapper.Map<HistoryPkgEntity>(HpPkg);
             var resEntity=await _dbContext.AddAsync(HpPkgEntity);
             await _dbContext.SaveChangesAsync();
+
             return _mapper.Map<HistoryPkg>(resEntity.Entity);
            
         }
@@ -24,8 +25,9 @@ namespace ClientSVH.DataAccess.Repositories
         {
             var hpPkgEntity = await _dbContext.HistoryPkg
                 .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Pid == Pid) ?? throw new Exception();
-            return _mapper.Map<HistoryPkg>(hpPkgEntity);
+                .FirstOrDefaultAsync(p => p.Pid == Pid);
+            if (hpPkgEntity == null) return null;
+            else return _mapper.Map<HistoryPkg>(hpPkgEntity);
 
         }
         

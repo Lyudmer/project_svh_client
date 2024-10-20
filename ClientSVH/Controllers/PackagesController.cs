@@ -59,6 +59,16 @@ namespace ClientSVH.Controllers
 
             return Ok(result);
         }
+        [HttpPost("PkgFLK")]
+        public async Task<IActionResult> PkgFLK(PackageRequest pkgSend)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _pkgService.PkgFLK(pkgSend.Pid);
+
+            return Ok(result);
+        }
         [HttpPost("LoadMessage")]
         public async Task<IActionResult> LoadMess()
         {
@@ -75,8 +85,10 @@ namespace ClientSVH.Controllers
                 return BadRequest(ModelState);
 
            var result= await _pkgService.HistoriPkgByPid(pkgSend.Pid);
-
-            return Ok(result);
+            if (result == null)
+                return BadRequest(ModelState);
+            else
+                return Ok(result);
         }
         [HttpPost("GetAllPackage")]
         public async Task<IActionResult> GetAll()
@@ -85,8 +97,10 @@ namespace ClientSVH.Controllers
                 return BadRequest(ModelState);
 
             var result = await _pkgService.GetAll();
-
-            return Ok(result);
+            if (result == null)
+                return BadRequest(ModelState);
+            else
+                return Ok(result);
         }
         [HttpPost("GetPackage")]
         public async Task<IActionResult> GetPkgId(PackageRequest pkgSend)
@@ -95,8 +109,10 @@ namespace ClientSVH.Controllers
                 return BadRequest(ModelState);
 
             var result = await _pkgService.GetPkgId(pkgSend.Pid);
-
-            return Ok(result);
+            if (result == null)
+                return BadRequest(ModelState);
+            else
+                return Ok(result);
         } 
         [HttpPost("GetDocsPackage")]
         public async Task<IActionResult> GetDocsPkg(PackageRequest pkgSend)
@@ -105,8 +121,10 @@ namespace ClientSVH.Controllers
                 return BadRequest(ModelState);
 
             var result = await _pkgService.GetDocsPkg(pkgSend.Pid);
-
-            return Ok(result);
+            if (result == null)
+                return BadRequest(ModelState);
+            else
+                return Ok(result);
         }
         [HttpPost("DelPackage")]
         public async Task<IActionResult> DeletePkg(PackageRequest pkgSend)

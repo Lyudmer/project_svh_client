@@ -10,6 +10,7 @@ namespace ClientSVH.Core.Abstraction.Services
         Task<int> LoadMessage();
         Task<int> SendToServer(int Pid);
         Task<bool> SendDelPkgToServer(int Pid);
+        Task<int> PkgFLK(int Pid);
         Task<HistoryPkg> HistoriPkgByPid(int Pid);
         Task<Package> GetPkgId(int Pid);
         Task<List<Package>> GetAll();

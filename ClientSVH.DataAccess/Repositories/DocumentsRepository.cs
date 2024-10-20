@@ -16,15 +16,15 @@ namespace ClientSVH.DataAccess.Repositories
             var resEntity = await _dbContext.AddAsync(docEntity);
             await _dbContext.SaveChangesAsync();
             return _mapper.Map<Document>(resEntity.Entity);
-           
         }
         public async Task<Document> GetById(int id)
         {
             var docEntity = await _dbContext.Document
                 .AsNoTracking()
-                .FirstOrDefaultAsync(d => d.Id == id) ?? throw new Exception();
-
-            return _mapper.Map<Document>(docEntity);
+                .FirstOrDefaultAsync(d => d.Id == id);
+            if (docEntity!= null) 
+                return _mapper.Map<Document>(docEntity);
+            else return null;    
 
         }
         public async Task<List<Document>> GetByFilter(int pid)
@@ -73,9 +73,21 @@ namespace ClientSVH.DataAccess.Repositories
         }
         public async Task<int> GetLastDocId()
         {
-            var cDoc = await _dbContext.Document.CountAsync();
+            int cDoc = 0;
+            try
+            {
+                var resId = await _dbContext.Document.MaxAsync(d=>d.Id);
+
+                if (resId != 0) cDoc = resId;
+                else cDoc = 0;
+
+            }
+            catch (Exception)
+            {
+                return cDoc;
+            }
             return cDoc;
-            
+
         }
 
        

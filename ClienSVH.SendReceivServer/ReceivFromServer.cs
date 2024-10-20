@@ -67,13 +67,13 @@ namespace ClientSVH.SendReceivServer
                         // поменять статус
                         await _pkgRepository.UpdateStatus(Pid, resRecord.Status);
                         // добавить в историю
-                        var hPkg = HistoryPkg.Create(Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.Now);
+                        var hPkg = HistoryPkg.Create(Pid, olsstPkg, resRecord.Status, "LoadStatusFromServer", DateTime.UtcNow);
 
                         await _historyPkgRepository.Add(hPkg);
                         // добавить документ
                         if (resRecord.DocRecord != null && await AddDocResPackage(resRecord))
                         {
-                            hPkg = HistoryPkg.Create(Pid, olsstPkg, resRecord.Status, "Add ConfirmWHDocReg", DateTime.Now);
+                            hPkg = HistoryPkg.Create(Pid, olsstPkg, resRecord.Status, "Add ConfirmWHDocReg", DateTime.UtcNow);
                             await _historyPkgRepository.Add(hPkg);
                         }
                     }
@@ -104,7 +104,7 @@ namespace ClientSVH.SendReceivServer
             string sMess;
             if (!typeMessage.Contains("Del")) sMess = resRecord.Message;
             else sMess = "LoadStatusFromServer";
-            var hPkg = HistoryPkg.Create( Pid, olsstPkg, resRecord.Status, sMess, DateTime.Now);
+            var hPkg = HistoryPkg.Create( Pid, olsstPkg, resRecord.Status, sMess, DateTime.UtcNow);
             await _historyPkgRepository.Add(hPkg);
         }
 
