@@ -6,7 +6,7 @@
       "serviceActions": {
         "clientsvh": "StartWithoutDebugging",
         "mongo": "StartWithoutDebugging",
-        "mongo-express": "StartWithoutDebugging",
+        "rabbit": "StartWithoutDebugging",
         "postgres": "StartWithoutDebugging"
       }
     }
