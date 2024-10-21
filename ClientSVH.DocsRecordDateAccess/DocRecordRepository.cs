@@ -18,35 +18,38 @@ namespace ClientSVH.DocsRecordDataAccess
         }
         public async Task<DocRecord> GetByDocId(Guid docId)
         {
-            var filter = Builders<DocRecord>.Filter.Eq("DocId", docId);
+           // var filter = Builders<DocRecord>.Filter.Eq("DocId", docId.ToString());
 
             try
             {
-                return await _docRecordCollection.DocRecords
-                                .Find(filter)
+               var resRec= await _docRecordCollection.DocRecords
+                                .Find(x => x.DocId == docId.ToString())
                                 .FirstOrDefaultAsync();
+                if (resRec == null) return null;
+                else return resRec;
             }
             catch (Exception)
             {
-                throw;
+                return null;
             }
         }
-        public async Task<Guid> AddRecord(DocRecord item)
+        public async Task<string> AddRecord(DocRecord item)
         {
             try
             {
                 var options = new InsertOneOptions { BypassDocumentValidation = true };
                 await _docRecordCollection.DocRecords.InsertOneAsync(item,options);
+
                 return item.DocId;
             }
             catch (Exception)
             {
-                throw;
+               return string.Empty;
             }
         }
         public async Task<long> UpdateRecord(Guid DocId, DocRecord docRecord)
         {
-            var filter = Builders<DocRecord>.Filter.Eq(s => s.DocId, DocId);
+            var filter = Builders<DocRecord>.Filter.Eq(s => s.DocId, DocId.ToString());
             var update = Builders<DocRecord>.Update.Set(s => s.DocText, docRecord.DocText);
             try
             {
@@ -56,21 +59,21 @@ namespace ClientSVH.DocsRecordDataAccess
             }
             catch (Exception)
             {
-                throw;
+                return 0;
             }
         }
 
-        public async Task<long> DeleteId(Guid Docid)
+        public async Task<long> DeleteId(string Docid)
         {
             try
             {
-                var resDel = await _docRecordCollection.DocRecords.DeleteOneAsync(x => x.DocId == Docid);
+                var resDel = await _docRecordCollection.DocRecords.DeleteOneAsync(x => x.DocId == Docid.ToString());
                 if (resDel != null) return resDel.DeletedCount;
                 else return 0;
             }
             catch (Exception)
             {
-                throw;
+                return 0;
             }
         }
 

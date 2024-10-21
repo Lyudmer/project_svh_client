@@ -8,7 +8,7 @@ namespace ClientSVH.DocRecordDataAccess.Entities
         public ObjectId Id { get; set; }
 
         [BsonElement("doc_id")]
-        public Guid DocId { get; set; }
+        public string DocId { get; set; }
         [BsonElement("doc_body")]
         public string DocText { get; set; } = null!;
 

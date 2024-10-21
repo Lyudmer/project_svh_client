@@ -1,7 +1,10 @@
-﻿using ClientSVH.Application.Common;
+﻿using ClientSVH.Application.CollectingListToXml.Hendlers;
+using ClientSVH.Application.CollectingListToXml.HendlersElem;
+using ClientSVH.Application.Common;
 using ClientSVH.Application.Interfaces;
 
 using ClientSVH.Core.Abstraction.Repositories;
+using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
@@ -41,13 +44,8 @@ namespace ClientSVH.SendReceivServer
                 if (xPkg is not null)
                 {
                     //проверить перед отправкой 
+                    stPkg = PkgFLK(Pid).Result;
                     
-                    var resFLK = ResultTransform(xPkg, CurDirINfo.Parent + "\\Workflow\\FLK\\DesNotif_PIResult.FLK.xsl");
-                    if (resFLK is not null)
-                    {
-                        var nodeError=resFLK.XPathSelectElements(@"//ResultInformation/RESULTINFORMATION_ITEM[contains(ResultCategory,'ERROR')]");
-                        if (nodeError is not null && nodeError.Count() > 0)  stPkg = 4; 
-                    }
                     if (stPkg != 4)
                     {
                         var resStatus = _messagePublisher.SendMessage(xPkg.ToString(), "sendpkg", stPkg);
@@ -113,23 +111,12 @@ namespace ClientSVH.SendReceivServer
                 , new XElement("props", new XAttribute("name", "UserId"), _pkgRepository.GetById(Pid).Result.UserId.ToString()));
             elem.Add(elem_props);
             var docs = await _docRepository.GetByFilter(Pid);
-            foreach (var doc in docs)
-            {
-                var docRecord = _docRecordRepository.GetByDocId(doc.DocId);
-                
-                if (docRecord != null)
-                {
-                    XElement elem_doc = XElement.Parse(docRecord.Result.DocText.ToString());
-                    elem_doc.SetAttributeValue("docid", doc.DocId.ToString());
-                    elem_doc.SetAttributeValue("doctype", doc.DocType);
-                    elem_doc.SetAttributeValue("createdate", doc.CreateDate);
-                    elem.Add(elem_doc);
-                }
-            }
+            var resProc = new TasksHandlerElem(_docRecordRepository, docs);
+            resProc.ProcessQueue(ref elem);
             xPkg.Add(elem);
             return xPkg;
         }
-        async Task<int> ISendToServer.PkgFLK(int Pid)
+        public async Task<int> PkgFLK(int Pid)
         {
             int stPkg = _pkgRepository.GetById(Pid).Result.StatusId;
             XDocument resXml = new();
@@ -176,7 +163,7 @@ namespace ClientSVH.SendReceivServer
                     Doc = await _docRepository.Add(Doc);
                     if (Doc is not null)
                     {
-                        var dRecord = DocRecord.Create(Doc.DocId, resXml.ToString());
+                        var dRecord = DocRecord.Create(Doc.DocId.ToString(), resXml.ToString());
                         var dRecordId = await _docRecordRepository.AddRecord(dRecord);
                         resFLK = Doc.Id;
                     }

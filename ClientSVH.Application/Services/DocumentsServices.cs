@@ -1,8 +1,10 @@
-﻿using ClientSVH.Core.Abstraction.Repositories;
+﻿using ClientSVH.Application.CollectingListToXml.Hendlers;
+using ClientSVH.Core.Abstraction.Repositories;
 using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
 using ClientSVH.DocsRecordCore.Models;
+using System.Xml.Linq;
 
 
 
@@ -42,5 +44,6 @@ namespace ClientSVH.Application.Services
             }
             
         }
+       
     }
 }

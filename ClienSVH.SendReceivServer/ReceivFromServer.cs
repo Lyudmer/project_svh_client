@@ -161,7 +161,7 @@ namespace ClientSVH.SendReceivServer
                     Doc = await _docRepository.Add(Doc);
                     if (Doc is not null)
                     {
-                        DocRecord dRecord = DocRecord.Create( Doc.DocId, doctext);
+                        DocRecord dRecord = DocRecord.Create( Doc.DocId.ToString(), doctext);
                         var dRecordId = await _docRecordRepository.AddRecord(dRecord);
 
                     }

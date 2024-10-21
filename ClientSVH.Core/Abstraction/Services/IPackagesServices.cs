@@ -6,7 +6,7 @@ namespace ClientSVH.Core.Abstraction.Services
     public interface IPackagesServices
     {
     
-        Task<int> LoadFile(Guid UserId, string xFile);
+        Task<string> LoadFile(Guid UserId, string xFile);
         Task<int> LoadMessage();
         Task<int> SendToServer(int Pid);
         Task<bool> SendDelPkgToServer(int Pid);

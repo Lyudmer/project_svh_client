@@ -5,6 +5,7 @@ using ClientSVH.Application.Interfaces.Auth;
 using ClientSVH.Application.Interfaces;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Http;
+using ClientSVH.Application.CollectingListToXml.Hendlers;
 
 
 
@@ -40,7 +41,7 @@ namespace ClientSVH.Application.Services
         {
             return await _hPkgRepository.GetById(Pid);
         }
-        public Task<int> LoadFile(Guid UserId,string  FileName)
+        public Task<string> LoadFile(Guid UserId,string  FileName)
         {
             return _loadFromFile.LoadFileXml(UserId, FileName);
         }
@@ -73,7 +74,7 @@ namespace ClientSVH.Application.Services
         {
             return await _documentsRepository.GetByFilter(Pid);
         }
-
+       
         public async Task DeletePkg(int Pid)
         {
             if (Pid != 0)

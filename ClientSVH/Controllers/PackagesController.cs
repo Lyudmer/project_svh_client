@@ -30,7 +30,7 @@ namespace ClientSVH.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);  
-            int result=0;
+            string result=string.Empty;
             using (var fileStream = new FileStream(_webHostEnvironment.WebRootPath + InName.FileName, FileMode.Create))
             {
                 await InName.CopyToAsync(fileStream);
