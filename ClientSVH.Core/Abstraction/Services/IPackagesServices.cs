@@ -15,6 +15,6 @@ namespace ClientSVH.Core.Abstraction.Services
         Task<Package> GetPkgId(int Pid);
         Task<List<Package>> GetAll();
         Task<List<Document>> GetDocsPkg(int Pid);
-        Task DeletePkg(int Pid);
+        Task<string> DeletePkg(int Pid);
     }
 }

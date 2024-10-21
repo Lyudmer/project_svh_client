@@ -4,7 +4,7 @@ namespace ClientSVH.Core.Abstraction.Services
 {
     public interface IStatusServices
     {
-        Task<int> AddStatus(Status status);
-        Task<bool> DelStatus(int Id);
+        Task<string> AddStatus(Status status);
+        Task<string> DelStatus(int Id);
     }
 }

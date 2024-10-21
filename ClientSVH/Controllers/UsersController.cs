@@ -33,8 +33,8 @@ namespace ClientSVH.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                await _usersService.Register(userRegistr.UserName, userRegistr.PasswordHash, userRegistr.Email);
-            return Ok();
+              var result=  await _usersService.Register(userRegistr.UserName, userRegistr.PasswordHash, userRegistr.Email);
+            return Ok(result);
         }
       
        

@@ -1,11 +1,11 @@
 ﻿using ClientSVH.Application.CollectingListToXml.Hendlers;
-using ClientSVH.Application.Common;
+
 using ClientSVH.Application.Interfaces;
 using ClientSVH.Core.Abstraction.Repositories;
 
 using ClientSVH.Core.Models;
 using ClientSVH.DocsRecordCore.Abstraction;
-using ClientSVH.DocsRecordCore.Models;
+
 
 using System.Data;
 

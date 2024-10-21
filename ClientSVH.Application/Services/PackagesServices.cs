@@ -26,17 +26,7 @@ namespace ClientSVH.Application.Services
         private readonly IDocumentsRepository _documentsRepository = documentsRepository;
         private readonly IDocumentsServices _documentServices= documentServices;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        public IEnumerable<Guid> GetUserId()
-        {
-            var UserId = _httpContextAccessor.HttpContext?.User.Claims
-                .FirstOrDefault(c => c.Type == CustomClaims.UserId);
-            if (UserId is null || Guid.TryParse(UserId.Value, out var userId))
-            {
-                throw new Exception("failed to login");
-            }
-
-            yield return userId;
-        }
+        
         public async Task<HistoryPkg> HistoriPkgByPid(int Pid)
         {
             return await _hPkgRepository.GetById(Pid);
@@ -45,7 +35,7 @@ namespace ClientSVH.Application.Services
         {
             return _loadFromFile.LoadFileXml(UserId, FileName);
         }
-      public async Task<int> SendToServer(int Pid)
+        public async Task<int> SendToServer(int Pid)
         {
             return await _sendToServer.SendPaskageToServer(Pid);
         }
@@ -75,7 +65,7 @@ namespace ClientSVH.Application.Services
             return await _documentsRepository.GetByFilter(Pid);
         }
        
-        public async Task DeletePkg(int Pid)
+        public async Task<string> DeletePkg(int Pid)
         {
             if (Pid != 0)
             {
@@ -88,11 +78,15 @@ namespace ClientSVH.Application.Services
                 }
                 if (cDocs == 0)
                     await _pkgRepository.Delete(Pid);
+                var resDel = await _pkgRepository.GetById(Pid);
+                if(resDel is null)
+                    return "Пакет удален";
                 else 
                 {
-                    //сообщение об ошибке
+                    return "Ошибка удаления";
                 }
             }
+            return $"Ошибка удаления, пакет с номером {Pid} не существует";
         }
     }
 }

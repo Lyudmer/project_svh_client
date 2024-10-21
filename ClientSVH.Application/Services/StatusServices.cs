@@ -9,21 +9,24 @@ namespace ClientSVH.Application.Services
     public class StatusServices(IStatusRepositoty statusRepository) : IStatusServices
     {
         private readonly IStatusRepositoty _statusRepository = statusRepository;
-        public async Task<int> AddStatus(Status status)
+        public async Task<string> AddStatus(Status status)
         {
-            return await _statusRepository.Add(status);
+             var resId = await _statusRepository.Add(status);
+            if (resId>0)
+                return resId.ToString();
+            else return "статус не добавлен";
         }
 
-        public async Task<bool> DelStatus(int Id)
+        public async Task<string> DelStatus(int Id)
         {
             var status = await _statusRepository.GetById(Id) ?? throw new Exception("Invalid Id Status");
             if (status != null)
             {
                  await _statusRepository.Delete(Id);
                 status = await _statusRepository.GetById(Id);
-                return status == null;
+                return (status == null)?"Статус удален": "Ошибка удаления статуса";
             }
-            throw new Exception("Invalid Del Status");
+            else return  "Ошибка удаления статуса"; 
 
         }
 

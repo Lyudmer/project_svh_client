@@ -4,6 +4,7 @@ using ClientSVH.Core.Abstraction.Services;
 using ClientSVH.Core.Models;
 using ClientSVH.DataAccess.Repositories;
 using Microsoft.AspNetCore.Http;
+using MongoDB.Driver;
 using System.Data;
 using System.Globalization;
 using System.Security.Claims;
@@ -22,18 +23,22 @@ namespace ClientSVH.Application.Services
         private readonly IJwtProvider _jwtProvider = jwtprovider;
         
 
-        public async Task Register(string username, string password, string email)
+        public async Task<string> Register(string username, string password, string email)
         {
+            var resId=Guid.NewGuid();
             try
             {
                 var hasherPassword = _passwordHasher.Generate(password);
-                await _usersRepository.Add(User.Create(Guid.NewGuid(), username, hasherPassword, email));
+                resId = await _usersRepository.Add(User.Create(Guid.NewGuid(), username, hasherPassword, email));
+                
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new Exception("Error code {0}",e);
+                return $"Ошибка регистрации";
             }
-
+            if (resId != Guid.Empty)
+                return $"Id {resId}";
+            else return $"Ошибка регистрации"; 
         }
 
         public async Task<string> Login(string password, string email)
@@ -44,7 +49,7 @@ namespace ClientSVH.Application.Services
                 var result = _passwordHasher.Verify(password, user.PasswordHash);
                 if (result == false)
                 {
-                    throw new Exception("failed to login");
+                    return $"Пользователь не найден";
                 }
               
                 var token = _jwtProvider.GenerateToken(user.Id);
@@ -52,7 +57,7 @@ namespace ClientSVH.Application.Services
 
                 return resUser;
             }
-            else throw new Exception("failed to login");
+            else return $"Пользователь не найден";
         }
 
         private string GetUserId(string token)
@@ -60,7 +65,7 @@ namespace ClientSVH.Application.Services
             var UserId =  _jwtProvider.ReadToken(token);
             if (UserId.Length==0 || !Guid.TryParse(UserId, out var userId))
             {
-                throw new Exception("failed to login");
+                return string.Empty;
             }
 
            return userId.ToString();
