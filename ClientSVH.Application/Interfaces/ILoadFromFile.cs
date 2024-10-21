@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace ClientSVH.Application.Interfaces.Auth
+namespace ClientSVH.Application.Interfaces
 {
     public interface ILoadFromFile
     {

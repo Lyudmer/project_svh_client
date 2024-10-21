@@ -1,6 +1,6 @@
 ﻿using ClientSVH.Application.CollectingListToXml.Hendlers;
 using ClientSVH.Application.Common;
-using ClientSVH.Application.Interfaces.Auth;
+using ClientSVH.Application.Interfaces;
 using ClientSVH.Core.Abstraction.Repositories;
 
 using ClientSVH.Core.Models;
