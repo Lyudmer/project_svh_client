@@ -29,7 +29,7 @@ namespace ClientSVH.SendReceivServer
         private readonly IPackagesRepository _pkgRepository = pkgRepository;
         private readonly IHistoryPkgRepository _historyPkgRepository= historyPkgRepository;
 
-        DirectoryInfo CurDirINfo = new(Directory.GetCurrentDirectory());
+        readonly DirectoryInfo CurDirINfo = new(Directory.GetCurrentDirectory());
       
         async Task<int> ISendToServer.SendPaskageToServer(int Pid)
         {
@@ -186,7 +186,7 @@ namespace ClientSVH.SendReceivServer
                 transform.Load(filexslt);
                 StringWriter output = new();
                 XsltArgumentList args = new();
-                XPathDocument document = new XPathDocument(new StringReader(inMess.ToString()));
+                XPathDocument document = new (new StringReader(inMess.ToString()));
                 transform.Transform(document, args, output);
                 if (String.IsNullOrEmpty(output.ToString())) return null;
                 resXml= XDocument.Parse(output.ToString());

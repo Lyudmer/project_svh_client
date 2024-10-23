@@ -36,7 +36,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ClientSVH.dll"]
-
-FROM rabbitmq
-RUN rabbitmq-plugins enable --offline rabbitmq_management
-EXPOSE 15671 15672
+FROM  postgres:latest
+ADD ./initdb.sql /docker-entrypoint-initdb.d/

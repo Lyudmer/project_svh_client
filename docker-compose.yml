@@ -1,39 +1,26 @@
+
 services:
   clientsvh:
     image: ${DOCKER_REGISTRY-}clientsvh
     build:
       context: .
       dockerfile: ClientSVH/Dockerfile
-
-  rabbit:
-    container_name: rabbitmq
-    image: rabbitmq:4.0.2-management-alpine
-    restart: always
-    hostname: localhost    
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - ./rabbitmq/data/:/var/lib/rabbitmq/
-      - ./rabbitmq/log/:/var/log/rabbitmq/
-    ports:
-      - "15671:15672"
-      - "5671:5672"
-   
+    depends_on:
+     - postgres
 
   postgres:
     container_name: postgres
     image: postgres:latest
-    restart: always
     environment:
       POSTGRES_DB: "svhdb"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "studadmin"
-    ports:
-       - "5431:5432"
     volumes:
-      - postgres-db:/var/lib/postgresql/data
-    
+      - ./pgdata:/var/lib/postgresql/data
+      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    ports:
+      - "5432:5432"
+      
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -42,19 +29,8 @@ services:
         MONGO_INITDB_ROOT_USERNAME: studadmin
         MONGO_INITDB_ROOT_PASSWORD: studadmin
     ports:
-       -  27018:27017
+       -  27017:27017
 
 volumes:
-  clientsvh:
-   name: clientsvh
-   driver: local
-  postgres-db:
-    driver: local
+  postgres-data:
   mongodb-data:
-    driver: local
-  rabbitmq_data:  
-    driver: local
-networks:
-  clientsvh:
-    name: clientsvh
-    external: true  
