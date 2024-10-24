@@ -10,7 +10,7 @@ services:
       - ASPNETCORE_URLS=https://localhost;http://localhost
       - ASPNETCORE_HTTPS_PORT=44349
     ports:
-     
+      - "5274:8080"
       - "44349:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets/:/root/.microsoft/usersecrets

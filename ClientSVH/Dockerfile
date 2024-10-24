@@ -37,9 +37,5 @@ RUN dotnet publish "./ClientSVH.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-
 ENTRYPOINT ["dotnet", "ClientSVH.dll"]
 
-#FROM  postgres:latest
-#ADD ./initdb.sql /docker-entrypoint-initdb.d/
