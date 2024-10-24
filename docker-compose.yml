@@ -5,6 +5,16 @@ services:
     build:
       context: .
       dockerfile: ClientSVH/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://localhost;http://localhost
+      - ASPNETCORE_HTTPS_PORT=44349
+    ports:
+     
+      - "44349:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets/:/root/.microsoft/usersecrets
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https/
     depends_on:
      - postgres
 
@@ -16,7 +26,7 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "studadmin"
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - ./pgdata2:/var/lib/postgresql/data
       - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     ports:
       - "5432:5432"

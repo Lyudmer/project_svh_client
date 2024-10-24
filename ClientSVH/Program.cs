@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.HttpOverrides;
 using ClienSVH.XMLParser;
 using ClientSVH.Application.Interfaces;
 using ClientSVH.Application.Interfaces.Auth;
@@ -33,7 +34,11 @@ services.AddApiAuthentication(configuration);
 services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
-
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
 
 //postgresql db
 
@@ -85,6 +90,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseForwardedHeaders();
+}
+else 
+{
+    app.UseForwardedHeaders();
 }
 
 app.UseHttpsRedirection();
