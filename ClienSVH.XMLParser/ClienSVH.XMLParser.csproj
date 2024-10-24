@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientSVH.Application\ClientSVH.Application.csproj" />
-    <ProjectReference Include="..\ClientSVH.DocsRecordCore\ClientSVH.DocsRecordCore.csproj" />
   </ItemGroup>
 
 </Project>
